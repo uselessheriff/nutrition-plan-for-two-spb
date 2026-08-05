@@ -1,0 +1,658 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#102b4b">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="format-detection" content="telephone=no">
+  <meta name="description" content="Интерактивная программа сбалансированного питания на месяц для двоих в Санкт-Петербурге.">
+  <title>Питание на месяц для двоих — Санкт-Петербург</title>
+  <style>
+    :root {
+      --ink: #102b4b;
+      --ink-soft: #40536b;
+      --muted: #6c7b8f;
+      --line: #dce4ec;
+      --rail: #f4f7fa;
+      --white: #ffffff;
+      --tomato: #ef493e;
+      --tomato-soft: #fff0ee;
+      --sage: #669e5f;
+      --sage-soft: #eef6ed;
+      --blue: #287dc7;
+      --blue-soft: #ebf4fc;
+      --gold: #b67b27;
+      --shadow: 0 16px 45px rgba(16, 43, 75, .08);
+      --radius: 18px;
+      --radius-sm: 12px;
+      color-scheme: light;
+    }
+
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; -webkit-text-size-adjust: 100%; text-size-adjust: 100%; }
+    body {
+      margin: 0;
+      color: var(--ink);
+      background: var(--white);
+      font: 16px/1.48 Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      -webkit-font-smoothing: antialiased;
+      text-size-adjust: 100%;
+      overflow-wrap: anywhere;
+    }
+    button, a { font: inherit; -webkit-tap-highlight-color: transparent; }
+    button { cursor: pointer; touch-action: manipulation; }
+    :focus-visible { outline: 3px solid rgba(40,125,199,.72); outline-offset: 3px; }
+    .sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0,0,0,0); white-space: nowrap; border: 0; }
+    .shell { max-width: 1320px; margin: 0 auto; padding: 0 28px; }
+    .topbar {
+      position: sticky; top: 0; z-index: 20; background: rgba(255,255,255,.94);
+      backdrop-filter: blur(16px); border-bottom: 1px solid var(--line);
+    }
+    .topbar__inner { min-height: 76px; display: flex; align-items: center; justify-content: space-between; gap: 28px; }
+    .brand { display: inline-flex; align-items: center; gap: 11px; color: var(--ink); text-decoration: none; font-weight: 760; letter-spacing: -.03em; white-space: nowrap; }
+    .brand__mark { width: 34px; height: 34px; color: var(--sage); flex: 0 0 auto; }
+    nav { display: flex; align-items: center; justify-content: center; gap: 26px; }
+    nav a { position: relative; color: var(--ink-soft); text-decoration: none; font-size: 14px; font-weight: 650; padding: 28px 0 23px; }
+    nav a:hover, nav a:focus-visible { color: var(--ink); }
+    nav a:first-child::after { content: ""; position: absolute; left: 0; right: 0; bottom: 0; height: 3px; background: var(--tomato); }
+    .city { display: inline-flex; align-items: center; gap: 8px; color: var(--ink-soft); font-size: 14px; white-space: nowrap; }
+    .city svg { width: 17px; height: 17px; }
+
+    .hero { padding: 58px 0 28px; display: grid; grid-template-columns: minmax(0, 1fr) minmax(420px, .82fr); gap: 48px; align-items: end; }
+    h1, h2, h3, p { margin-top: 0; }
+    h1 { max-width: 650px; margin-bottom: 12px; font-size: clamp(37px, 4.1vw, 59px); line-height: 1.04; letter-spacing: -.055em; }
+    .lede { max-width: 625px; color: var(--ink-soft); font-size: 18px; }
+    .budget-panel { padding: 22px; border: 1px solid var(--line); border-radius: var(--radius); background: linear-gradient(135deg, #fff, #fbfdff); box-shadow: var(--shadow); }
+    .budget-panel__title { display: block; margin-bottom: 14px; color: var(--ink); font-size: 14px; font-weight: 760; }
+    .budget-switch { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; }
+    .budget-switch button { min-height: 56px; border: 1px solid #cfd9e4; border-radius: 10px; color: var(--ink); background: var(--white); font-size: 17px; font-weight: 800; transition: transform .18s ease, border-color .18s ease, color .18s ease, box-shadow .18s ease; }
+    .budget-switch button:hover { transform: translateY(-2px); border-color: var(--tomato); }
+    .budget-switch button.is-active { color: #d72f26; border: 2px solid var(--tomato); box-shadow: 0 7px 20px rgba(239,73,62,.13); }
+    .budget-note { margin: 13px 0 0; color: var(--muted); font-size: 12px; }
+
+    .facts { margin-bottom: 30px; padding: 18px 0; display: grid; grid-template-columns: 1.1fr 1.25fr 1.25fr .9fr .9fr; border-top: 1px solid var(--line); border-bottom: 1px solid var(--line); }
+    .fact { min-height: 88px; padding: 4px 21px; display: flex; gap: 13px; align-items: flex-start; border-right: 1px solid var(--line); }
+    .fact:first-child { padding-left: 0; }
+    .fact:last-child { border-right: 0; }
+    .fact__icon { width: 42px; height: 42px; display: grid; place-items: center; border-radius: 12px; flex: 0 0 auto; }
+    .fact:nth-child(1) .fact__icon { background: var(--blue-soft); color: var(--blue); }
+    .fact:nth-child(2) .fact__icon { background: var(--sage-soft); color: var(--sage); }
+    .fact:nth-child(3) .fact__icon { background: #edf5fe; color: var(--blue); }
+    .fact:nth-child(4) .fact__icon { background: var(--tomato-soft); color: var(--tomato); }
+    .fact:nth-child(5) .fact__icon { background: #fff6e7; color: var(--gold); }
+    .fact svg { width: 22px; height: 22px; }
+    .fact strong { display: block; font-size: 14px; line-height: 1.2; }
+    .fact span { display: block; margin-top: 5px; color: var(--ink-soft); font-size: 13px; line-height: 1.35; }
+
+    .section { padding: 44px 0; scroll-margin-top: 76px; }
+    .section + .section { border-top: 1px solid var(--line); }
+    .section-title { display: flex; align-items: end; justify-content: space-between; gap: 24px; margin-bottom: 24px; }
+    h2 { margin-bottom: 7px; font-size: clamp(27px, 3vw, 38px); line-height: 1.08; letter-spacing: -.045em; }
+    .section-title p { max-width: 650px; margin-bottom: 0; color: var(--ink-soft); }
+    .utility-btn { display: inline-flex; align-items: center; justify-content: center; gap: 8px; min-height: 44px; padding: 10px 13px; border: 1px solid var(--line); border-radius: 9px; background: var(--white); color: var(--ink); font-size: 13px; font-weight: 720; white-space: nowrap; }
+    .utility-btn:hover { border-color: var(--ink); }
+    .utility-btn svg { width: 16px; height: 16px; }
+
+    .overview-grid { display: grid; grid-template-columns: minmax(0, 1.2fr) minmax(330px, .8fr); gap: 24px; }
+    .surface { border: 1px solid var(--line); border-radius: var(--radius); background: var(--white); overflow: hidden; }
+    .surface--soft { background: var(--rail); }
+    .surface__head { padding: 20px 22px 16px; display: flex; justify-content: space-between; gap: 15px; align-items: baseline; }
+    .surface__title { margin: 0; color: var(--ink); font-size: 16px; letter-spacing: -.02em; }
+    .surface__caption { color: var(--muted); font-size: 12px; }
+
+    .spend-summary { padding: 8px 22px 20px; display: grid; grid-template-columns: 1fr auto; align-items: end; gap: 18px; }
+    .spend-summary__amount { font-size: 42px; line-height: 1; letter-spacing: -.06em; font-weight: 820; }
+    .spend-summary__label { margin-top: 5px; color: var(--ink-soft); font-size: 13px; }
+    .buffer { padding: 9px 12px; border-radius: 10px; background: var(--sage-soft); color: #397637; font-size: 13px; font-weight: 730; text-align: right; }
+    .meter { height: 10px; margin: 0 22px 24px; overflow: hidden; border-radius: 99px; background: #edf1f5; }
+    .meter span { display: block; height: 100%; border-radius: inherit; background: linear-gradient(90deg, var(--tomato), #f78e50); transition: width .3s ease; }
+    .week-bars { height: 180px; padding: 17px 22px 26px; display: grid; grid-template-columns: repeat(4, 1fr); gap: 22px; align-items: end; border-top: 1px solid var(--line); background: #fbfcfd; }
+    .bar-col { height: 100%; display: grid; grid-template-rows: 1fr auto; gap: 9px; text-align: center; }
+    .bar-wrap { display: flex; align-items: end; justify-content: center; height: 100%; padding-top: 9px; border-bottom: 1px solid #ccd8e3; }
+    .bar { width: min(60px, 68%); min-height: 24px; border-radius: 8px 8px 0 0; background: var(--blue); position: relative; transition: height .35s ease; }
+    .bar.is-current { background: var(--tomato); }
+    .bar::after { content: attr(data-amount); position: absolute; left: 50%; bottom: calc(100% + 6px); transform: translateX(-50%); color: var(--ink-soft); font-size: 11px; font-weight: 740; white-space: nowrap; }
+    .bar-col small { color: var(--ink-soft); font-size: 12px; font-weight: 700; }
+
+    .category-list { padding: 4px 22px 20px; }
+    .category-row { display: grid; grid-template-columns: minmax(95px, 1fr) minmax(120px, 1.7fr) auto; align-items: center; gap: 12px; padding: 11px 0; border-bottom: 1px solid var(--line); }
+    .category-row:last-child { border-bottom: 0; }
+    .category-row span { color: var(--ink-soft); font-size: 13px; }
+    .category-row strong { font-size: 13px; }
+    .category-track { height: 8px; overflow: hidden; border-radius: 99px; background: #e9eef3; }
+    .category-track i { display: block; height: 100%; border-radius: inherit; background: var(--sage); }
+    .category-row:nth-child(2) .category-track i { background: var(--blue); }
+    .category-row:nth-child(3) .category-track i { background: var(--tomato); }
+    .category-row:nth-child(4) .category-track i { background: var(--gold); }
+    .category-row:nth-child(5) .category-track i { background: #8872c8; }
+
+    .calorie-board { padding: 22px; display: grid; grid-template-columns: 1fr 158px 1fr; gap: 15px; align-items: center; }
+    .person { min-height: 165px; padding: 15px; border: 1px solid var(--line); border-radius: 13px; }
+    .person__name { display: flex; align-items: center; gap: 8px; font-weight: 800; }
+    .person__avatar { width: 28px; height: 28px; display: grid; place-items: center; border-radius: 50%; background: var(--blue-soft); color: var(--blue); }
+    .person--her .person__avatar { background: var(--tomato-soft); color: var(--tomato); }
+    .person__target { margin: 12px 0 7px; font-size: 23px; line-height: 1; letter-spacing: -.04em; font-weight: 820; }
+    .person__copy { margin: 0; color: var(--ink-soft); font-size: 12px; }
+    .ring { width: 158px; height: 158px; position: relative; display: grid; place-items: center; border-radius: 50%; background: conic-gradient(var(--blue) 0 44%, var(--tomato) 44% 74%, var(--sage) 74% 100%); }
+    .ring::before { content: ""; position: absolute; inset: 15px; border-radius: inherit; background: var(--white); }
+    .ring__inside { position: relative; z-index: 1; text-align: center; }
+    .ring__inside strong { display: block; font-size: 23px; letter-spacing: -.04em; }
+    .ring__inside span { display: block; margin-top: 2px; color: var(--ink-soft); font-size: 11px; }
+    .home-share { margin: 0 22px 22px; padding: 13px 15px; border-radius: 11px; background: var(--blue-soft); color: #28577e; font-size: 13px; }
+
+    .week-tabs { display: flex; flex-wrap: wrap; gap: 9px; margin-bottom: 18px; }
+    .week-tabs button { min-height: 44px; padding: 10px 14px; border: 1px solid var(--line); border-radius: 9px; color: var(--ink-soft); background: var(--white); font-size: 13px; font-weight: 750; touch-action: manipulation; }
+    .week-tabs button.is-active { color: var(--white); background: var(--ink); border-color: var(--ink); }
+    .menu-grid { display: grid; grid-template-columns: minmax(0, 1fr) 296px; gap: 24px; align-items: start; }
+    .menu-table-wrap { overflow-x: auto; }
+    table { width: 100%; border-collapse: collapse; }
+    th, td { padding: 13px 14px; text-align: left; vertical-align: top; border-bottom: 1px solid var(--line); }
+    th { color: var(--muted); background: #fbfcfd; font-size: 11px; text-transform: uppercase; letter-spacing: .045em; }
+    td { font-size: 13px; }
+    .meal-day { display: block; font-weight: 790; }
+    .meal-type { display: block; margin-top: 2px; color: var(--muted); font-size: 11px; }
+    .dish { min-width: 270px; font-weight: 740; line-height: 1.32; }
+    .batch { display: block; margin-top: 4px; color: var(--ink-soft); font-size: 11px; font-weight: 540; }
+    .kcal { color: var(--ink); font-weight: 800; white-space: nowrap; }
+    .portions { min-width: 170px; color: var(--ink-soft); font-size: 12px; line-height: 1.38; }
+    .side-stack { display: grid; gap: 16px; }
+    .side-note { padding: 20px; border-radius: var(--radius); background: var(--ink); color: white; }
+    .side-note h3 { margin-bottom: 10px; font-size: 16px; letter-spacing: -.02em; }
+    .side-note p { margin-bottom: 0; color: #d9e4ef; font-size: 13px; }
+    .prep-list { margin: 0; padding: 0; list-style: none; }
+    .prep-list li { position: relative; margin: 0 0 13px; padding-left: 25px; color: #d9e4ef; font-size: 13px; }
+    .prep-list li:last-child { margin-bottom: 0; }
+    .prep-list li::before { content: ""; position: absolute; top: .28em; left: 0; width: 13px; height: 13px; border: 1px solid #90aac4; border-radius: 4px; }
+    .note-card { padding: 19px; border: 1px solid var(--line); border-radius: var(--radius); background: var(--sage-soft); }
+    .note-card h3 { margin-bottom: 8px; font-size: 15px; }
+    .note-card p { margin-bottom: 0; color: #426b45; font-size: 13px; }
+
+    .shop-grid { display: grid; grid-template-columns: minmax(0, 1fr) 310px; gap: 24px; align-items: start; }
+    .shop-table td:first-child { width: 132px; color: var(--muted); font-size: 12px; font-weight: 720; }
+    .shop-table td:last-child, .shop-table th:last-child { text-align: right; white-space: nowrap; }
+    .shop-total { padding: 18px 20px; display: flex; align-items: center; justify-content: space-between; gap: 16px; background: #fbfcfd; border-top: 1px solid var(--line); }
+    .shop-total span { color: var(--ink-soft); font-size: 13px; }
+    .shop-total strong { font-size: 24px; letter-spacing: -.04em; }
+    .basket-side { padding: 22px; border-radius: var(--radius); background: var(--rail); }
+    .basket-side h3 { margin-bottom: 8px; font-size: 17px; }
+    .basket-side p { color: var(--ink-soft); font-size: 13px; }
+    .basket-side ol { margin: 16px 0 21px; padding-left: 22px; color: var(--ink-soft); font-size: 13px; }
+    .basket-side li { margin-bottom: 9px; }
+    .basket-side .utility-btn { width: 100%; justify-content: center; }
+
+    .principles { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; }
+    .principle { padding: 4px 4px 4px 0; }
+    .principle__number { display: grid; width: 37px; height: 37px; place-items: center; margin-bottom: 15px; border-radius: 50%; background: var(--tomato-soft); color: var(--tomato); font-size: 14px; font-weight: 850; }
+    .principle:nth-child(2) .principle__number { color: var(--blue); background: var(--blue-soft); }
+    .principle:nth-child(3) .principle__number { color: var(--sage); background: var(--sage-soft); }
+    .principle h3 { margin-bottom: 8px; font-size: 18px; letter-spacing: -.025em; }
+    .principle p { margin-bottom: 0; color: var(--ink-soft); font-size: 14px; }
+    .split-info { margin-top: 44px; display: grid; grid-template-columns: minmax(0, 1.2fr) minmax(0, .8fr); gap: 24px; }
+    .guide { padding: 24px; border: 1px solid var(--line); border-radius: var(--radius); }
+    .guide h3 { margin-bottom: 10px; font-size: 20px; letter-spacing: -.03em; }
+    .guide p { color: var(--ink-soft); }
+    .guide ul { margin: 15px 0 0; padding-left: 20px; color: var(--ink-soft); font-size: 14px; }
+    .guide li { margin-bottom: 9px; }
+    .guide--warn { background: #fffaf2; border-color: #f3dfbd; }
+    .guide--warn p, .guide--warn li { color: #76592e; }
+    .recipe-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 16px; }
+    .recipe { padding: 18px; border: 1px solid var(--line); border-radius: 13px; }
+    .recipe__top { display: flex; align-items: center; justify-content: space-between; gap: 10px; margin-bottom: 8px; }
+    .recipe h3 { margin: 0; font-size: 15px; letter-spacing: -.02em; }
+    .recipe time { color: var(--muted); font-size: 11px; font-weight: 720; white-space: nowrap; }
+    .recipe p { margin-bottom: 0; color: var(--ink-soft); font-size: 12px; }
+    .footnotes { padding: 30px 0 44px; border-top: 1px solid var(--line); color: var(--ink-soft); font-size: 12px; }
+    .footnotes__grid { display: grid; grid-template-columns: 1.2fr .8fr; gap: 35px; }
+    .footnotes h3 { margin-bottom: 8px; color: var(--ink); font-size: 14px; }
+    .footnotes p { margin-bottom: 9px; }
+    .footnotes a { color: var(--blue); }
+    .disclaimer { padding: 14px 16px; border-left: 3px solid var(--gold); background: #fffaf2; color: #76592e; }
+
+    @media (max-width: 980px) {
+      .topbar__inner { min-height: 62px; }
+      nav { display: none; }
+      .hero, .overview-grid, .menu-grid, .shop-grid, .split-info { grid-template-columns: 1fr; }
+      .facts { grid-template-columns: repeat(3, 1fr); }
+      .fact:nth-child(3) { border-right: 0; }
+      .fact:nth-child(4) { padding-left: 0; }
+      .calorie-board { grid-template-columns: 1fr 142px 1fr; }
+    }
+    @media (max-width: 650px) {
+      .shell { padding: 0 17px; }
+      .city { display: none; }
+      .hero { padding-top: 34px; gap: 25px; }
+      h1 { font-size: 38px; }
+      .budget-switch { gap: 7px; }
+      .budget-switch button { min-height: 49px; font-size: 14px; }
+      .facts { grid-template-columns: 1fr 1fr; padding: 8px 0; }
+      .fact { min-height: 76px; padding: 11px 0 11px 12px; border-right: 0; }
+      .fact:first-child, .fact:nth-child(3), .fact:nth-child(5) { padding-left: 0; }
+      .fact:nth-child(odd) { border-right: 1px solid var(--line); }
+      .fact:last-child { grid-column: span 2; }
+      .fact__icon { width: 33px; height: 33px; border-radius: 10px; }
+      .fact strong { font-size: 12px; }
+      .fact span { font-size: 11px; }
+      .section { padding: 33px 0; }
+      .section-title { display: block; }
+      .section-title .utility-btn { margin-top: 14px; }
+      .spend-summary__amount { font-size: 36px; }
+      .calorie-board { grid-template-columns: 1fr 1fr; }
+      .ring { grid-column: span 2; grid-row: 1; justify-self: center; }
+      .principles, .recipe-grid, .footnotes__grid { grid-template-columns: 1fr; }
+      .week-bars { gap: 10px; padding-left: 10px; padding-right: 10px; }
+      .bar::after { font-size: 9px; }
+    }
+    @media (max-width: 800px) {
+      .menu-table-wrap { overflow: visible; }
+      .menu-table-wrap table { display: block; }
+      .menu-table-wrap thead { position: absolute; width: 1px; height: 1px; padding: 0; overflow: hidden; clip: rect(0,0,0,0); white-space: nowrap; }
+      #menu-body, #shopping-body { display: grid; gap: 10px; padding: 10px; }
+      #menu-body tr, #shopping-body tr { display: block; border: 1px solid var(--line); border-radius: 12px; overflow: hidden; background: var(--white); }
+      #menu-body td, #shopping-body td { min-width: 0; display: grid; grid-template-columns: 94px minmax(0, 1fr); gap: 10px; padding: 9px 11px; border-bottom: 1px solid #e8edf2; font-size: 13px; }
+      #menu-body td:last-child, #shopping-body td:last-child { border-bottom: 0; }
+      #menu-body td::before, #shopping-body td::before { content: attr(data-label); color: var(--muted); font-size: 11px; font-weight: 800; text-transform: uppercase; letter-spacing: .04em; }
+      #menu-body td:first-child { display: block; background: #fbfcfd; }
+      #menu-body td:first-child::before { display: none; }
+      #menu-body .meal-day { display: inline; }
+      #menu-body .meal-type { display: inline; margin: 0 0 0 6px; }
+      .dish, .kcal, .portions { min-width: 0; white-space: normal; }
+      .shop-table td:first-child { width: auto; color: var(--ink-soft); }
+      .shop-table td:last-child { text-align: left; white-space: normal; }
+      .shop-total { align-items: flex-start; flex-direction: column; gap: 5px; }
+    }
+    @media (max-width: 390px) {
+      .shell { padding: 0 14px; }
+      h1 { font-size: 34px; }
+      .budget-panel { padding: 17px; }
+      .budget-switch button { font-size: 13px; }
+      .fact { gap: 9px; }
+      .fact span { font-size: 10px; }
+      .week-tabs { gap: 7px; }
+      .week-tabs button { padding-left: 11px; padding-right: 11px; }
+      #menu-body td, #shopping-body td { grid-template-columns: 82px minmax(0, 1fr); }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      html { scroll-behavior: auto; }
+      *, *::before, *::after { scroll-behavior: auto !important; transition-duration: .01ms !important; animation-duration: .01ms !important; animation-iteration-count: 1 !important; }
+    }
+    @media print {
+      body { font-size: 11px; }
+      .topbar { position: static; }
+      .utility-btn, .budget-panel, .week-tabs, .basket-side .utility-btn { display: none !important; }
+      .shell { max-width: none; padding: 0 18px; }
+      .hero { grid-template-columns: 1fr; padding: 22px 0; }
+      .facts { grid-template-columns: repeat(5, 1fr); }
+      .fact { min-height: 50px; }
+      .overview-grid, .menu-grid, .shop-grid, .split-info { grid-template-columns: 1fr; }
+      .surface, .guide, .recipe { break-inside: avoid; box-shadow: none; }
+      .section { padding: 22px 0; }
+      h1 { font-size: 34px; }
+      h2 { font-size: 25px; }
+      .menu-table-wrap { overflow: visible; }
+      .side-stack, .basket-side { display: none; }
+    }
+  </style>
+</head>
+<body>
+  <div class="sr-only" id="live-status" aria-live="polite" aria-atomic="true"></div>
+  <header class="topbar">
+    <div class="shell topbar__inner">
+      <a class="brand" href="#overview" aria-label="Петербургский рацион — в начало">
+        <svg class="brand__mark" viewBox="0 0 44 44" fill="none" aria-hidden="true">
+          <path d="M11 6v14m5-14v14m5-14v14M8 20h16v3c0 5.1-3.6 9.3-8 9.3S8 28.1 8 23v-3Z" fill="currentColor"/>
+          <path d="M25.4 30.6c2.3-9.3 7.1-14.9 13-17.6-1.1 7.3-4.1 13.8-13 17.6Z" fill="#8cbc78"/>
+          <path d="M24.6 31.5c4.2-3.6 8.1-5.5 12.5-6.1" stroke="#8cbc78" stroke-width="2" stroke-linecap="round"/>
+        </svg>
+        <span>Петербургский рацион</span>
+      </a>
+      <nav aria-label="Навигация по документу">
+        <a href="#overview">Обзор</a>
+        <a href="#menu">Меню</a>
+        <a href="#shopping">Закупки</a>
+        <a href="#principles">Принципы</a>
+      </nav>
+      <span class="city"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M20 10c0 5-8 11-8 11S4 15 4 10a8 8 0 1 1 16 0Z"/><circle cx="12" cy="10" r="2.5"/></svg>Санкт-Петербург</span>
+    </div>
+  </header>
+
+  <main>
+    <div class="shell" id="overview">
+      <section class="hero" aria-labelledby="page-title">
+        <div>
+          <h1 id="page-title">Питание на месяц для двоих</h1>
+          <p class="lede">Четыре недельные корзины, живое меню и нормальная еда — без запретов, супов «для галочки» и бесконечной готовки.</p>
+        </div>
+        <div class="budget-panel" aria-label="Выбор бюджета">
+          <span class="budget-panel__title">Выберите бюджет на месяц</span>
+          <div class="budget-switch" role="group" aria-label="Варианты бюджета">
+            <button type="button" data-budget="economy">20&nbsp;000&nbsp;₽</button>
+            <button type="button" data-budget="comfort" class="is-active">25&nbsp;000&nbsp;₽</button>
+            <button type="button" data-budget="full">30&nbsp;000&nbsp;₽</button>
+          </div>
+          <p class="budget-note">Сумма уже включает небольшой резерв на доставку. Цены — ориентиры для Петербурга, а не обещание цены в вашей корзине.</p>
+        </div>
+      </section>
+
+      <section class="facts" aria-label="Ключевые параметры плана">
+        <div class="fact"><span class="fact__icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="4" y="5" width="16" height="15" rx="2"/><path d="M8 3v4M16 3v4M7.5 11h9M8 15h3"/></svg></span><div><strong>4 недели</strong><span>Повторяемый ритм, а не «идеальный понедельник».</span></div></div>
+        <div class="fact"><span class="fact__icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M3 7h11v10H3zM14 10h4l3 3v4h-7z"/><circle cx="7" cy="19" r="1.5"/><circle cx="18" cy="19" r="1.5"/></svg></span><div><strong>Закупка раз в неделю</strong><span>Воскресенье: корзина на Пн–Вс и запас на ланч-бокс.</span></div></div>
+        <div class="fact"><span class="fact__icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 12c3.2-4 7.8-4 13.5 0-5.7 4-10.3 4-13.5 0Z"/><path d="M17.5 12 21 8v8l-3.5-4Z"/><circle cx="8.5" cy="11" r=".8" fill="currentColor"/></svg></span><div><strong>Рыба — 2 ужина</strong><span>Недели 2 и 4: ровно в согласованном ритме.</span></div></div>
+        <div class="fact"><span class="fact__icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 3c2 3.3 5 5.7 5 10a5 5 0 0 1-10 0c0-2.6 1.3-4.9 3.2-7.2.1 2 .9 3.1 2.2 4.1.8-1.9.7-4.1-.2-6.9Z"/></svg></span><div><strong>Без жёсткого ПП</strong><span>Соки, сырки и домашняя выпечка — по плану.</span></div></div>
+        <div class="fact"><span class="fact__icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M8 3h8l1 4H7l1-4Z"/><path d="M6 8h12v10H6z"/><path d="M9 15c1-2 2-2 3 0 1-2 2-2 3 0"/></svg></span><div><strong>108 порций дома</strong><span>Включая 12 дополнительных порций для ланч-бокса.</span></div></div>
+      </section>
+    </div>
+
+    <section class="section" aria-labelledby="dashboard-title">
+      <div class="shell">
+        <div class="section-title">
+          <div><h2 id="dashboard-title">План в одном взгляде</h2><p id="plan-subtitle">Комфортный баланс: больше свежих продуктов, рыба и небольшие удовольствия без выхода за бюджет.</p></div>
+          <button class="utility-btn" type="button" id="print-button"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M6 9V3h12v6M6 17H4a2 2 0 0 1-2-2v-4a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v4a2 2 0 0 1-2 2h-2"/><path d="M6 14h12v7H6z"/></svg>Распечатать</button>
+        </div>
+        <div class="overview-grid">
+          <div class="surface">
+            <div class="surface__head"><h3 class="surface__title">Расходы по неделям</h3><span class="surface__caption" id="spend-caption">включая резерв доставки</span></div>
+            <div class="spend-summary"><div><div class="spend-summary__amount" id="monthly-total">24&nbsp;750&nbsp;₽</div><div class="spend-summary__label">плановая сумма на месяц</div></div><div class="buffer" id="budget-buffer">250&nbsp;₽ остаётся в лимите</div></div>
+            <div class="meter" aria-label="Использование бюджета"><span id="budget-meter" style="width:99%"></span></div>
+            <div class="week-bars" id="week-bars" aria-label="Столбчатая диаграмма трат по неделям"></div>
+          </div>
+          <div class="surface">
+            <div class="surface__head"><h3 class="surface__title">На что уходит корзина</h3><span class="surface__caption">по стоимости</span></div>
+            <div class="category-list" id="category-list"></div>
+          </div>
+        </div>
+        <div class="surface" style="margin-top:24px">
+          <div class="surface__head"><h3 class="surface__title">Калорийная логика дома</h3><span class="surface__caption">ориентир, не назначение врача</span></div>
+          <div class="calorie-board">
+            <article class="person"><div class="person__name"><span class="person__avatar"><svg width="17" height="17" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><circle cx="12" cy="7" r="4"/><path d="M4 21c.5-5 3.2-7.5 8-7.5s7.5 2.5 8 7.5H4Z"/></svg></span>Он · 27 лет</div><div class="person__target">≈ 2&nbsp;250 ккал</div><p class="person__copy">Ужин дома 750–850 ккал + рабочий обед 1&nbsp;300 ккал. Небольшой дефицит — без голодного вечера.</p></article>
+            <div class="ring" aria-label="Основа домашних тарелок: белок, углеводы и овощи"><div class="ring__inside"><strong>3 опоры</strong><span>белок · гарнир · овощи</span></div></div>
+            <article class="person person--her"><div class="person__name"><span class="person__avatar"><svg width="17" height="17" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><circle cx="12" cy="7" r="4"/><path d="M4 21c.5-5 3.2-7.5 8-7.5s7.5 2.5 8 7.5H4Z"/></svg></span>Она · 24 года</div><div class="person__target">≈ 2&nbsp;350–2&nbsp;550</div><p class="person__copy">Высокая активность: домашний ужин 650–800 ккал, без цели на дефицит. На тренировочный день — дополнительный перекус.</p></article>
+          </div>
+          <p class="home-share">Будни: основное решение — один совместный ужин. Выходные: три домашних приёма пищи. Третья порция ужина обычно идёт девушке в ланч-бокс, а не добавляется парню сверх его рабочего обеда.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="menu" aria-labelledby="menu-title">
+      <div class="shell">
+        <div class="section-title"><div><h2 id="menu-title">Меню, синхронизированное с корзиной</h2><p>Нажмите неделю — календарь и список закупки ниже переключатся вместе. Калорийность каждого блюда приблизительная: точность зависит от бренда и фактической порции.</p></div></div>
+        <div class="week-tabs" id="week-tabs" role="tablist" aria-label="Выбор недели"></div>
+        <div class="menu-grid">
+          <div class="surface menu-table-wrap">
+            <table aria-label="Расписание блюд на выбранную неделю">
+              <thead><tr><th>День</th><th>Блюдо</th><th>Он</th><th>Она</th><th>Порции и остаток</th></tr></thead>
+              <tbody id="menu-body"></tbody>
+            </table>
+          </div>
+          <aside class="side-stack">
+            <div class="side-note"><h3>Подготовка в воскресенье</h3><ul class="prep-list" id="prep-list"></ul></div>
+            <div class="note-card"><h3>Правило порции</h3><p>Сначала соберите одинаковую основу. Парню добавьте гарнир/белок; девушке — не урезайте порцию, а добавляйте фрукт, йогурт или хлеб в активный день.</p></div>
+          </aside>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="shopping" aria-labelledby="shopping-title">
+      <div class="shell">
+        <div class="section-title"><div><h2 id="shopping-title">Закупка на <span id="shop-week-title">неделю 1</span></h2><p id="shopping-copy">Количество рассчитано на меню выше, включая часть овощей и базовых продуктов для выходных.</p></div></div>
+        <div class="shop-grid">
+          <div class="surface">
+            <div class="menu-table-wrap"><table class="shop-table" aria-label="Список покупок на выбранную неделю"><thead><tr><th>Раздел</th><th>Что купить</th><th>Количество</th><th>Ориентир</th></tr></thead><tbody id="shopping-body"></tbody></table></div>
+            <div class="shop-total"><span>Итого с резервом на доставку</span><strong id="shopping-total">6&nbsp;150&nbsp;₽</strong></div>
+          </div>
+          <aside class="basket-side"><h3>Как уложиться в цену</h3><p>Корзину лучше собирать в гипермаркете/онлайн в один заказ. После замены товара проверьте не только цену за упаковку, но и цену за кг.</p><ol><li>Сначала добавьте белок, крупы и заморозку.</li><li>Затем свежие овощи, фрукты и молочку с коротким сроком.</li><li>Соки и сырки добавьте последними — в пределах строки «Удовольствия».</li><li>Если доставка бесплатна, не «добивайте» корзину: резерв остаётся запасом.</li></ol><button class="utility-btn" type="button" id="copy-list"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="9" y="9" width="11" height="11" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg><span>Скопировать список</span></button></aside>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="principles" aria-labelledby="principles-title">
+      <div class="shell">
+        <div class="section-title"><div><h2 id="principles-title">Как это остаётся обычной едой</h2><p>Не нужны «чистые» дни, запрет фруктов или отдельная готовка для каждого. Нужна повторяемая структура и нормальные продукты.</p></div></div>
+        <div class="principles">
+          <article class="principle"><div class="principle__number">01</div><h3>80% — основа, 20% — удовольствие</h3><p>Сок — 150–200 мл с едой 3–4 раза в неделю; 4–6 сырков на двоих в неделю; домашняя выпечка — одна небольшая форма, разделённая на 4–6 порций.</p></article>
+          <article class="principle"><div class="principle__number">02</div><h3>Каждый ужин собирается из трёх частей</h3><p>Белок, гарнир и 250–350 г овощей/зелени на тарелку. Крупы и картофель не исключаются: они помогают девушке держать энергию и не превращают ужин в перекус.</p></article>
+          <article class="principle"><div class="principle__number">03</div><h3>Планируйте остатки, а не «доедайте»</h3><p>Две–три партии в неделю готовятся на три порции. Ланч-бокс подписывается и убирается сразу, пока ужин не разошёлся по тарелкам.</p></article>
+        </div>
+        <div class="split-info">
+          <article class="guide"><h3>Быстрые базовые рецепты</h3><div class="recipe-grid" id="recipe-grid"></div></article>
+          <article class="guide guide--warn"><h3>Как отслеживать результат без жёсткости</h3><p>Это пищевой план, а не медицинская программа. Никаких диагнозов из него не следует.</p><ul><li>Парню: взвешиваться 1 раз в неделю утром. Цель «−3,5 кг» разумнее оценивать за 8–14 недель, а не за месяц.</li><li>Если две недели нет изменений, сначала уменьшите 1–2 жидких калорийных перекуса/выпечки, а не белок и овощи.</li><li>Девушке: если падают сила, настроение или восстановление, добавьте 1 порцию гарнира + молочный/фруктовый перекус в тренировочный день.</li><li>При заболеваниях, нарушениях пищевого поведения, беременности/ГВ или стойком ухудшении самочувствия нужен врач или диетолог.</li></ul></article>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footnotes">
+    <div class="shell footnotes__grid">
+      <div><h3>Откуда взялись цены и как ими пользоваться</h3><p>Расчёт сделан 5 августа 2026 года как ориентир для Санкт-Петербурга. В качестве базы использованы городские диапазоны: молоко 91–97 ₽/л, курица около 390 ₽/кг, филе курицы в среднем 517 ₽/кг, яйца 136–160 ₽ за упаковку, рис 135–160 ₽/кг, яблоки 110–152 ₽/кг. Это не корзина конкретного магазина: бренд, акция, район и слот доставки меняют итог.</p><p>Сверяйте перед заказом: <a href="https://rgex.ru/price/saint-petersburg/eat/" target="_blank" rel="noreferrer">RGEX: цены на продукты в Петербурге</a>, <a href="https://tracken.su/prices/saint-petersburg/groceries" target="_blank" rel="noreferrer">Tracken: диапазоны по городу</a> и <a href="https://lenta.com/" target="_blank" rel="noreferrer">Лента Онлайн</a>. Резерв на доставку уже стоит отдельной строкой: при бесплатном слоте он превращается в запас бюджета.</p></div>
+      <div><h3>Питательная рамка</h3><p>План опирается на разнообразие, умеренность и баланс, а не на исключение групп продуктов. ВОЗ рекомендует взрослым стремиться к ≥400 г овощей и фруктов в день; сок содержит свободные сахара, поэтому он запланирован небольшими порциями, а не как ежедневный напиток.</p><p><a href="https://www.who.int/news-room/fact-sheets/detail/healthy-diet" target="_blank" rel="noreferrer">ВОЗ — Healthy diet</a></p><p class="disclaimer">Калорийность и темп снижения веса — расчётные ориентиры по возрасту, росту, весу и заявленной активности. Они не заменяют личную оценку врача.</p></div>
+    </div>
+  </footer>
+
+  <script>
+    const rub = new Intl.NumberFormat('ru-RU');
+    const f = (n) => `${rub.format(Math.round(n))}&nbsp;₽`;
+    const txt = (n) => `${rub.format(Math.round(n))} ₽`;
+    const item = (section, name, qty, price) => ({ section, name, qty, price });
+
+    const weeks = [
+      {
+        label: 'Неделя 1', theme: 'Курица, печень, паста и домашняя пицца',
+        prep: ['Запечь картофель и бёдра на 2 ужина; часть мяса сразу убрать в контейнер.', 'Сварить рис и гречку по 3 порции, остудить и хранить в контейнерах.', 'Нарезать овощи для салатов на 2 дня; зелень хранить с салфеткой.', 'Замесить тесто для одной домашней пиццы или подготовить основу из муки.'],
+        meals: [
+          ['Понедельник', 'Ужин', 'Бёдра в аэрогриле, картофель и салат', 'Филе цыплёнка с картофелем и салатом', 'Филе цыплёнка, мини-картофель и салат с мягким сыром', '810', '680', '3 порции: ужин на двоих + ланч-бокс'],
+          ['Вторник', 'Ужин', 'Паста с куриным фаршем, томатами и сыром', 'Паста болоньезе из индейки и говядины', 'Паста с говядиной, томатами и выдержанным сыром', '830', '690', 'Готовить на 3 порции; третью — в контейнер'],
+          ['Среда', 'Ужин', 'Куриный боул: рис, овощи, йогуртовый соус', 'Боул с куриным филе, рисом и свежими овощами', 'Боул с курицей, авокадо и овощами', '780', '660', '3 порции; соус хранить отдельно'],
+          ['Четверг', 'Ужин', 'Печень с луком, гречка и морковь', 'Печень по-строгановски, гречка и салат', 'Печень с грибами, гречкой и рукколой', '760', '640', '2 порции; девушке — фрукт/йогурт после тренировки'],
+          ['Пятница', 'Ужин', 'Домашняя пицца с курицей, грибами и сыром', 'Пицца с курицей, грибами и моцареллой', 'Пицца с цыплёнком, моцареллой и томатами', '860', '720', '1 противень: 4–6 кусков, часть оставить на субботу'],
+          ['Суббота', 'Завтрак', 'Овсяные панкейки с творогом и бананом', 'Панкейки с творогом, йогуртом и ягодами', 'Панкейки с рикоттой, ягодами и орехами', '640', '590', '2 порции'],
+          ['Суббота', 'Обед', 'Пицца/боул из остатков и свежий салат', 'Греческий салат с курицей и питой', 'Салат с курицей, мягким сыром и питой', '720', '630', '2 порции; остатки используются осознанно'],
+          ['Суббота', 'Ужин', 'Картофельная запеканка с фаршем и овощами', 'Запеканка с индейкой, овощами и сыром', 'Запеканка с индейкой, шпинатом и сыром', '820', '690', '3 порции; одна — на воскресный обед'],
+          ['Воскресенье', 'Завтрак', 'Омлет, тост и овощи', 'Омлет с сыром, тостом и овощами', 'Омлет с сыром, зеленью и цельнозерновым тостом', '610', '550', '2 порции'],
+          ['Воскресенье', 'Обед', 'Куриный салат в лепёшке', 'Салат с курицей, овощами и йогуртовой заправкой', 'Салат с цыплёнком, авокадо и тостом', '700', '620', '2 порции'],
+          ['Воскресенье', 'Ужин', 'Курица карри с рисом и овощами', 'Курица в мягком карри с рисом и овощами', 'Курица карри с жасминовым рисом и овощами', '800', '680', '3 порции; третья — на понедельник']
+        ]
+      },
+      {
+        label: 'Неделя 2', theme: 'Первая рыбная неделя, фрикадельки и фахитас',
+        prep: ['Порционно заморозить рыбу: размораживать только на вечер понедельника.', 'Сделать фрикадельки из фарша и убрать половину в морозилку.', 'Запечь брокколи и картофель, сварить рис/гречку на 2–3 дня.', 'Подготовить нарезку для фахитас и соус из йогурта с лимоном.'],
+        meals: [
+          ['Понедельник', 'Ужин', 'Минтай/хек, картофель и брокколи', 'Форель с картофелем и брокколи', 'Лосось с мини-картофелем и брокколи', '800', '670', '2 порции; рыба — в день приготовления'],
+          ['Вторник', 'Ужин', 'Фрикадельки из индейки, паста и томатный соус', 'Фрикадельки из индейки с пастой и сыром', 'Фрикадельки из индейки и говядины с пастой', '820', '690', '3 порции; одну охладить на обед'],
+          ['Среда', 'Ужин', 'Свинина в воке, рис и овощи', 'Свиная вырезка в воке, рис и овощи', 'Вырезка в воке с рисом и кешью', '810', '680', '3 порции; соус умеренно солёный'],
+          ['Четверг', 'Ужин', 'Куриная паста с грибами и сметаной', 'Куриное филе с грибами, пастой и йогуртовым соусом', 'Куриное филе с грибами, пастой и пармезаном', '790', '660', '2 порции'],
+          ['Пятница', 'Ужин', 'Фахитас с курицей, овощами и лепёшкой', 'Фахитас из куриного филе с овощами', 'Фахитас с цыплёнком, овощами и гуакамоле', '840', '700', '3 порции; третью завернуть в ланч-бокс'],
+          ['Суббота', 'Завтрак', 'Творог, яблоко и овсянка', 'Греческий йогурт, творог, яблоко и ягоды', 'Йогуртовая миска с ягодами и орехами', '610', '570', '2 порции'],
+          ['Суббота', 'Обед', 'Кесадилья с остатками курицы и овощами', 'Кесадилья с курицей, сыром и салатом', 'Кесадилья с цыплёнком, сыром и сальсой', '740', '640', '2 порции'],
+          ['Суббота', 'Ужин', 'Запечённая свинина, гречка и капустный салат', 'Свиная вырезка, гречка и большой салат', 'Вырезка, гречка, салат и мягкий сыр', '830', '700', '3 порции; остаток — к воскресному обеду'],
+          ['Воскресенье', 'Завтрак', 'Сырники с йогуртом', 'Сырники с ягодами и йогуртом', 'Сырники с ягодами и ореховой крошкой', '650', '600', '2 порции'],
+          ['Воскресенье', 'Обед', 'Салат из остатков свинины, овощей и хлеба', 'Тёплый салат со свининой и овощами', 'Тёплый салат с вырезкой и сыром', '710', '630', '2 порции'],
+          ['Воскресенье', 'Ужин', 'Ленивая лазанья с фаршем и овощами', 'Ленивая лазанья с индейкой, овощами и сыром', 'Лазанья с индейкой, говядиной и салатом', '840', '710', '3 порции; третья — на понедельник']
+        ]
+      },
+      {
+        label: 'Неделя 3', theme: 'Целая курица, перцы, кесадилья и домашний пирог',
+        prep: ['Запечь целую курицу; снять мясо с костей и разделить на два блюда.', 'Сварить рис и булгур, промыть/высушить зелень.', 'Подготовить фарш и перцы для запекания: вечером останется только поставить в духовку.', 'Испечь маленький яблочный пирог или маффины: порционно убрать в контейнер.'],
+        meals: [
+          ['Понедельник', 'Ужин', 'Запечённая курица, рис и овощи', 'Запечённая курица, рис и овощи-гриль', 'Цыплёнок, рис басмати и овощи-гриль', '810', '680', '3 порции; снять мясо с кости заранее'],
+          ['Вторник', 'Ужин', 'Фаршированные перцы с рисом и фаршем', 'Перцы с индейкой, рисом и сыром', 'Перцы с индейкой, говядиной и сыром', '800', '670', '3 порции; третья — ланч-бокс'],
+          ['Среда', 'Ужин', 'Куриная паста с томатами и овощами', 'Паста с куриным филе, соусом и салатом', 'Паста с цыплёнком, томатами и пармезаном', '800', '680', '2 порции'],
+          ['Четверг', 'Ужин', 'Бургер-боул: котлета, картофель, капуста', 'Боул с котлетой из индейки/говядины и картофелем', 'Боул с говяжьей котлетой, картофелем и салатом', '820', '690', '2 порции; без обязательной булки'],
+          ['Пятница', 'Ужин', 'Кесадилья с курицей, сыром и овощами', 'Кесадилья с курицей, сыром и салатом', 'Кесадилья с цыплёнком, сыром и свежей сальсой', '830', '690', '3 порции; одна — на субботу'],
+          ['Суббота', 'Завтрак', 'Яйца, тост и помидоры', 'Яйца, тост, творог и помидоры', 'Яйца, тост, мягкий сыр и помидоры', '610', '560', '2 порции'],
+          ['Суббота', 'Обед', 'Домашний «цезарь» с курицей', '«Цезарь» с курицей, яйцом и сухариками', '«Цезарь» с цыплёнком, пармезаном и яйцом', '730', '630', '2 порции'],
+          ['Суббота', 'Ужин', 'Картофельный пирог с курицей и овощами', 'Пирог с курицей, овощами и сыром', 'Пирог с индейкой, овощами и сыром', '830', '700', '3 порции; остаток — на воскресенье'],
+          ['Воскресенье', 'Завтрак', 'Овсянка, творог и банан', 'Овсянка, творог, ягоды и банан', 'Овсянка, греческий йогурт, ягоды и орехи', '630', '580', '2 порции'],
+          ['Воскресенье', 'Обед', 'Пирог/кесадилья из остатков и салат', 'Тёплый салат с курицей и остатками пирога', 'Тёплый салат с цыплёнком, сыром и овощами', '700', '620', '2 порции'],
+          ['Воскресенье', 'Ужин', 'Куриный плов с овощами', 'Плов с куриным филе, рисом и овощами', 'Плов с цыплёнком, рисом и овощами-гриль', '820', '690', '3 порции; третья — на понедельник']
+        ]
+      },
+      {
+        label: 'Неделя 4', theme: 'Вторая рыбная неделя, печень, кебабы и запеканка',
+        prep: ['Разделить рыбу на две порции и заморозить до понедельника.', 'Замариновать курицу для кебабов; булгур сварить заранее.', 'Сделать овощную основу для запеканки и заморозить половину.', 'Приготовить тесто/начинку для одной пиццы, чтобы пятница была быстрой.'],
+        meals: [
+          ['Понедельник', 'Ужин', 'Минтай/хек с рисом и овощами', 'Форель с рисом и овощами', 'Лосось с рисом и зелёными овощами', '790', '660', '2 порции; рыбу не оставлять на завтра'],
+          ['Вторник', 'Ужин', 'Печень в томатном соусе, пюре и салат', 'Печень с грибами, пюре и салат', 'Печень с грибами, пюре и рукколой', '760', '650', '2 порции; девушке — дополнительный фрукт'],
+          ['Среда', 'Ужин', 'Куриные кебабы, булгур и овощи', 'Кебабы из куриного филе, булгур и овощи', 'Кебабы из цыплёнка, булгур и овощи-гриль', '810', '680', '3 порции; третья — ланч-бокс'],
+          ['Четверг', 'Ужин', 'Паста-запеканка с фаршем и овощами', 'Запеканка с индейкой, пастой и сыром', 'Запеканка с индейкой, овощами и моцареллой', '830', '700', '3 порции; одна — на обед'],
+          ['Пятница', 'Ужин', 'Домашняя пицца/лепёшки с курицей', 'Пицца с курицей, овощами и сыром', 'Пицца с цыплёнком, овощами и моцареллой', '850', '710', '4–6 кусков; часть — на субботу'],
+          ['Суббота', 'Завтрак', 'Запечённая овсянка с яблоком и творогом', 'Запечённая овсянка с творогом, яблоком и ягодами', 'Овсянка с творогом, ягодами и орехами', '630', '590', '2 порции'],
+          ['Суббота', 'Обед', 'Горячие куриные сэндвичи и салат', 'Сэндвичи с курицей, сыром и салатом', 'Сэндвичи с цыплёнком, сыром и салатом', '730', '640', '2 порции'],
+          ['Суббота', 'Ужин', 'Овощная запеканка с фаршем', 'Овощная запеканка с индейкой и сыром', 'Овощная запеканка с индейкой, сыром и салатом', '820', '690', '3 порции; остаток — на воскресенье'],
+          ['Воскресенье', 'Завтрак', 'Шакшука, хлеб и овощи', 'Шакшука с сыром, хлебом и овощами', 'Шакшука с мягким сыром и хлебом на закваске', '620', '570', '2 порции'],
+          ['Воскресенье', 'Обед', 'Остаток запеканки + большой салат', 'Тёплый салат с запеканкой и йогуртовым соусом', 'Тёплый салат с запеканкой, сыром и зеленью', '700', '620', '2 порции'],
+          ['Воскресенье', 'Ужин', 'Курица с овощами и картофелем в духовке', 'Куриное филе с овощами и картофелем', 'Цыплёнок с овощами, картофелем и зеленью', '800', '680', '3 порции; третья — на понедельник']
+        ]
+      }
+    ];
+
+    const plans = {
+      economy: {
+        name: 'До 20 000 ₽', cap: 20000, menuIndex: 2,
+        subtitle: 'Экономный вариант: цельная курица, бёдра, заморозка и сезонные фрукты; вкусные перекусы остаются в плане, но в ограниченной строке.',
+        cartCopy: 'Основа — курица, яйца, недорогая рыба, сезонные овощи и заморозка. Сыр и ягоды берите только в указанном объёме: так план остаётся реальным.',
+        shopping: [
+          [item('Белок', 'Курица: филе 0,5 кг + бёдра 1,0 кг', '1,5 кг', 650), item('Белок', 'Фарш + печень', '0,95 кг', 380), item('Белок', 'Яйца С1', '20 шт.', 270), item('Молочное', 'Творог 5% + полутвёрдый сыр', '0,8 кг', 431), item('Молочное', 'Молоко/кефир + натуральный йогурт', '2,4 л / 0,4 кг', 300), item('Овощи', 'Картофель, лук и морковь', '4,5 кг', 327), item('Овощи', 'Помидоры, огурцы, капуста, зелень', '3 кг', 450), item('Овощи', 'Замороженные овощи + кукуруза/грибы', '2 кг', 350), item('Фрукты', 'Яблоки и бананы', '2,5 кг', 330), item('Бакалея', 'Рис, паста, гречка и овсянка', '2,8 кг', 484), item('Бакалея', 'Хлеб и лепёшки', '3 уп.', 230), item('База', 'Томатная паста, соевый соус, специи', '1 набор', 230), item('Удовольствия', 'Сок, 4 сырка, ингредиенты для выпечки', '1,5 л + 4 шт.', 390), item('Доставка', 'Резерв на слот/пакеты', '1 заказ', 100)],
+          [item('Белок', 'Минтай/хек', '0,9 кг', 420), item('Белок', 'Куриные бёдра', '0,8 кг', 312), item('Белок', 'Фарш из индейки/курицы', '0,8 кг', 380), item('Белок', 'Свинина', '0,6 кг', 260), item('Белок', 'Яйца С1', '20 шт.', 270), item('Молочное', 'Творог, сыр, кефир и йогурт', '1,6 кг/л', 641), item('Овощи', 'Картофель, лук, морковь, капуста', '5,5 кг', 407), item('Овощи', 'Томаты, огурцы, перец', '1,8 кг', 420), item('Овощи', 'Брокколи и замороженная смесь', '2 кг', 250), item('Фрукты', 'Яблоки и бананы', '2,2 кг', 290), item('Бакалея', 'Паста, рис, гречка, овсянка, хлеб, лепёшки', '3,1 кг + 2 уп.', 750), item('База', 'Томаты, чеснок, лимон, приправы', '1 набор', 150), item('Удовольствия', 'Сок, 3 сырка, выпечка', '1,5 л + 3 шт.', 330), item('Доставка', 'Резерв на слот/пакеты', '1 заказ', 100)],
+          [item('Белок', 'Целая курица + филе', '2,4 кг', 912), item('Белок', 'Фарш', '0,7 кг', 320), item('Белок', 'Яйца С1', '20 шт.', 270), item('Молочное', 'Творог, сыр, молоко/кефир, йогурт', '1,6 кг/л', 731), item('Овощи', 'Картофель, лук, морковь', '4,5 кг', 327), item('Овощи', 'Замороженные овощи', '1,5 кг', 285), item('Овощи', 'Томаты, огурцы, капуста, перец, зелень', '3,2 кг', 470), item('Фрукты', 'Яблоки и бананы', '2,5 кг', 330), item('Бакалея', 'Рис, паста, булгур, овсянка, хлеб и лепёшки', '2,6 кг + 2 уп.', 687), item('База', 'Томатный соус, горчица, специи', '1 набор', 168), item('Удовольствия', 'Сок, 2 сырка, маффины/пирог', '1 л + 2 шт.', 252), item('Доставка', 'Резерв на слот/пакеты', '1 заказ', 100)],
+          [item('Белок', 'Минтай/хек', '0,9 кг', 420), item('Белок', 'Курица: бёдра 0,8 кг + филе 0,5 кг', '1,3 кг', 572), item('Белок', 'Печень + фарш из индейки', '0,95 кг', 400), item('Белок', 'Яйца С1', '20 шт.', 270), item('Молочное', 'Творог, сыр, молоко/кефир, йогурт', '1,6 кг/л', 731), item('Овощи', 'Картофель, лук, морковь, капуста', '5 кг', 387), item('Овощи', 'Томаты, огурцы, перец, зелень', '2,7 кг', 403), item('Овощи', 'Замороженные овощи', '1,3 кг', 250), item('Фрукты', 'Яблоки и бананы', '2,1 кг', 282), item('Бакалея', 'Рис, булгур, паста, овсянка, хлеб/лепёшки', '2,8 кг + 2 уп.', 675), item('База', 'Томаты, специи, горчица, чеснок', '1 набор', 150), item('Удовольствия', 'Сок, 3 сырка, выпечка', '1 л + 3 шт.', 270), item('Доставка', 'Резерв на слот/пакеты', '1 заказ', 100)]
+        ]
+      },
+      comfort: {
+        name: 'До 25 000 ₽', cap: 25000, menuIndex: 3,
+        subtitle: 'Комфортный баланс: больше филе и свежих овощей, две рыбные недели с форелью, ягоды и более гибкая строка «для удовольствия».',
+        cartCopy: 'Это базовый вариант для вас: набор остаётся рациональным, но не требует охоты за каждым минимальным ценником. Ягоды и орехи запланированы, а не покупаются «сверху».',
+        shopping: [
+          [item('Белок', 'Курица: филе и бёдра', '1,7 кг', 800), item('Белок', 'Индейка/говядина + печень', '0,95 кг', 480), item('Белок', 'Яйца С1', '20 шт.', 270), item('Молочное', 'Творог, сыр и мягкий сыр', '1 кг', 601), item('Молочное', 'Молоко/кефир + натуральный йогурт', '2,4 л / 0,4 кг', 300), item('Овощи', 'Картофель, лук и морковь', '4,5 кг', 327), item('Овощи', 'Томаты, огурцы, капуста, зелень', '3,4 кг', 520), item('Овощи', 'Замороженные овощи + кукуруза/грибы', '2 кг', 390), item('Фрукты', 'Яблоки, бананы и ягоды', '3 кг', 550), item('Бакалея', 'Рис, паста, гречка и овсянка', '2,8 кг', 484), item('Бакалея', 'Хлеб и лепёшки', '3 уп.', 260), item('База', 'Томатная паста, соус, специи, сушёные травы', '1 набор', 290), item('Удовольствия', 'Сок, 5 сырков, ингредиенты для выпечки', '1,5 л + 5 шт.', 510), item('Дополнительно', 'Орехи и свежие грибы', '0,2 кг / 0,4 кг', 268), item('Доставка', 'Резерв на слот/пакеты', '1 заказ', 100)],
+          [item('Белок', 'Форель', '0,9 кг', 870), item('Белок', 'Куриное филе', '1 кг', 420), item('Белок', 'Фарш из индейки', '0,8 кг', 450), item('Белок', 'Свиная вырезка', '0,6 кг', 290), item('Белок', 'Яйца С1', '20 шт.', 270), item('Молочное', 'Творог, сыр, кефир и йогурт', '1,8 кг/л', 741), item('Овощи', 'Картофель, лук, морковь, капуста', '5,5 кг', 407), item('Овощи', 'Томаты, огурцы, перец, зелень', '2,2 кг', 520), item('Овощи', 'Брокколи и замороженная смесь', '2 кг', 250), item('Фрукты', 'Фрукты и ягоды', '2,6 кг', 422), item('Бакалея', 'Паста, рис, гречка, овсянка, хлеб, лепёшки', '3,2 кг + 2 уп.', 790), item('База', 'Томаты, чеснок, лимон, приправы', '1 набор', 200), item('Удовольствия', 'Сок, 4 сырка, выпечка', '1,5 л + 4 шт.', 400), item('Дополнительно', 'Орехи', '0,1 кг', 120), item('Доставка', 'Резерв на слот/пакеты', '1 заказ', 100)],
+          [item('Белок', 'Курица: целая + филе', '2,4 кг', 1050), item('Белок', 'Фарш из индейки/говядины', '0,7 кг', 550), item('Белок', 'Яйца С1', '20 шт.', 270), item('Молочное', 'Творог, сыр, молоко/кефир, йогурт', '1,9 кг/л', 1001), item('Овощи', 'Картофель, лук, морковь', '4,5 кг', 327), item('Овощи', 'Замороженные овощи', '1,5 кг', 330), item('Овощи', 'Томаты, огурцы, капуста, перец, зелень', '3,5 кг', 575), item('Фрукты', 'Фрукты и ягоды', '3,2 кг', 630), item('Бакалея', 'Рис, паста, булгур, овсянка, хлеб и лепёшки', '2,8 кг + 2 уп.', 767), item('База', 'Томатный соус, горчица, специи, травы', '1 набор', 218), item('Удовольствия', 'Сок, 4 сырка, маффины/пирог', '1,5 л + 4 шт.', 322), item('Доставка', 'Резерв на слот/пакеты', '1 заказ', 100)],
+          [item('Белок', 'Форель', '0,9 кг', 950), item('Белок', 'Куриное филе и бёдра', '1,3 кг', 600), item('Белок', 'Печень + фарш из индейки', '0,95 кг', 560), item('Белок', 'Яйца С1', '20 шт.', 270), item('Молочное', 'Творог, сыр, молоко/кефир, йогурт', '1,8 кг/л', 931), item('Овощи', 'Картофель, лук, морковь, капуста', '5 кг', 387), item('Овощи', 'Томаты, огурцы, перец, зелень', '3 кг', 523), item('Овощи', 'Замороженные овощи', '1,3 кг', 250), item('Фрукты', 'Фрукты и ягоды', '2,7 кг', 382), item('Бакалея', 'Рис, булгур, паста, овсянка, хлеб/лепёшки', '3 кг + 2 уп.', 725), item('База', 'Томаты, специи, горчица, чеснок, лимон', '1 набор', 200), item('Удовольствия', 'Сок, 4 сырка, выпечка', '1,5 л + 4 шт.', 332), item('Доставка', 'Резерв на слот/пакеты', '1 заказ', 100)]
+        ]
+      },
+      full: {
+        name: 'До 30 000 ₽', cap: 30000, menuIndex: 4,
+        subtitle: 'Максимум качества в рамках задачи: больше филе, говядины, мягких сыров, ягод и лосося. Объём еды не раздувается — растёт качество и гибкость.',
+        cartCopy: 'Верхний бюджет не «заставляет» покупать больше еды: он меняет качество белка, рыбы, сыров и свежих продуктов. Если вы не хотите часть улучшений, оставьте запас в бюджете.',
+        shopping: [
+          [item('Белок', 'Куриное филе/цыплёнок', '1,9 кг', 1100), item('Белок', 'Индейка, говядина + печень', '0,95 кг', 830), item('Белок', 'Яйца С1', '20 шт.', 270), item('Молочное', 'Творог, выдержанный и мягкий сыр', '1,1 кг', 851), item('Молочное', 'Кефир/молоко + густой йогурт', '2,8 л / 0,5 кг', 430), item('Овощи', 'Картофель, лук и морковь', '4,5 кг', 327), item('Овощи', 'Томаты, огурцы, капуста, зелень', '3,7 кг', 590), item('Овощи', 'Замороженные овощи + кукуруза/грибы', '2 кг', 390), item('Фрукты', 'Фрукты, ягоды, авокадо', '3,5 кг', 720), item('Бакалея', 'Рис, паста, гречка и овсянка', '2,8 кг', 484), item('Бакалея', 'Хлеб на закваске и лепёшки', '3 уп.', 260), item('База', 'Томаты, соусы, специи, свежие травы', '1 набор', 290), item('Удовольствия', 'Сок, 5 сырков, домашняя выпечка', '1,5 л + 5 шт.', 510), item('Дополнительно', 'Орехи и свежие грибы', '0,2 кг / 0,4 кг', 268), item('Доставка', 'Резерв на слот/пакеты', '1 заказ', 100)],
+          [item('Белок', 'Лосось', '0,9 кг', 1320), item('Белок', 'Куриное филе/индейка', '1 кг', 620), item('Белок', 'Индейка и свиная вырезка', '1,4 кг', 940), item('Белок', 'Яйца С1', '20 шт.', 270), item('Молочное', 'Творог, сыр, кефир и греческий йогурт', '2 кг/л', 921), item('Овощи', 'Картофель, лук, морковь, капуста', '5,5 кг', 407), item('Овощи', 'Томаты, огурцы, перец, зелень', '2,6 кг', 620), item('Овощи', 'Брокколи и замороженная смесь', '2 кг', 250), item('Фрукты', 'Фрукты, ягоды, авокадо', '3 кг', 552), item('Бакалея', 'Паста, рис, гречка, овсянка, хлеб, лепёшки', '3,2 кг + 2 уп.', 790), item('База', 'Томаты, чеснок, лимон, приправы', '1 набор', 200), item('Удовольствия', 'Сок, 4 сырка, выпечка', '1,5 л + 4 шт.', 400), item('Дополнительно', 'Орехи', '0,1 кг', 120), item('Доставка', 'Резерв на слот/пакеты', '1 заказ', 100)],
+          [item('Белок', 'Цыплёнок и куриное филе', '2,4 кг', 1350), item('Белок', 'Фарш из индейки и говядины', '0,7 кг', 800), item('Белок', 'Яйца С1', '20 шт.', 270), item('Молочное', 'Творог, сыры, молоко/кефир, греческий йогурт', '2,1 кг/л', 1251), item('Овощи', 'Картофель, лук, морковь', '4,5 кг', 327), item('Овощи', 'Замороженные овощи', '1,5 кг', 360), item('Овощи', 'Томаты, огурцы, капуста, перец, зелень', '3,8 кг', 665), item('Фрукты', 'Фрукты, ягоды и авокадо', '3,7 кг', 830), item('Бакалея', 'Рис, паста, булгур, овсянка, хлеб и лепёшки', '3 кг + 2 уп.', 827), item('База', 'Томатный соус, горчица, специи, травы', '1 набор', 268), item('Удовольствия', 'Сок, 5 сырков, выпечка', '1,5 л + 5 шт.', 372), item('Доставка', 'Резерв на слот/пакеты', '1 заказ', 100)],
+          [item('Белок', 'Лосось', '0,9 кг', 1400), item('Белок', 'Куриное филе/цыплёнок', '1,3 кг', 750), item('Белок', 'Печень + фарш из индейки/говядины', '0,95 кг', 760), item('Белок', 'Яйца С1', '20 шт.', 270), item('Молочное', 'Творог, сыры, кефир и густой йогурт', '2 кг/л', 1181), item('Овощи', 'Картофель, лук, морковь, капуста', '5 кг', 387), item('Овощи', 'Томаты, огурцы, перец, зелень', '3,4 кг', 623), item('Овощи', 'Замороженные овощи', '1,3 кг', 250), item('Фрукты', 'Фрукты, ягоды и авокадо', '3 кг', 432), item('Бакалея', 'Рис, булгур, паста, овсянка, хлеб/лепёшки', '3,1 кг + 2 уп.', 775), item('База', 'Томаты, специи, горчица, чеснок, лимон, травы', '1 набор', 240), item('Удовольствия', 'Сок, 4 сырка, выпечка', '1,5 л + 4 шт.', 332), item('Доставка', 'Резерв на слот/пакеты', '1 заказ', 100)]
+        ]
+      }
+    };
+
+    const recipes = [
+      ['Боул/вок на 3 порции', '25–30 мин', '600–700 г мяса, 250 г сухого риса, 700 г овощей. Жарьте мясо порциями, овощи — быстро, соус добавляйте в конце.'],
+      ['Паста с соусом', '30 мин', '500–600 г фарша/филе, 250 г сухой пасты, 400 г томатов, 80–120 г сыра. Сразу отложите третью порцию.'],
+      ['Рыба + противень овощей', '25 мин', '800–900 г рыбы, 1–1,2 кг картофеля, 600 г брокколи/смеси. Рыбу запекайте отдельно, чтобы не пересушить.'],
+      ['Запеканка на 3 порции', '45 мин', '600 г фарша/курицы, 900 г овощей/картофеля, 120 г сыра. Хорошо переживает следующий день.'],
+      ['Фахитас/кесадилья', '25 мин', '600 г курицы, 2 перца, лук, 4 лепёшки, 100–150 г сыра. Соус — йогурт + лимон + специи.'],
+      ['Сырники или панкейки', '25 мин', '400–500 г творога, 2 яйца, 80–100 г муки/овсянки. Добавьте фрукт, йогурт и ягоды по бюджету.'],
+      ['Домашняя пицца', '40 мин', 'Тесто из имеющейся муки, 400–500 г начинки, 150–200 г сыра. Не делайте второй ужин из остатков — оставьте на обед.'],
+      ['Кебабы в аэрогриле', '30 мин', '700 г филе, йогурт/специи, 250 г сухого булгура, 700 г овощей. Маринад можно сделать утром.']
+    ];
+
+    let currentBudget = 'comfort';
+    let currentWeek = 0;
+
+    const totalOf = (items) => items.reduce((sum, row) => sum + row.price, 0);
+    const planTotal = (plan) => plan.shopping.reduce((sum, list) => sum + totalOf(list), 0);
+    const groupedTotals = (plan) => {
+      const map = new Map();
+      plan.shopping.flat().forEach(({ section, price }) => map.set(section, (map.get(section) || 0) + price));
+      const labels = ['Белок', 'Молочное', 'Овощи', 'Фрукты', 'Бакалея', 'База', 'Удовольствия', 'Дополнительно', 'Доставка'];
+      return labels.filter((k) => map.has(k)).map((name) => ({ name, total: map.get(name) }));
+    };
+    const escapeHTML = (str) => String(str).replace(/[&<>"]/g, (char) => ({ '&':'&amp;', '<':'&lt;', '>':'&gt;', '"':'&quot;' }[char]));
+
+    function renderBudget() {
+      const plan = plans[currentBudget];
+      const total = planTotal(plan);
+      document.querySelectorAll('[data-budget]').forEach((button) => button.classList.toggle('is-active', button.dataset.budget === currentBudget));
+      document.getElementById('plan-subtitle').textContent = plan.subtitle;
+      document.getElementById('monthly-total').innerHTML = f(total);
+      document.getElementById('budget-buffer').innerHTML = `${f(plan.cap - total)} остаётся в лимите`;
+      document.getElementById('budget-meter').style.width = `${Math.min(100, total / plan.cap * 100)}%`;
+      document.getElementById('shopping-copy').textContent = plan.cartCopy;
+      document.getElementById('live-status').textContent = `${plan.name}, ${weeks[currentWeek].label}: меню и корзина обновлены.`;
+      renderBars(plan);
+      renderCategories(plan);
+      renderMenu();
+      renderShopping();
+    }
+
+    function renderBars(plan) {
+      const max = Math.max(...plan.shopping.map(totalOf));
+      document.getElementById('week-bars').innerHTML = plan.shopping.map((list, index) => {
+        const total = totalOf(list);
+        const height = Math.max(25, Math.round(total / max * 100));
+        return `<div class="bar-col"><div class="bar-wrap"><div class="bar ${index === currentWeek ? 'is-current' : ''}" data-amount="${txt(total)}" style="height:${height}%"></div></div><small>Нед. ${index + 1}</small></div>`;
+      }).join('');
+    }
+
+    function renderCategories(plan) {
+      const groups = groupedTotals(plan).filter((x) => !['База', 'Доставка', 'Дополнительно'].includes(x.name));
+      const largest = Math.max(...groups.map((x) => x.total));
+      document.getElementById('category-list').innerHTML = groups.map(({ name, total }) => `<div class="category-row"><span>${escapeHTML(name)}</span><div class="category-track"><i style="width:${Math.round(total/largest*100)}%"></i></div><strong>${f(total)}</strong></div>`).join('');
+    }
+
+    function renderWeekTabs() {
+      document.getElementById('week-tabs').innerHTML = weeks.map((week, index) => `<button type="button" role="tab" aria-selected="${index === currentWeek}" class="${index === currentWeek ? 'is-active' : ''}" data-week="${index}">${week.label}</button>`).join('');
+      document.querySelectorAll('[data-week]').forEach((button) => button.addEventListener('click', () => { currentWeek = Number(button.dataset.week); renderWeekTabs(); renderBudget(); }));
+    }
+
+    function renderMenu() {
+      const plan = plans[currentBudget];
+      const week = weeks[currentWeek];
+      const dishIndex = plan.menuIndex;
+      document.getElementById('menu-body').innerHTML = week.meals.map(([day, type, economy, comfort, full, him, her, batch]) => `
+        <tr><td data-label="День"><span class="meal-day">${day}</span><span class="meal-type">${type}</span></td><td class="dish" data-label="Блюдо">${[economy, comfort, full][dishIndex - 2]}</td><td class="kcal" data-label="Он">≈ ${him} ккал</td><td class="kcal" data-label="Она">≈ ${her} ккал</td><td class="portions" data-label="Порции">${batch}</td></tr>`).join('');
+      document.getElementById('prep-list').innerHTML = week.prep.map((step) => `<li>${step}</li>`).join('');
+    }
+
+    function renderShopping() {
+      const plan = plans[currentBudget];
+      const list = plan.shopping[currentWeek];
+      document.getElementById('shop-week-title').textContent = `неделю ${currentWeek + 1}`;
+      document.getElementById('shopping-body').innerHTML = list.map((row) => `<tr><td data-label="Раздел">${escapeHTML(row.section)}</td><td data-label="Что купить">${escapeHTML(row.name)}</td><td data-label="Количество">${escapeHTML(row.qty)}</td><td data-label="Ориентир">${f(row.price)}</td></tr>`).join('');
+      document.getElementById('shopping-total').innerHTML = f(totalOf(list));
+    }
+
+    function renderRecipes() {
+      document.getElementById('recipe-grid').innerHTML = recipes.map(([name, time, body]) => `<article class="recipe"><div class="recipe__top"><h3>${name}</h3><time>${time}</time></div><p>${body}</p></article>`).join('');
+    }
+
+    document.querySelectorAll('[data-budget]').forEach((button) => button.addEventListener('click', () => { currentBudget = button.dataset.budget; renderBudget(); }));
+    document.getElementById('print-button').addEventListener('click', () => window.print());
+    document.getElementById('copy-list').addEventListener('click', async () => {
+      const plan = plans[currentBudget];
+      const list = plan.shopping[currentWeek];
+      const content = `${plan.name} · ${weeks[currentWeek].label}\n\n${list.map((x) => `${x.section}: ${x.name} — ${x.qty} — ${txt(x.price)}`).join('\n')}\n\nИтого: ${txt(totalOf(list))}`;
+      const button = document.getElementById('copy-list');
+      try {
+        if (navigator.clipboard && navigator.clipboard.writeText) {
+          await navigator.clipboard.writeText(content);
+        } else {
+          const helper = document.createElement('textarea');
+          helper.value = content;
+          helper.setAttribute('readonly', '');
+          helper.style.cssText = 'position:fixed;left:-9999px;top:0';
+          document.body.appendChild(helper);
+          helper.select();
+          if (!document.execCommand('copy')) throw new Error('Clipboard fallback failed');
+          helper.remove();
+        }
+        button.querySelector('span').textContent = 'Список скопирован';
+      } catch (_) {
+        button.querySelector('span').textContent = 'Скопируйте вручную';
+      }
+      setTimeout(() => { button.querySelector('span').textContent = 'Скопировать список'; }, 1800);
+    });
+
+    renderWeekTabs();
+    renderRecipes();
+    renderBudget();
+  </script>
+</body>
+</html>
