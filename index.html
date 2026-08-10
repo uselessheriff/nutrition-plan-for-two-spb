@@ -194,7 +194,7 @@
     .principle:nth-child(3) .principle__number { color: var(--sage); background: var(--sage-soft); }
     .principle h3 { margin-bottom: 8px; font-size: 18px; letter-spacing: -.025em; }
     .principle p { margin-bottom: 0; color: var(--ink-soft); font-size: 14px; }
-    .split-info { margin-top: 44px; display: grid; grid-template-columns: minmax(0, 1.2fr) minmax(0, .8fr); gap: 24px; }
+    .split-info { margin-top: 44px; }
     .guide { padding: 24px; border: 1px solid var(--line); border-radius: var(--radius); }
     .guide h3 { margin-bottom: 10px; font-size: 20px; letter-spacing: -.03em; }
     .guide p { color: var(--ink-soft); }
@@ -202,12 +202,6 @@
     .guide li { margin-bottom: 9px; }
     .guide--warn { background: #fffaf2; border-color: #f3dfbd; }
     .guide--warn p, .guide--warn li { color: #76592e; }
-    .recipe-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 16px; }
-    .recipe { padding: 18px; border: 1px solid var(--line); border-radius: 13px; }
-    .recipe__top { display: flex; align-items: center; justify-content: space-between; gap: 10px; margin-bottom: 8px; }
-    .recipe h3 { margin: 0; font-size: 15px; letter-spacing: -.02em; }
-    .recipe time { color: var(--muted); font-size: 11px; font-weight: 720; white-space: nowrap; }
-    .recipe p { margin-bottom: 0; color: var(--ink-soft); font-size: 12px; }
     .recipe-dialog { width: min(760px, calc(100vw - 32px)); max-width: none; max-height: calc(100dvh - 32px); padding: 0; overflow: hidden; border: 1px solid var(--line); border-radius: 20px; color: var(--ink); background: var(--white); box-shadow: 0 28px 80px rgba(16,43,75,.28); }
     .recipe-dialog::backdrop { background: rgba(16,43,75,.56); backdrop-filter: blur(3px); }
     .recipe-dialog__inner { max-height: calc(100dvh - 32px); overflow: auto; }
@@ -337,7 +331,7 @@
       .spend-summary__amount { font-size: 36px; }
       .calorie-board { grid-template-columns: 1fr 1fr; }
       .ring { grid-column: span 2; grid-row: 1; justify-self: center; }
-      .principles, .recipe-grid, .footnotes__grid { grid-template-columns: 1fr; }
+      .principles, .footnotes__grid { grid-template-columns: 1fr; }
       .recipe-dialog { width: min(100vw - 20px, 760px); max-height: calc(100dvh - 20px); border-radius: 16px; }
       .recipe-dialog__inner { max-height: calc(100dvh - 20px); }
       .recipe-dialog__head { padding: 21px 19px 18px; }
@@ -411,7 +405,7 @@
       .facts { grid-template-columns: repeat(5, 1fr); }
       .fact { min-height: 50px; }
       .overview-grid, .menu-grid, .shop-grid, .split-info { grid-template-columns: 1fr; }
-      .surface, .guide, .recipe { break-inside: avoid; box-shadow: none; }
+      .surface, .guide { break-inside: avoid; box-shadow: none; }
       .section { padding: 22px 0; }
       h1 { font-size: 34px; }
       h2 { font-size: 25px; }
@@ -513,7 +507,7 @@
         </div>
         <div class="actual-layout">
           <article class="surface">
-            <div class="actual-week-head"><div><h3>Расписание без «овощей для салата»</h3><p>Нажмите на блюдо — откроется точная карточка с количеством каждого продукта и шагами.</p></div><span>11 приёмов пищи</span></div>
+            <div class="actual-week-head"><div><h3>Расписание без «овощей для салата»</h3><p>Нажмите на название блюда — откроется привычная карточка рецепта с точным количеством каждого продукта и шагами.</p></div><span>11 приёмов пищи</span></div>
             <ol class="actual-meal-list" id="actual-meal-list" aria-label="Фактическое меню недели"></ol>
           </article>
           <aside class="actual-stock">
@@ -583,7 +577,6 @@
           <article class="principle"><div class="principle__number">03</div><h3>Планируйте остатки, а не «доедайте»</h3><p>Две–три партии в неделю готовятся на три порции. Ланч-бокс подписывается и убирается сразу, пока ужин не разошёлся по тарелкам.</p></article>
         </div>
         <div class="split-info">
-          <article class="guide"><h3>Быстрые базовые рецепты</h3><div class="recipe-grid" id="recipe-grid"></div></article>
           <article class="guide guide--warn"><h3>Как отслеживать результат без жёсткости</h3><p>Это пищевой план, а не медицинская программа. Никаких диагнозов из него не следует.</p><ul><li>Парню: взвешиваться 1 раз в неделю утром. Цель «−3,5 кг» разумнее оценивать за 8–14 недель, а не за месяц.</li><li>Если две недели нет изменений, сначала уменьшите 1–2 жидких калорийных перекуса/выпечки, а не белок и овощи.</li><li>Девушке: если падают сила, настроение или восстановление, добавьте 1 порцию гарнира + молочный/фруктовый перекус в тренировочный день.</li><li>При заболеваниях, нарушениях пищевого поведения, беременности/ГВ или стойком ухудшении самочувствия нужен врач или диетолог.</li></ul></article>
         </div>
       </div>
@@ -724,17 +717,6 @@
         ]
       }
     };
-
-    const recipes = [
-      ['Боул/вок на 3 порции', '25–30 мин', '600–700 г мяса, 250 г сухого риса, 700 г овощей. Жарьте мясо порциями, овощи — быстро, соус добавляйте в конце.'],
-      ['Паста с соусом', '30 мин', '500–600 г фарша/филе, 250 г сухой пасты, 400 г томатов, 80–120 г сыра. Сразу отложите третью порцию.'],
-      ['Рыба + противень овощей', '25 мин', '800–900 г рыбы, 1–1,2 кг картофеля, 600 г брокколи/смеси. Рыбу запекайте отдельно, чтобы не пересушить.'],
-      ['Запеканка на 3 порции', '45 мин', '600 г фарша/курицы, 900 г овощей/картофеля, 120 г сыра. Хорошо переживает следующий день.'],
-      ['Фахитас/кесадилья', '25 мин', '600 г курицы, 2 перца, лук, 4 лепёшки, 100–150 г сыра. Соус — йогурт + лимон + специи.'],
-      ['Сырники или панкейки', '25 мин', '400–500 г творога, 2 яйца, 80–100 г муки/овсянки. Добавьте фрукт, йогурт и ягоды по бюджету.'],
-      ['Домашняя пицца', '40 мин', 'Тесто из имеющейся муки, 400–500 г начинки, 150–200 г сыра. Не делайте второй ужин из остатков — оставьте на обед.'],
-      ['Кебабы в аэрогриле', '30 мин', '700 г филе, йогурт/специи, 250 г сухого булгура, 700 г овощей. Маринад можно сделать утром.']
-    ];
 
     const tier = (economy, comfort, full) => [economy, comfort, full];
     const recipe = (time, portions, ingredients, steps, tip) => ({ time, portions, ingredients, steps, tip });
@@ -1130,10 +1112,6 @@
       document.getElementById('shopping-total').innerHTML = f(totalOf(list));
     }
 
-    function renderRecipes() {
-      document.getElementById('recipe-grid').innerHTML = recipes.map(([name, time, body]) => `<article class="recipe"><div class="recipe__top"><h3>${name}</h3><time>${time}</time></div><p>${body}</p></article>`).join('');
-    }
-
     function pendingExpenseIdFor(name) {
       const normalized = name.toLocaleLowerCase('ru-RU');
       if (normalized.includes('картоф')) return 'potatoes';
@@ -1227,7 +1205,6 @@
     });
 
     renderWeekTabs();
-    renderRecipes();
     loadActualExpenseState();
     renderActualWeek();
     renderBudget();
