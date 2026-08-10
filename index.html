@@ -231,7 +231,7 @@
     .actual-banner h2 { margin-bottom: 7px; }
     .actual-banner p { max-width: 760px; margin: 0; color: var(--ink-soft); font-size: 14px; line-height: 1.5; }
     .actual-banner__date { flex: 0 0 auto; padding: 7px 10px; border-radius: 99px; color: #285d86; background: #dcecf8; font-size: 12px; font-weight: 790; white-space: nowrap; }
-    .actual-summary { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 14px; margin-top: 16px; }
+    .actual-summary { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 14px; margin-top: 16px; }
     .actual-stat { min-height: 118px; padding: 17px 18px; border: 1px solid var(--line); border-radius: 14px; background: var(--white); }
     .actual-stat--primary { color: var(--white); border-color: var(--ink); background: var(--ink); }
     .actual-stat__label { display: block; margin-bottom: 7px; color: var(--muted); font-size: 11px; font-weight: 790; text-transform: uppercase; letter-spacing: .045em; }
@@ -239,21 +239,20 @@
     .actual-stat strong { display: block; font-size: clamp(23px, 3vw, 31px); line-height: 1; letter-spacing: -.045em; }
     .actual-stat small { display: block; margin-top: 8px; color: var(--ink-soft); font-size: 12px; line-height: 1.4; }
     .actual-stat--primary small { color: #d7e7f3; }
-    .actual-layout { display: grid; grid-template-columns: minmax(0, 1fr) 296px; gap: 24px; margin-top: 24px; align-items: start; }
-    .actual-week-head { display: flex; align-items: flex-start; justify-content: space-between; gap: 16px; padding: 19px 21px 15px; border-bottom: 1px solid var(--line); }
-    .actual-week-head h3 { margin: 0 0 4px; font-size: 18px; letter-spacing: -.025em; }
-    .actual-week-head p { margin: 0; color: var(--ink-soft); font-size: 12px; line-height: 1.45; }
-    .actual-week-head span { flex: 0 0 auto; color: #426b45; font-size: 12px; font-weight: 790; }
-    .actual-meal-list { display: grid; margin: 0; padding: 0; list-style: none; }
-    .actual-meal { border-bottom: 1px solid var(--line); }
-    .actual-meal:last-child { border-bottom: 0; }
-    .actual-meal__button { display: grid; width: 100%; grid-template-columns: 112px minmax(0, 1fr) auto; gap: 13px; align-items: center; padding: 15px 21px; border: 0; color: var(--ink); background: var(--white); text-align: left; cursor: pointer; touch-action: manipulation; }
-    .actual-meal__button:hover { background: #f8fbfd; }
-    .actual-meal__button:focus-visible { position: relative; z-index: 1; outline: 3px solid #8db9d9; outline-offset: -3px; }
-    .actual-meal__when { color: var(--ink-soft); font-size: 12px; font-weight: 760; line-height: 1.35; }
-    .actual-meal__name { display: block; font-size: 14px; font-weight: 780; line-height: 1.35; }
+    .actual-layout { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 24px; margin-top: 24px; align-items: start; }
+    .actual-meals-panel { margin-top: 24px; }
+    .actual-meals-panel__head { display: flex; align-items: flex-start; justify-content: space-between; gap: 16px; padding: 20px 21px 15px; border-bottom: 1px solid var(--line); }
+    .actual-meals-panel__head h3 { margin: 0 0 4px; font-size: 18px; letter-spacing: -.025em; }
+    .actual-meals-panel__head p { margin: 0; color: var(--ink-soft); font-size: 12px; line-height: 1.45; }
+    .actual-meals-panel__head span { flex: 0 0 auto; color: #426b45; font-size: 12px; font-weight: 790; }
+    .actual-meal-cards { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px; padding: 18px 21px 21px; }
+    .actual-meal-card { display: block; min-height: 142px; width: 100%; padding: 15px; border: 1px solid var(--line); border-radius: 12px; color: var(--ink); background: #fff; text-align: left; cursor: pointer; touch-action: manipulation; }
+    .actual-meal-card:hover { border-color: #a9c5dc; background: #f8fbfd; }
+    .actual-meal-card:focus-visible { outline: 3px solid #8db9d9; outline-offset: 2px; }
+    .actual-meal__when { display: block; color: var(--ink-soft); font-size: 12px; font-weight: 760; line-height: 1.35; }
+    .actual-meal__name { display: block; margin-top: 7px; font-size: 14px; font-weight: 780; line-height: 1.35; }
     .actual-meal__meta { display: block; margin-top: 3px; color: var(--muted); font-size: 11px; font-weight: 650; line-height: 1.35; }
-    .actual-meal__status { padding: 5px 8px; border-radius: 99px; color: #426b45; background: var(--sage-soft); font-size: 11px; font-weight: 800; white-space: nowrap; }
+    .actual-meal__status { display: inline-block; margin-top: 11px; padding: 5px 8px; border-radius: 99px; color: #426b45; background: var(--sage-soft); font-size: 11px; font-weight: 800; white-space: nowrap; }
     .actual-meal__status--planned { color: #285d86; background: var(--blue-soft); }
     .actual-stock { padding: 20px; border: 1px solid var(--line); border-radius: 14px; background: var(--white); }
     .actual-stock h3 { margin: 0 0 8px; font-size: 16px; letter-spacing: -.02em; }
@@ -262,6 +261,11 @@
     .actual-stock li { display: flex; justify-content: space-between; gap: 12px; padding: 9px 0; border-top: 1px solid var(--line); color: var(--ink-soft); font-size: 12px; line-height: 1.35; }
     .actual-stock li strong { color: var(--ink); font-size: 12px; text-align: right; }
     .actual-stock__note { margin-top: 15px !important; padding: 11px 12px; border-radius: 10px; color: #426b45 !important; background: var(--sage-soft); }
+    .actual-topup { border-color: #f3dfbd; background: #fffaf2; }
+    .actual-topup > p { color: #76592e; }
+    .actual-topup .actual-stock__note { color: #76592e !important; background: #fff2d4; }
+    .actual-topup-list li { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 3px 12px; }
+    .actual-topup-list small { grid-column: 1 / -1; color: #76592e; font-size: 11px; line-height: 1.35; }
     .expense-tracker { margin-top: 24px; }
     .expense-tracker__head { display: flex; align-items: flex-start; justify-content: space-between; gap: 18px; padding: 21px 21px 0; }
     .expense-tracker__head h3 { margin: 0 0 5px; font-size: 18px; letter-spacing: -.025em; }
@@ -342,12 +346,11 @@
       .bar::after { font-size: 9px; }
       .actual-banner { display: block; padding: 19px; }
       .actual-banner__date { display: inline-block; margin-top: 12px; }
-      .actual-summary { grid-template-columns: 1fr; gap: 10px; }
+      .actual-summary { grid-template-columns: 1fr 1fr; gap: 10px; }
       .actual-stat { min-height: 0; }
-      .actual-meal__button { grid-template-columns: 1fr auto; gap: 7px 12px; padding: 14px 16px; }
-      .actual-meal__when { grid-column: 1 / -1; }
-      .actual-week-head, .expense-tracker__head { padding-left: 16px; padding-right: 16px; }
+      .actual-meals-panel__head, .expense-tracker__head { padding-left: 16px; padding-right: 16px; }
       .actual-stock { padding: 17px; }
+      .actual-meal-cards { grid-template-columns: repeat(2, minmax(0, 1fr)); padding: 16px; }
       .expense-summary { grid-template-columns: 1fr; margin-left: 16px; margin-right: 16px; }
       .actual-category-list { margin-left: 16px; margin-right: 16px; }
       .expense-form { grid-template-columns: 1fr; padding: 16px; }
@@ -388,6 +391,7 @@
       .fact { gap: 9px; }
       .fact span { font-size: 10px; }
       .week-tabs { gap: 7px; }
+      .actual-meal-cards { grid-template-columns: 1fr; }
       .week-tabs button { padding-left: 11px; padding-right: 11px; }
       #menu-body td, #shopping-body td { grid-template-columns: 82px minmax(0, 1fr); }
     }
@@ -502,22 +506,28 @@
         </div>
         <div class="actual-summary" aria-label="Сводка фактической недели">
           <article class="actual-stat actual-stat--primary"><span class="actual-stat__label">Учтено по чекам</span><strong id="actual-known-total">3&nbsp;254,94&nbsp;₽</strong><small>Без маскарпоне, который не относится к этой неделе.</small></article>
-          <article class="actual-stat"><span class="actual-stat__label">До плана недели</span><strong id="actual-plan-gap">2&nbsp;895,06&nbsp;₽</strong><small>Сравнение с комфортным планом на 25&nbsp;000&nbsp;₽: 6&nbsp;150&nbsp;₽ на неделю.</small></article>
+          <article class="actual-stat"><span class="actual-stat__label">До плана до докупки</span><strong id="actual-plan-gap">2&nbsp;895,06&nbsp;₽</strong><small>Сравнение с комфортным планом на 25&nbsp;000&nbsp;₽: 6&nbsp;150&nbsp;₽ на неделю.</small></article>
           <article class="actual-stat"><span class="actual-stat__label">Нужно дописать цену</span><strong id="actual-pending-count">3 позиции</strong><small>Картофель, тесто для пиццы и помидоры пока не участвуют в сумме.</small></article>
+          <article class="actual-stat"><span class="actual-stat__label">Докупить к выходным</span><strong id="actual-topup-count">9 позиций</strong><small>Добавьте суммы в журнал только после нового чека.</small></article>
         </div>
         <div class="actual-layout">
-          <article class="surface">
-            <div class="actual-week-head"><div><h3>Расписание без «овощей для салата»</h3><p>Нажмите на название блюда — откроется привычная карточка рецепта с точным количеством каждого продукта и шагами.</p></div><span>11 приёмов пищи</span></div>
-            <ol class="actual-meal-list" id="actual-meal-list" aria-label="Фактическое меню недели"></ol>
+          <article class="actual-stock actual-topup">
+            <h3>Докупить к выходным</h3><p>Эти точные количества нужны для трёх новых блюд. План не смешивает эту корзину с уже оплаченными расходами: внесите сумму по новому чеку.</p>
+            <ul class="actual-topup-list" id="actual-topup-list" aria-label="Список докупки к выходным"></ul>
+            <p class="actual-stock__note">Пиццу в пятницу делите на четыре части: две на ужин, две — сразу в морозилку на следующую неделю.</p>
           </article>
           <aside class="actual-stock">
-            <h3>Что останется после воскресенья</h3><p>Скоропортящиеся белки, зелень, овощи, фрукты и сыр распределены полностью.</p>
+            <h3>Что останется после воскресенья</h3><p>Скоропортящиеся белки, зелень, овощи и фрукты распределены по рецептам; сохраните указанные остатки для следующей недели.</p>
             <ul id="actual-stock-list"></ul>
             <p class="actual-stock__note">Свежие фрукты распределены на перекусы: банан 95 г; сливы по 228 г во вторник и среду; киви по 206–207 г в четверг и пятницу.</p>
           </aside>
         </div>
+        <article class="surface actual-meals-panel" aria-labelledby="actual-meals-title">
+          <div class="actual-meals-panel__head"><div><h3 id="actual-meals-title">Блюда фактической недели</h3><p>Вместо длинного расписания — компактные карточки. Нажмите на блюдо, чтобы открыть привычный рецепт с точными ингредиентами и шагами.</p></div><span>11 приёмов пищи</span></div>
+          <div class="actual-meal-cards" id="actual-meal-cards" aria-label="Блюда фактической недели"></div>
+        </article>
         <article class="surface expense-tracker" aria-labelledby="expense-title">
-          <div class="expense-tracker__head"><div><h3 id="expense-title">Расходы недели</h3><p>Учёт уже заполнен по чеку «Ленты», моркови и голеням. Добавляйте цену картофеля, теста или новые покупки — сумма и разбивка по категориям пересчитаются на этом устройстве.</p></div></div>
+          <div class="expense-tracker__head"><div><h3 id="expense-title">Расходы недели</h3><p>Учёт уже заполнен по чеку «Ленты», моркови и голеням. Добавляйте цену картофеля, теста, помидоров и новой докупки после чека — сумма и разбивка по категориям пересчитаются на этом устройстве.</p></div></div>
           <div class="expense-summary">
             <div class="expense-summary__cell expense-summary__cell--actual"><span>Фактически учтено</span><strong id="expense-total">3&nbsp;254,94&nbsp;₽</strong><small id="expense-total-note">Без исключённых и неоценённых позиций.</small></div>
             <div class="expense-summary__cell"><span>План недели</span><strong id="expense-plan">6&nbsp;150&nbsp;₽</strong><small>Комфортный месячный сценарий.</small></div>
@@ -867,41 +877,44 @@
       ], ['Голени посолите, смажьте небольшим количеством масла и запекайте при 200 °C 32–38 минут, перевернув один раз.', 'Одновременно сварите два пакетика риса.', 'Лук нарежьте, морковь натрите. Обжарьте их 4 минуты, добавьте овощную смесь и готовьте ещё 7–8 минут.', 'Смешайте йогурт с укропом и щепоткой соли — это соус к голеням.', 'Подайте каждому по две голени, половине риса и овощей; сверху добавьте петрушку.'], 'Если срок годности голеней заканчивается раньше четверга, приготовьте их на день раньше, а печень переставьте на четверг.'),
       actualFriday: recipe('45 мин', '4 равные части', [
         ['Тесто для пиццы', '400 г — купить'], ['Мясо с куриных голеней', 'с 2 шт.'], ['Лисички замороженные', '100 г'], ['Помидоры', '2 крупных шт.'], ['Лук', '1 средняя шт.'], ['Кетчуп', '80 г'], ['Сыр', '100 г'], ['Петрушка', '20 г']
-      ], ['Снимите мясо с двух голеней; нарежьте его мелко. Лисички прогрейте на сухой сковороде до испарения влаги.', 'Тесто растяните на противне, оставляя тонкий бортик. Смажьте ровно 80 г кетчупа.', 'Разложите лук, тонкие ломтики двух помидоров, курицу и лисички.', 'Посыпьте сыром и запекайте при 220 °C 13–16 минут, до румяного края.', 'Добавьте петрушку, разрежьте на четыре равные части: две съешьте в пятницу, две оставьте на субботний обед.'], 'Цена теста пока не внесена в факт недели: добавьте её в журнал расходов после покупки.'),
+      ], ['Снимите мясо с двух голеней; нарежьте его мелко. Лисички прогрейте на сухой сковороде до испарения влаги.', 'Тесто растяните на противне, оставляя тонкий бортик. Смажьте ровно 80 г кетчупа.', 'Разложите лук, тонкие ломтики двух помидоров, курицу и лисички.', 'Посыпьте сыром и запекайте при 220 °C 13–16 минут, до румяного края.', 'Добавьте петрушку, разрежьте на четыре равные части: две съешьте в пятницу, две полностью остудите и заморозьте для следующей недели.'], 'Цена теста пока не внесена в факт недели: добавьте её в журнал расходов после покупки.'),
       actualSaturdayBreakfast: recipe('25 мин', '2 порции', [
         ['Творог', '250 г'], ['Овсяные хлопья', '80 г'], ['Яйца', '2 шт.'], ['Молоко', '100 мл'], ['Банан', '150 г'], ['Греческий йогурт', '135 г'], ['Сливы', '100 г'], ['Сахарная пудра', '10 г'], ['Масло', '5 мл']
       ], ['Разомните банан с творогом, яйцами и молоком до однородности.', 'Вмешайте овсяные хлопья и дайте тесту постоять 5 минут.', 'Выпекайте небольшие панкейки на слегка смазанной сковороде по 2–3 минуты с каждой стороны.', 'Разделите йогурт и нарезанные сливы между двумя тарелками.', 'Посыпьте готовые панкейки десятью граммами сахарной пудры.'], 'Не добавляйте больше хлопьев сразу: через несколько минут они впитают часть влаги сами.'),
-      actualSaturdayLunch: recipe('10 мин', '2 порции', [
-        ['Оставшаяся пицца', '2 из 4 частей'], ['Огурцы', '200 г'], ['Масло', '5 мл'], ['Соль', 'по вкусу']
-      ], ['Достаньте две оставшиеся части пиццы и разогрейте в аэрогриле 3–4 минуты при 170 °C или на сухой сковороде под крышкой.', 'Огурцы нарежьте и заправьте пятью миллилитрами масла с солью непосредственно перед подачей.', 'Подайте по одной части пиццы и половине салата каждому.'], 'Это запланированные остатки, а не «доедание»: пицца была заранее разделена на четыре равные порции.'),
-      actualSaturdayDinner: recipe('55 мин', '2 порции', [
-        ['Картофель', '450 г'], ['Творог', '150 г'], ['Яйца', '4 шт.'], ['Молоко', '150 мл'], ['Сыр', '30 г'], ['Лук', '1 средняя шт.'], ['Кетчуп', '50 г'], ['Петрушка', '5 г'], ['Масло', '10 мл']
-      ], ['Картофель нарежьте тонкими ломтиками и отварите 6–7 минут до полуготовности. Духовку разогрейте до 190 °C.', 'Лук мелко нарежьте и обжарьте на масле до прозрачности.', 'Смешайте творог, яйца, молоко, кетчуп, лук и петрушку. Посолите и поперчите.', 'В форму выложите картофель, сверху распределите творожную смесь и посыпьте сыром.', 'Запекайте 30–35 минут, затем дайте постоять 7 минут и разделите на две порции.'], 'Творог здесь заменяет фарш: он даёт белок, а четыре яйца делают запеканку сытной без отдельной покупки.'),
+      actualSaturdayLunch: recipe('30 мин', '2 порции', [
+        ['Тортильи', '4 шт. (≈ 280 г) — докупить'], ['Куриное филе', '350 г — докупить'], ['Шампиньоны', '150 г — докупить'], ['Сыр', '100 г — докупить'], ['Помидор', '1 крупный'], ['Лук', '1/2 средней шт.'], ['Кетчуп', '40 г'], ['Петрушка', '5 г'], ['Масло', '5 мл']
+      ], ['Куриное филе нарежьте небольшими кубиками, посолите и обжарьте на масле 5–6 минут до готовности.', 'Лук нарежьте очень тонко, шампиньоны пластинками. Добавьте к курице и готовьте ещё 5–6 минут, пока грибы не подрумянятся.', 'Помидор нарежьте мелкими кубиками, сыр натрите. На каждую тортилью нанесите по 10 г кетчупа.', 'Распределите курицу с грибами, помидор и сыр по двум тортильям; накройте оставшимися двумя и слегка прижмите.', 'Обжарьте кесадильи на сухой сковороде или в аэрогриле по 2–3 минуты с каждой стороны. Разрежьте каждую пополам и подайте сразу.'], 'Собирайте кесадильи прямо перед жаркой: тогда тортилья останется хрустящей, а сыр успеет расплавиться.'),
+      actualSaturdayDinner: recipe('50 мин', '2 порции', [
+        ['Куриный фарш', '500 г — докупить'], ['Картофель', '550 г'], ['Шампиньоны', '250 г — докупить'], ['Сливки 20%', '200 мл — докупить'], ['Яйцо', '1 шт.'], ['Лук', '1/2 средней шт.'], ['Молоко', '50 мл'], ['Огурцы', '200 г'], ['Петрушка', '5 г'], ['Мука', '10 г'], ['Масло', '10 мл']
+      ], ['Картофель очистите, нарежьте крупными кусками и поставьте вариться в подсоленной воде на 20–22 минуты.', 'Фарш смешайте с яйцом, половиной мелко натёртого лука, мукой и щепоткой соли. Сформируйте 10 небольших тефтелей.', 'Обжарьте тефтели на масле по 2 минуты с каждой стороны, затем переложите на тарелку.', 'В той же сковороде обжарьте оставшийся лук и шампиньоны 5 минут. Влейте сливки, верните тефтели и томите под крышкой 10–12 минут.', 'Слейте картофель, разомните с 50 мл молока. Огурцы нарежьте, смешайте с петрушкой и подайте рядом с тефтелями и пюре.'], 'Если хотите совсем без сковороды, тефтели можно запечь 14 минут в аэрогриле при 190 °C, а соус сделать отдельно.'),
       actualSundayBreakfast: recipe('15 мин', '2 порции', [
         ['Яйца', '5 шт.'], ['Молоко', '100 мл'], ['Сыр', '20 г'], ['Огурцы', '205 г'], ['Укроп', '10 г'], ['Петрушка', '5 г'], ['Масло', '5 мл']
       ], ['Огурцы нарежьте, укроп и петрушку мелко порубите.', 'Яйца взбейте с молоком, солью и половиной зелени.', 'Разогрейте сковороду с пятью миллилитрами масла, вылейте смесь и готовьте под крышкой 4–5 минут.', 'Посыпьте омлет тёртым сыром, накройте ещё на минуту.', 'Подайте с огурцами и оставшейся зеленью.'], 'Омлет получится нежнее, если не взбивать яйца до пены и не делать сильный огонь.'),
       actualSundayLunch: recipe('40 мин', '2 порции', [
         ['Овсяные хлопья', '160 г'], ['Молоко', '300 мл'], ['Яйца', '2 шт.'], ['Банан', '200 г'], ['Масло для формы', '5 мл']
       ], ['Разогрейте духовку до 180 °C. Форму смажьте пятью миллилитрами масла.', 'Разомните банан вилкой, смешайте с яйцами и молоком.', 'Добавьте овсяные хлопья, перемешайте и оставьте на 5 минут.', 'Перелейте массу в форму и запекайте 27–30 минут до схватывания середины.', 'Разделите на две порции после 5 минут отдыха.'], 'Здесь не нужен дополнительный сахар: спелый банан уже даёт сладость.'),
-      actualSundayDinner: recipe('25 мин', '2 порции', [
-        ['Рис', '2 порционных пакетика'], ['Яйца', '4 шт.'], ['Морковь', '50 г'], ['Лук', '1 средняя шт.'], ['Помидор', '1 крупная шт.'], ['Петрушка', '10 г'], ['Масло', '10 мл']
-      ], ['Сварите два пакетика риса и дайте воде полностью стечь.', 'Лук мелко нарежьте, морковь натрите, помидор нарежьте кубиком.', 'Обжарьте лук и морковь на масле 4 минуты, добавьте помидор и готовьте ещё 2 минуты.', 'Сдвиньте овощи к краю сковороды, влейте четыре слегка взбитых яйца и сделайте крупный скрэмбл.', 'Добавьте рис, перемешайте, прогрейте 2 минуты и посыпьте петрушкой.'], 'Этот ужин использует последний рис, морковь и помидор, но оставляет три яйца как резерв на следующую неделю.')
+      actualSundayDinner: recipe('45 мин', '3 порции', [
+        ['Говяжий или домашний фарш', '500 г — докупить'], ['Паста сухая', '260 г'], ['Пассата', '500 г — докупить'], ['Сыр', '80 г — докупить'], ['Лук', '1 средняя шт.'], ['Морковь', '50 г'], ['Чеснок', '1 зубчик — докупить'], ['Итальянские травы', '1 ч. л. — докупить'], ['Петрушка', '5 г'], ['Масло', '10 мл']
+      ], ['Лук, морковь и чеснок мелко нарежьте. Обжарьте их на масле 5–6 минут до мягкости.', 'Добавьте фарш, разбивайте лопаткой крупные комки и готовьте ещё 6–7 минут до уверенного подрумянивания.', 'Влейте пассату, добавьте итальянские травы и соль. Убавьте огонь и томите соус без крышки 18–20 минут.', 'За 10 минут до конца соуса сварите пасту на 1 минуту меньше времени на упаковке. Оставьте 100 мл воды от варки.', 'Смешайте пасту с соусом, при необходимости добавьте немного воды от пасты. Посыпьте сыром и петрушкой; третью порцию сразу уберите в ланч-бокс.'], 'Хорошо прожаренный фарш и короткое томление пассаты делают соус насыщенным без сахара и большого количества сыра.')
     };
     const actualWeekMeals = [
       { day: 'Понедельник', type: 'Ужин', title: 'Филе с картофелем, огурцами и томатами', meta: '2 порции · уже приготовлено', status: 'Готово', key: 'actualMonday', done: true },
       { day: 'Вторник', type: 'Ужин', title: 'Паста с курицей и лисичками', meta: '3 порции · третья в ланч-бокс', status: 'Запланировано', key: 'actualTuesday' },
       { day: 'Среда', type: 'Ужин', title: 'Печень по-строгановски с гречкой', meta: '3 порции · третья в ланч-бокс', status: 'Запланировано', key: 'actualWednesday' },
       { day: 'Четверг', type: 'Ужин', title: 'Голени с рисом и овощами', meta: '2 порции', status: 'Запланировано', key: 'actualThursday' },
-      { day: 'Пятница', type: 'Ужин', title: 'Пицца с курицей, лисичками и томатами', meta: '4 части · половина на субботу', status: 'Запланировано', key: 'actualFriday' },
+      { day: 'Пятница', type: 'Ужин', title: 'Пицца с курицей, лисичками и томатами', meta: '4 части · 2 на ужин, 2 в морозилку', status: 'Запланировано', key: 'actualFriday' },
       { day: 'Суббота', type: 'Завтрак', title: 'Творожно-овсяные панкейки', meta: '2 порции', status: 'Запланировано', key: 'actualSaturdayBreakfast' },
-      { day: 'Суббота', type: 'Обед', title: 'Остатки пиццы + огурцы', meta: '2 порции', status: 'Запланировано', key: 'actualSaturdayLunch' },
-      { day: 'Суббота', type: 'Ужин', title: 'Картофельно-творожная запеканка', meta: '2 порции', status: 'Запланировано', key: 'actualSaturdayDinner' },
+      { day: 'Суббота', type: 'Обед', title: 'Кесадильи с курицей, грибами и сыром', meta: '2 порции · нужна докупка', status: 'Запланировано', key: 'actualSaturdayLunch' },
+      { day: 'Суббота', type: 'Ужин', title: 'Тефтели в сливочно-грибном соусе с пюре', meta: '2 порции · нужна докупка', status: 'Запланировано', key: 'actualSaturdayDinner' },
       { day: 'Воскресенье', type: 'Завтрак', title: 'Омлет с сыром и огурцом', meta: '2 порции', status: 'Запланировано', key: 'actualSundayBreakfast' },
       { day: 'Воскресенье', type: 'Обед', title: 'Запечённая овсянка с бананом', meta: '2 порции', status: 'Запланировано', key: 'actualSundayLunch' },
-      { day: 'Воскресенье', type: 'Ужин', title: 'Рис с яйцом, морковью и томатом', meta: '2 порции', status: 'Запланировано', key: 'actualSundayDinner' }
+      { day: 'Воскресенье', type: 'Ужин', title: 'Паста болоньезе с мясным соусом', meta: '3 порции · третья в ланч-бокс', status: 'Запланировано', key: 'actualSundayDinner' }
     ];
     const actualRemainingStock = [
-      ['Картофель', '650 г'], ['Молоко', '450 мл'], ['Овсяные хлопья', '560 г'], ['Кетчуп', '570 г'], ['Яйца', '3 шт.'], ['Сахарная пудра', '70 г']
+      ['Картофель', '550 г'], ['Молоко', '550 мл'], ['Творог', '150 г'], ['Сыр', '50 г'], ['Овсяные хлопья', '560 г'], ['Кетчуп', '580 г'], ['Яйца', '10 шт.'], ['Сахарная пудра', '70 г'], ['Пицца с курицей', '2 части — заморозить']
+    ];
+    const actualTopUpPlan = [
+      ['Куриное филе', '350 г', 'кесадильи'], ['Куриный фарш', '500 г', 'тефтели'], ['Говяжий или домашний фарш', '500 г', 'болоньезе'], ['Шампиньоны', '400 г', '150 г на обед + 250 г на ужин'], ['Тортильи', '4 шт. (≈ 280 г)', 'кесадильи'], ['Сыр', '200 г', 'кесадильи + болоньезе'], ['Сливки 20%', '200 мл', 'грибной соус'], ['Пассата', '500 г', 'мясной соус'], ['Чеснок и итальянские травы', '1 головка + 1 пачка', 'болоньезе']
     ];
     const actualExpenseSeed = [
       { date: '09.08', name: 'Филе и печень из чека «Ленты»', category: 'Белок', amount: 657.78, status: 'Учтено' },
@@ -1050,8 +1063,10 @@
     }
 
     function renderActualWeek() {
-      document.getElementById('actual-meal-list').innerHTML = actualWeekMeals.map((meal, index) => `<li class="actual-meal"><button class="actual-meal__button" type="button" data-actual-recipe="${index}" aria-haspopup="dialog" aria-label="Открыть фактический рецепт: ${escapeHTML(meal.title)}"><span class="actual-meal__when">${escapeHTML(meal.day)}<br>${escapeHTML(meal.type)}</span><span><span class="actual-meal__name">${escapeHTML(meal.title)}</span><span class="actual-meal__meta">${escapeHTML(meal.meta)}</span></span><span class="actual-meal__status ${meal.done ? '' : 'actual-meal__status--planned'}">${escapeHTML(meal.status)}</span></button></li>`).join('');
+      document.getElementById('actual-meal-cards').innerHTML = actualWeekMeals.map((meal, index) => `<button class="actual-meal-card" type="button" data-actual-recipe="${index}" aria-haspopup="dialog" aria-label="Открыть фактический рецепт: ${escapeHTML(meal.title)}"><span class="actual-meal__when">${escapeHTML(meal.day)} · ${escapeHTML(meal.type)}</span><span class="actual-meal__name">${escapeHTML(meal.title)}</span><span class="actual-meal__meta">${escapeHTML(meal.meta)}</span><span class="actual-meal__status ${meal.done ? '' : 'actual-meal__status--planned'}">${escapeHTML(meal.status)}</span></button>`).join('');
       document.getElementById('actual-stock-list').innerHTML = actualRemainingStock.map(([name, amount]) => `<li><span>${escapeHTML(name)}</span><strong>${escapeHTML(amount)}</strong></li>`).join('');
+      document.getElementById('actual-topup-list').innerHTML = actualTopUpPlan.map(([name, amount, meal]) => `<li><span>${escapeHTML(name)}</span><strong>${escapeHTML(amount)}</strong><small>${escapeHTML(meal)}</small></li>`).join('');
+      document.getElementById('actual-topup-count').textContent = actualPendingLabel(actualTopUpPlan.length);
       renderActualExpenses();
     }
 
@@ -1130,7 +1145,7 @@
       const trigger = event.target.closest('[data-recipe]');
       if (trigger) openRecipe(Number(trigger.dataset.recipe));
     });
-    document.getElementById('actual-meal-list').addEventListener('click', (event) => {
+    document.getElementById('actual-meal-cards').addEventListener('click', (event) => {
       const trigger = event.target.closest('[data-actual-recipe]');
       if (trigger) openActualRecipe(Number(trigger.dataset.actualRecipe));
     });
