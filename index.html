@@ -232,6 +232,74 @@
     .recipe-steps li::marker { color: var(--tomato); font-weight: 850; }
     .recipe-dialog__tip { margin: 0 28px 28px; padding: 13px 15px; border-radius: 11px; color: #426b45; background: var(--sage-soft); font-size: 13px; line-height: 1.45; }
     .recipe-dialog__tip strong { color: #315f36; }
+    .actual-section { padding-top: 22px; background: linear-gradient(180deg, #f5faff 0%, #fff 72%); }
+    .actual-banner { display: flex; align-items: flex-start; justify-content: space-between; gap: 22px; padding: 22px 24px; border: 1px solid #c8d9e7; border-radius: var(--radius); background: var(--blue-soft); }
+    .actual-banner h2 { margin-bottom: 7px; }
+    .actual-banner p { max-width: 760px; margin: 0; color: var(--ink-soft); font-size: 14px; line-height: 1.5; }
+    .actual-banner__date { flex: 0 0 auto; padding: 7px 10px; border-radius: 99px; color: #285d86; background: #dcecf8; font-size: 12px; font-weight: 790; white-space: nowrap; }
+    .actual-summary { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 14px; margin-top: 16px; }
+    .actual-stat { min-height: 118px; padding: 17px 18px; border: 1px solid var(--line); border-radius: 14px; background: var(--white); }
+    .actual-stat--primary { color: var(--white); border-color: var(--ink); background: var(--ink); }
+    .actual-stat__label { display: block; margin-bottom: 7px; color: var(--muted); font-size: 11px; font-weight: 790; text-transform: uppercase; letter-spacing: .045em; }
+    .actual-stat--primary .actual-stat__label { color: #b9d3e9; }
+    .actual-stat strong { display: block; font-size: clamp(23px, 3vw, 31px); line-height: 1; letter-spacing: -.045em; }
+    .actual-stat small { display: block; margin-top: 8px; color: var(--ink-soft); font-size: 12px; line-height: 1.4; }
+    .actual-stat--primary small { color: #d7e7f3; }
+    .actual-layout { display: grid; grid-template-columns: minmax(0, 1fr) 296px; gap: 24px; margin-top: 24px; align-items: start; }
+    .actual-week-head { display: flex; align-items: flex-start; justify-content: space-between; gap: 16px; padding: 19px 21px 15px; border-bottom: 1px solid var(--line); }
+    .actual-week-head h3 { margin: 0 0 4px; font-size: 18px; letter-spacing: -.025em; }
+    .actual-week-head p { margin: 0; color: var(--ink-soft); font-size: 12px; line-height: 1.45; }
+    .actual-week-head span { flex: 0 0 auto; color: #426b45; font-size: 12px; font-weight: 790; }
+    .actual-meal-list { display: grid; margin: 0; padding: 0; list-style: none; }
+    .actual-meal { border-bottom: 1px solid var(--line); }
+    .actual-meal:last-child { border-bottom: 0; }
+    .actual-meal__button { display: grid; width: 100%; grid-template-columns: 112px minmax(0, 1fr) auto; gap: 13px; align-items: center; padding: 15px 21px; border: 0; color: var(--ink); background: var(--white); text-align: left; cursor: pointer; touch-action: manipulation; }
+    .actual-meal__button:hover { background: #f8fbfd; }
+    .actual-meal__button:focus-visible { position: relative; z-index: 1; outline: 3px solid #8db9d9; outline-offset: -3px; }
+    .actual-meal__when { color: var(--ink-soft); font-size: 12px; font-weight: 760; line-height: 1.35; }
+    .actual-meal__name { display: block; font-size: 14px; font-weight: 780; line-height: 1.35; }
+    .actual-meal__meta { display: block; margin-top: 3px; color: var(--muted); font-size: 11px; font-weight: 650; line-height: 1.35; }
+    .actual-meal__status { padding: 5px 8px; border-radius: 99px; color: #426b45; background: var(--sage-soft); font-size: 11px; font-weight: 800; white-space: nowrap; }
+    .actual-meal__status--planned { color: #285d86; background: var(--blue-soft); }
+    .actual-stock { padding: 20px; border: 1px solid var(--line); border-radius: 14px; background: var(--white); }
+    .actual-stock h3 { margin: 0 0 8px; font-size: 16px; letter-spacing: -.02em; }
+    .actual-stock > p { margin: 0 0 14px; color: var(--ink-soft); font-size: 12px; line-height: 1.45; }
+    .actual-stock ul { display: grid; gap: 0; margin: 0; padding: 0; list-style: none; }
+    .actual-stock li { display: flex; justify-content: space-between; gap: 12px; padding: 9px 0; border-top: 1px solid var(--line); color: var(--ink-soft); font-size: 12px; line-height: 1.35; }
+    .actual-stock li strong { color: var(--ink); font-size: 12px; text-align: right; }
+    .actual-stock__note { margin-top: 15px !important; padding: 11px 12px; border-radius: 10px; color: #426b45 !important; background: var(--sage-soft); }
+    .expense-tracker { margin-top: 24px; }
+    .expense-tracker__head { display: flex; align-items: flex-start; justify-content: space-between; gap: 18px; padding: 21px 21px 0; }
+    .expense-tracker__head h3 { margin: 0 0 5px; font-size: 18px; letter-spacing: -.025em; }
+    .expense-tracker__head p { max-width: 760px; margin: 0; color: var(--ink-soft); font-size: 12px; line-height: 1.45; }
+    .expense-summary { display: grid; grid-template-columns: 1.2fr 1fr 1fr; gap: 12px; margin: 18px 21px; }
+    .expense-summary__cell { padding: 14px; border-radius: 12px; background: #f8fbfd; }
+    .expense-summary__cell span { display: block; margin-bottom: 5px; color: var(--muted); font-size: 10px; font-weight: 800; text-transform: uppercase; letter-spacing: .045em; }
+    .expense-summary__cell strong { font-size: 19px; letter-spacing: -.035em; }
+    .expense-summary__cell small { display: block; margin-top: 4px; color: var(--ink-soft); font-size: 11px; line-height: 1.3; }
+    .expense-summary__cell--actual { color: var(--white); background: var(--ink); }
+    .expense-summary__cell--actual span, .expense-summary__cell--actual small { color: #c1d9ea; }
+    .actual-category-list { display: grid; gap: 9px; margin: 0 21px 20px; }
+    .actual-category-row { display: grid; grid-template-columns: minmax(118px, .55fr) minmax(80px, 1.45fr) auto; gap: 10px; align-items: center; color: var(--ink-soft); font-size: 12px; }
+    .actual-category-row strong { color: var(--ink); font-size: 12px; }
+    .actual-category-track { height: 8px; overflow: hidden; border-radius: 99px; background: #e8eff5; }
+    .actual-category-track i { display: block; height: 100%; border-radius: inherit; background: var(--blue); }
+    .expense-table-wrap { overflow-x: auto; border-top: 1px solid var(--line); }
+    .expense-table th, .expense-table td { padding: 11px 14px; font-size: 12px; }
+    .expense-table td:last-child { text-align: right; font-weight: 760; white-space: nowrap; }
+    .expense-row--excluded { color: var(--muted); background: #fbfcfd; text-decoration: line-through; }
+    .expense-row--pending { color: #7f6735; background: #fffaf0; }
+    .expense-status { display: inline-block; padding: 4px 7px; border-radius: 99px; color: #426b45; background: var(--sage-soft); font-size: 10px; font-weight: 800; text-decoration: none; }
+    .expense-status--pending { color: #806226; background: #fff2d4; }
+    .expense-status--excluded { color: var(--muted); background: #edf1f4; }
+    .expense-delete { padding: 0; border: 0; color: #9b453f; background: transparent; font: inherit; font-size: 11px; font-weight: 790; cursor: pointer; text-decoration: underline; }
+    .expense-form { display: grid; grid-template-columns: minmax(0, 1.45fr) minmax(130px, .8fr) minmax(110px, .55fr) auto; gap: 10px; padding: 18px 21px 21px; border-top: 1px solid var(--line); }
+    .expense-form label { display: grid; gap: 6px; color: var(--muted); font-size: 10px; font-weight: 800; text-transform: uppercase; letter-spacing: .04em; }
+    .expense-form input, .expense-form select { min-width: 0; height: 42px; padding: 0 10px; border: 1px solid #cfd9e4; border-radius: 9px; color: var(--ink); background: var(--white); font: inherit; font-size: 13px; }
+    .expense-form input:focus, .expense-form select:focus { outline: 3px solid #b9d3e9; outline-offset: 1px; border-color: #6f9dc1; }
+    .expense-form button { align-self: end; min-height: 42px; padding: 0 14px; border: 1px solid var(--ink); border-radius: 9px; color: var(--white); background: var(--ink); font-size: 12px; font-weight: 800; cursor: pointer; }
+    .expense-form button:hover { background: #1f4f78; }
+    .expense-form__hint { grid-column: 1 / -1; margin: -1px 0 0; color: var(--muted); font-size: 11px; line-height: 1.4; }
     .footnotes { padding: 30px 0 44px; border-top: 1px solid var(--line); color: var(--ink-soft); font-size: 12px; }
     .footnotes__grid { display: grid; grid-template-columns: 1.2fr .8fr; gap: 35px; }
     .footnotes h3 { margin-bottom: 8px; color: var(--ink); font-size: 14px; }
@@ -242,7 +310,7 @@
     @media (max-width: 980px) {
       .topbar__inner { min-height: 62px; }
       nav { display: none; }
-      .hero, .overview-grid, .menu-grid, .shop-grid, .split-info { grid-template-columns: 1fr; }
+      .hero, .overview-grid, .menu-grid, .shop-grid, .split-info, .actual-layout { grid-template-columns: 1fr; }
       .facts { grid-template-columns: repeat(3, 1fr); }
       .fact:nth-child(3) { border-right: 0; }
       .fact:nth-child(4) { padding-left: 0; }
@@ -278,6 +346,18 @@
       .recipe-dialog__tip { margin: 0 19px 20px; }
       .week-bars { gap: 10px; padding-left: 10px; padding-right: 10px; }
       .bar::after { font-size: 9px; }
+      .actual-banner { display: block; padding: 19px; }
+      .actual-banner__date { display: inline-block; margin-top: 12px; }
+      .actual-summary { grid-template-columns: 1fr; gap: 10px; }
+      .actual-stat { min-height: 0; }
+      .actual-meal__button { grid-template-columns: 1fr auto; gap: 7px 12px; padding: 14px 16px; }
+      .actual-meal__when { grid-column: 1 / -1; }
+      .actual-week-head, .expense-tracker__head { padding-left: 16px; padding-right: 16px; }
+      .actual-stock { padding: 17px; }
+      .expense-summary { grid-template-columns: 1fr; margin-left: 16px; margin-right: 16px; }
+      .actual-category-list { margin-left: 16px; margin-right: 16px; }
+      .expense-form { grid-template-columns: 1fr; padding: 16px; }
+      .expense-form button { width: 100%; }
     }
     @media (max-width: 800px) {
       .menu-table-wrap { overflow: visible; }
@@ -297,6 +377,14 @@
       .shop-table td:first-child { width: auto; color: var(--ink-soft); }
       .shop-table td:last-child { text-align: left; white-space: normal; }
       .shop-total { align-items: flex-start; flex-direction: column; gap: 5px; }
+      .expense-table-wrap { overflow: visible; }
+      .expense-table { display: block; }
+      .expense-table thead { position: absolute; width: 1px; height: 1px; padding: 0; overflow: hidden; clip: rect(0,0,0,0); white-space: nowrap; }
+      #expense-body { display: grid; gap: 10px; padding: 10px; }
+      #expense-body tr { display: block; overflow: hidden; border: 1px solid var(--line); border-radius: 12px; background: var(--white); }
+      #expense-body td { min-width: 0; display: grid; grid-template-columns: 98px minmax(0, 1fr); gap: 10px; padding: 9px 11px; border-bottom: 1px solid #e8edf2; font-size: 12px; text-align: left; white-space: normal; }
+      #expense-body td:last-child { border-bottom: 0; text-align: left; }
+      #expense-body td::before { content: attr(data-label); color: var(--muted); font-size: 10px; font-weight: 800; text-transform: uppercase; letter-spacing: .04em; }
     }
     @media (max-width: 390px) {
       .shell { padding: 0 14px; }
@@ -316,7 +404,7 @@
     @media print {
       body { font-size: 11px; }
       .topbar { position: static; }
-      .utility-btn, .budget-panel, .week-tabs, .basket-side .utility-btn { display: none !important; }
+      .utility-btn, .budget-panel, .week-tabs, .basket-side .utility-btn, .expense-form { display: none !important; }
       .recipe-dialog { display: none !important; }
       .shell { max-width: none; padding: 0 18px; }
       .hero { grid-template-columns: 1fr; padding: 22px 0; }
@@ -346,6 +434,7 @@
       </a>
       <nav aria-label="Навигация по документу">
         <a href="#overview">Обзор</a>
+        <a href="#actual-week">Факт недели</a>
         <a href="#menu">Меню</a>
         <a href="#shopping">Закупки</a>
         <a href="#principles">Принципы</a>
@@ -408,6 +497,48 @@
           </div>
           <p class="home-share">Будни: основное решение — один совместный ужин. Выходные: три домашних приёма пищи. Третья порция ужина обычно идёт девушке в ланч-бокс, а не добавляется парню сверх его рабочего обеда.</p>
         </div>
+      </div>
+    </section>
+
+    <section class="section actual-section" id="actual-week" aria-labelledby="actual-week-title">
+      <div class="shell">
+        <div class="actual-banner">
+          <div><h2 id="actual-week-title">Фактическая неделя: готовим из вашей корзины</h2><p>План пересобран после первого готового ужина. В карточках ниже — точные продукты, которые идут в каждое блюдо; маскарпоне исключён из недельного рациона и расходов.</p></div>
+          <span class="actual-banner__date">Факт от 9 августа</span>
+        </div>
+        <div class="actual-summary" aria-label="Сводка фактической недели">
+          <article class="actual-stat actual-stat--primary"><span class="actual-stat__label">Учтено по чекам</span><strong id="actual-known-total">3&nbsp;254,94&nbsp;₽</strong><small>Без маскарпоне, который не относится к этой неделе.</small></article>
+          <article class="actual-stat"><span class="actual-stat__label">До плана недели</span><strong id="actual-plan-gap">2&nbsp;895,06&nbsp;₽</strong><small>Сравнение с комфортным планом на 25&nbsp;000&nbsp;₽: 6&nbsp;150&nbsp;₽ на неделю.</small></article>
+          <article class="actual-stat"><span class="actual-stat__label">Нужно дописать цену</span><strong id="actual-pending-count">3 позиции</strong><small>Картофель, тесто для пиццы и помидоры пока не участвуют в сумме.</small></article>
+        </div>
+        <div class="actual-layout">
+          <article class="surface">
+            <div class="actual-week-head"><div><h3>Расписание без «овощей для салата»</h3><p>Нажмите на блюдо — откроется точная карточка с количеством каждого продукта и шагами.</p></div><span>11 приёмов пищи</span></div>
+            <ol class="actual-meal-list" id="actual-meal-list" aria-label="Фактическое меню недели"></ol>
+          </article>
+          <aside class="actual-stock">
+            <h3>Что останется после воскресенья</h3><p>Скоропортящиеся белки, зелень, овощи, фрукты и сыр распределены полностью.</p>
+            <ul id="actual-stock-list"></ul>
+            <p class="actual-stock__note">Свежие фрукты распределены на перекусы: банан 95 г; сливы по 228 г во вторник и среду; киви по 206–207 г в четверг и пятницу.</p>
+          </aside>
+        </div>
+        <article class="surface expense-tracker" aria-labelledby="expense-title">
+          <div class="expense-tracker__head"><div><h3 id="expense-title">Расходы недели</h3><p>Учёт уже заполнен по чеку «Ленты», моркови и голеням. Добавляйте цену картофеля, теста или новые покупки — сумма и разбивка по категориям пересчитаются на этом устройстве.</p></div></div>
+          <div class="expense-summary">
+            <div class="expense-summary__cell expense-summary__cell--actual"><span>Фактически учтено</span><strong id="expense-total">3&nbsp;254,94&nbsp;₽</strong><small id="expense-total-note">Без исключённых и неоценённых позиций.</small></div>
+            <div class="expense-summary__cell"><span>План недели</span><strong id="expense-plan">6&nbsp;150&nbsp;₽</strong><small>Комфортный месячный сценарий.</small></div>
+            <div class="expense-summary__cell"><span>Резерв до плана</span><strong id="expense-gap">2&nbsp;895,06&nbsp;₽</strong><small id="expense-pending-note">3 позиции ещё без цены.</small></div>
+          </div>
+          <div class="actual-category-list" id="actual-category-list" aria-label="Фактические расходы по категориям"></div>
+          <div class="expense-table-wrap"><table class="expense-table" aria-label="Журнал фактических расходов"><thead><tr><th>Дата</th><th>Позиция</th><th>Категория</th><th>Статус</th><th>Сумма</th><th></th></tr></thead><tbody id="expense-body"></tbody></table></div>
+          <form class="expense-form" id="expense-form">
+            <label>Что купили<input id="expense-name" name="name" required maxlength="80" placeholder="Например: тесто для пиццы" /></label>
+            <label>Категория<select id="expense-category" name="category"><option>Овощи и фрукты</option><option>Белок</option><option>Молочное и яйца</option><option>Бакалея</option><option>Другое</option></select></label>
+            <label>Сумма, ₽<input id="expense-amount" name="amount" required min="0.01" step="0.01" inputmode="decimal" placeholder="0,00" /></label>
+            <button type="submit">Добавить расход</button>
+            <p class="expense-form__hint" id="expense-form-hint">Дополнительные записи сохраняются только в браузере этого устройства. Их можно удалить из таблицы.</p>
+          </form>
+        </article>
       </div>
     </section>
 
@@ -739,8 +870,77 @@
       ['fishRice', 'liverMash', 'chickenKebabs', 'pastaBake', 'chickenPizza', 'bakedOats', 'chickenSandwiches', 'vegetableCasserole', 'shakshuka', 'leftoverCasseroleSalad', 'chickenRoast']
     ];
 
+    const actualWeekRecipes = {
+      actualMonday: recipe('Уже приготовлено', '2 порции', [
+        ['Куриное филе', '400 г'], ['Картофель', '600 г'], ['Морковь', '150 г'], ['Огурцы', '150 г'], ['Помидоры', '3 крупных шт.'], ['Укроп', '10 г'], ['Йогурт Lapland', '100 г'], ['Масло', '15 мл']
+      ], ['Картофель и морковь запекли до мягкости, филе приготовили рядом.', 'Огурцы смешали с тремя помидорами и укропом.', 'Йогурт использовали как заправку. Продукты учтены как уже израсходованные.'], 'В календаре эта позиция отмечена «Готово»; следующие карточки показывают остаток корзины после неё.'),
+      actualTuesday: recipe('35 мин', '3 порции', [
+        ['Куриное филе', '396 г'], ['Паста сухая', '240 г'], ['Лисички замороженные', '200 г'], ['Лук', '1 средняя шт.'], ['Молоко', '150 мл'], ['Сыр', '50 г'], ['Петрушка', '20 г'], ['Мука', '15 г'], ['Масло', '10 мл']
+      ], ['Поставьте пасту: варите 1 минуту меньше времени на упаковке. Лисички не размораживайте заранее.', 'Филе нарежьте кубиками и обжарьте на сильном огне 5–6 минут; переложите на тарелку.', 'В той же сковороде обжарьте мелко нарезанный лук, добавьте лисички и готовьте, пока лишняя влага не уйдёт.', 'Вмешайте муку, через 30 секунд влейте молоко. Верните курицу и прогрейте соус 3–4 минуты.', 'Смешайте с пастой, добавьте тёртый сыр и петрушку. Сразу отложите третью порцию в ланч-бокс.'], 'Не добавляйте к лисичкам воду: замороженные грибы сами отдадут её столько, сколько нужно для соуса.'),
+      actualWednesday: recipe('35 мин', '3 порции', [
+        ['Печень', '450 г'], ['Гречка', '2 порционных пакетика'], ['Морковь', '250 г'], ['Лук', '1 средняя шт.'], ['Йогурт Lapland', '80 г'], ['Молоко', '150 мл'], ['Петрушка', '20 г'], ['Мука', '10 г'], ['Масло', '10 мл']
+      ], ['Поставьте гречку вариться в двух пакетиках по инструкции.', 'Морковь натрите, лук нарежьте полукольцами и обжарьте на масле 6–7 минут.', 'Печень обсушите, снимите плёнки, нарежьте полосками и отдельно быстро обжарьте 3–4 минуты.', 'К овощам вмешайте муку, молоко и йогурт; прогрейте на слабом огне до гладкого соуса.', 'Верните печень, прогрейте ещё 3 минуты, посолите в конце. Добавьте петрушку и отложите третью порцию.'], 'Печень не нужно тушить долго: после 7–8 минут общей тепловой обработки она начинает становиться сухой.'),
+      actualThursday: recipe('45 мин', '2 порции', [
+        ['Куриные голени', '4 шт.'], ['Рис', '2 порционных пакетика'], ['Овощная смесь', '400 г'], ['Морковь', '250 г'], ['Лук', '1 средняя шт.'], ['Йогурт Lapland', '80 г'], ['Укроп', '10 г'], ['Петрушка', '20 г'], ['Масло', '15 мл']
+      ], ['Голени посолите, смажьте небольшим количеством масла и запекайте при 200 °C 32–38 минут, перевернув один раз.', 'Одновременно сварите два пакетика риса.', 'Лук нарежьте, морковь натрите. Обжарьте их 4 минуты, добавьте овощную смесь и готовьте ещё 7–8 минут.', 'Смешайте йогурт с укропом и щепоткой соли — это соус к голеням.', 'Подайте каждому по две голени, половине риса и овощей; сверху добавьте петрушку.'], 'Если срок годности голеней заканчивается раньше четверга, приготовьте их на день раньше, а печень переставьте на четверг.'),
+      actualFriday: recipe('45 мин', '4 равные части', [
+        ['Тесто для пиццы', '400 г — купить'], ['Мясо с куриных голеней', 'с 2 шт.'], ['Лисички замороженные', '100 г'], ['Помидоры', '2 крупных шт.'], ['Лук', '1 средняя шт.'], ['Кетчуп', '80 г'], ['Сыр', '100 г'], ['Петрушка', '20 г']
+      ], ['Снимите мясо с двух голеней; нарежьте его мелко. Лисички прогрейте на сухой сковороде до испарения влаги.', 'Тесто растяните на противне, оставляя тонкий бортик. Смажьте ровно 80 г кетчупа.', 'Разложите лук, тонкие ломтики двух помидоров, курицу и лисички.', 'Посыпьте сыром и запекайте при 220 °C 13–16 минут, до румяного края.', 'Добавьте петрушку, разрежьте на четыре равные части: две съешьте в пятницу, две оставьте на субботний обед.'], 'Цена теста пока не внесена в факт недели: добавьте её в журнал расходов после покупки.'),
+      actualSaturdayBreakfast: recipe('25 мин', '2 порции', [
+        ['Творог', '250 г'], ['Овсяные хлопья', '80 г'], ['Яйца', '2 шт.'], ['Молоко', '100 мл'], ['Банан', '150 г'], ['Греческий йогурт', '135 г'], ['Сливы', '100 г'], ['Сахарная пудра', '10 г'], ['Масло', '5 мл']
+      ], ['Разомните банан с творогом, яйцами и молоком до однородности.', 'Вмешайте овсяные хлопья и дайте тесту постоять 5 минут.', 'Выпекайте небольшие панкейки на слегка смазанной сковороде по 2–3 минуты с каждой стороны.', 'Разделите йогурт и нарезанные сливы между двумя тарелками.', 'Посыпьте готовые панкейки десятью граммами сахарной пудры.'], 'Не добавляйте больше хлопьев сразу: через несколько минут они впитают часть влаги сами.'),
+      actualSaturdayLunch: recipe('10 мин', '2 порции', [
+        ['Оставшаяся пицца', '2 из 4 частей'], ['Огурцы', '200 г'], ['Масло', '5 мл'], ['Соль', 'по вкусу']
+      ], ['Достаньте две оставшиеся части пиццы и разогрейте в аэрогриле 3–4 минуты при 170 °C или на сухой сковороде под крышкой.', 'Огурцы нарежьте и заправьте пятью миллилитрами масла с солью непосредственно перед подачей.', 'Подайте по одной части пиццы и половине салата каждому.'], 'Это запланированные остатки, а не «доедание»: пицца была заранее разделена на четыре равные порции.'),
+      actualSaturdayDinner: recipe('55 мин', '2 порции', [
+        ['Картофель', '450 г'], ['Творог', '150 г'], ['Яйца', '4 шт.'], ['Молоко', '150 мл'], ['Сыр', '30 г'], ['Лук', '1 средняя шт.'], ['Кетчуп', '50 г'], ['Петрушка', '5 г'], ['Масло', '10 мл']
+      ], ['Картофель нарежьте тонкими ломтиками и отварите 6–7 минут до полуготовности. Духовку разогрейте до 190 °C.', 'Лук мелко нарежьте и обжарьте на масле до прозрачности.', 'Смешайте творог, яйца, молоко, кетчуп, лук и петрушку. Посолите и поперчите.', 'В форму выложите картофель, сверху распределите творожную смесь и посыпьте сыром.', 'Запекайте 30–35 минут, затем дайте постоять 7 минут и разделите на две порции.'], 'Творог здесь заменяет фарш: он даёт белок, а четыре яйца делают запеканку сытной без отдельной покупки.'),
+      actualSundayBreakfast: recipe('15 мин', '2 порции', [
+        ['Яйца', '5 шт.'], ['Молоко', '100 мл'], ['Сыр', '20 г'], ['Огурцы', '205 г'], ['Укроп', '10 г'], ['Петрушка', '5 г'], ['Масло', '5 мл']
+      ], ['Огурцы нарежьте, укроп и петрушку мелко порубите.', 'Яйца взбейте с молоком, солью и половиной зелени.', 'Разогрейте сковороду с пятью миллилитрами масла, вылейте смесь и готовьте под крышкой 4–5 минут.', 'Посыпьте омлет тёртым сыром, накройте ещё на минуту.', 'Подайте с огурцами и оставшейся зеленью.'], 'Омлет получится нежнее, если не взбивать яйца до пены и не делать сильный огонь.'),
+      actualSundayLunch: recipe('40 мин', '2 порции', [
+        ['Овсяные хлопья', '160 г'], ['Молоко', '300 мл'], ['Яйца', '2 шт.'], ['Банан', '200 г'], ['Масло для формы', '5 мл']
+      ], ['Разогрейте духовку до 180 °C. Форму смажьте пятью миллилитрами масла.', 'Разомните банан вилкой, смешайте с яйцами и молоком.', 'Добавьте овсяные хлопья, перемешайте и оставьте на 5 минут.', 'Перелейте массу в форму и запекайте 27–30 минут до схватывания середины.', 'Разделите на две порции после 5 минут отдыха.'], 'Здесь не нужен дополнительный сахар: спелый банан уже даёт сладость.'),
+      actualSundayDinner: recipe('25 мин', '2 порции', [
+        ['Рис', '2 порционных пакетика'], ['Яйца', '4 шт.'], ['Морковь', '50 г'], ['Лук', '1 средняя шт.'], ['Помидор', '1 крупная шт.'], ['Петрушка', '10 г'], ['Масло', '10 мл']
+      ], ['Сварите два пакетика риса и дайте воде полностью стечь.', 'Лук мелко нарежьте, морковь натрите, помидор нарежьте кубиком.', 'Обжарьте лук и морковь на масле 4 минуты, добавьте помидор и готовьте ещё 2 минуты.', 'Сдвиньте овощи к краю сковороды, влейте четыре слегка взбитых яйца и сделайте крупный скрэмбл.', 'Добавьте рис, перемешайте, прогрейте 2 минуты и посыпьте петрушкой.'], 'Этот ужин использует последний рис, морковь и помидор, но оставляет три яйца как резерв на следующую неделю.')
+    };
+    const actualWeekMeals = [
+      { day: 'Понедельник', type: 'Ужин', title: 'Филе с картофелем, огурцами и томатами', meta: '2 порции · уже приготовлено', status: 'Готово', key: 'actualMonday', done: true },
+      { day: 'Вторник', type: 'Ужин', title: 'Паста с курицей и лисичками', meta: '3 порции · третья в ланч-бокс', status: 'Запланировано', key: 'actualTuesday' },
+      { day: 'Среда', type: 'Ужин', title: 'Печень по-строгановски с гречкой', meta: '3 порции · третья в ланч-бокс', status: 'Запланировано', key: 'actualWednesday' },
+      { day: 'Четверг', type: 'Ужин', title: 'Голени с рисом и овощами', meta: '2 порции', status: 'Запланировано', key: 'actualThursday' },
+      { day: 'Пятница', type: 'Ужин', title: 'Пицца с курицей, лисичками и томатами', meta: '4 части · половина на субботу', status: 'Запланировано', key: 'actualFriday' },
+      { day: 'Суббота', type: 'Завтрак', title: 'Творожно-овсяные панкейки', meta: '2 порции', status: 'Запланировано', key: 'actualSaturdayBreakfast' },
+      { day: 'Суббота', type: 'Обед', title: 'Остатки пиццы + огурцы', meta: '2 порции', status: 'Запланировано', key: 'actualSaturdayLunch' },
+      { day: 'Суббота', type: 'Ужин', title: 'Картофельно-творожная запеканка', meta: '2 порции', status: 'Запланировано', key: 'actualSaturdayDinner' },
+      { day: 'Воскресенье', type: 'Завтрак', title: 'Омлет с сыром и огурцом', meta: '2 порции', status: 'Запланировано', key: 'actualSundayBreakfast' },
+      { day: 'Воскресенье', type: 'Обед', title: 'Запечённая овсянка с бананом', meta: '2 порции', status: 'Запланировано', key: 'actualSundayLunch' },
+      { day: 'Воскресенье', type: 'Ужин', title: 'Рис с яйцом, морковью и томатом', meta: '2 порции', status: 'Запланировано', key: 'actualSundayDinner' }
+    ];
+    const actualRemainingStock = [
+      ['Картофель', '650 г'], ['Молоко', '450 мл'], ['Овсяные хлопья', '560 г'], ['Кетчуп', '570 г'], ['Яйца', '3 шт.'], ['Сахарная пудра', '70 г']
+    ];
+    const actualExpenseSeed = [
+      { date: '09.08', name: 'Филе и печень из чека «Ленты»', category: 'Белок', amount: 657.78, status: 'Учтено' },
+      { date: '09.08', name: 'Куриные голени, 6 шт.', category: 'Белок', amount: 300, status: 'Учтено' },
+      { date: '09.08', name: 'Овощи, фрукты и зелень из чека', category: 'Овощи и фрукты', amount: 509.29, status: 'Учтено' },
+      { date: '09.08', name: 'Лисички и овощная заморозка', category: 'Овощи и фрукты', amount: 389.98, status: 'Учтено' },
+      { date: '09.08', name: 'Морковь, 700 г', category: 'Овощи и фрукты', amount: 56, status: 'Учтено' },
+      { date: '09.08', name: 'Молочное и яйца из чека', category: 'Молочное и яйца', amount: 911.93, status: 'Учтено' },
+      { date: '09.08', name: 'Гречка, овсянка, кетчуп и пудра', category: 'Бакалея', amount: 429.96, status: 'Учтено' },
+      { date: '09.08', name: 'Маскарпоне — не для этой недели', category: 'Исключено', amount: 229.99, status: 'Исключено', excluded: true },
+      { id: 'potatoes', date: '—', name: 'Картофель, 1,7 кг', category: 'Овощи и фрукты', amount: null, status: 'Нужна цена', pending: true },
+      { id: 'pizza-dough', date: '—', name: 'Тесто для пиццы, 400 г', category: 'Бакалея', amount: null, status: 'Нужна цена', pending: true },
+      { id: 'tomatoes', date: '—', name: 'Помидоры, 6 крупных шт.', category: 'Овощи и фрукты', amount: null, status: 'Нужна цена', pending: true }
+    ];
+    const actualWeekPlan = 6150;
+    const actualExpenseStorageKey = 'petersburg-ration-actual-week-expenses-v1';
+
     let currentBudget = 'comfort';
     let currentWeek = 0;
+    let customActualExpenses = [];
+    let actualExpenseOverrides = {};
 
     const totalOf = (items) => items.reduce((sum, row) => sum + row.price, 0);
     const planTotal = (plan) => plan.shopping.reduce((sum, list) => sum + totalOf(list), 0);
@@ -752,6 +952,23 @@
     };
     const escapeHTML = (str) => String(str).replace(/[&<>"]/g, (char) => ({ '&':'&amp;', '<':'&lt;', '>':'&gt;', '"':'&quot;' }[char]));
     const tierValue = (value, tierIndex) => Array.isArray(value) ? value[tierIndex] : value;
+    const exactRub = new Intl.NumberFormat('ru-RU', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+    const exactTxt = (n) => `${exactRub.format(n)} ₽`;
+
+    function openRecipeDetails({ eyebrow, title, meta, details }) {
+      document.getElementById('recipe-eyebrow').textContent = eyebrow;
+      document.getElementById('recipe-title').textContent = title;
+      document.getElementById('recipe-meta').innerHTML = meta.map((value) => `<span>${escapeHTML(value)}</span>`).join('');
+      document.getElementById('recipe-ingredients').innerHTML = details.ingredients
+        .filter(([, amount]) => amount !== '—')
+        .map(([name, amount]) => `<li><strong>${escapeHTML(name)}</strong> — ${escapeHTML(amount)}</li>`).join('');
+      document.getElementById('recipe-steps').innerHTML = details.steps.map((step) => `<li>${escapeHTML(step)}</li>`).join('');
+      document.getElementById('recipe-tip').innerHTML = `<strong>Лайфхак.</strong> ${escapeHTML(details.tip)}`;
+      const dialog = document.getElementById('recipe-dialog');
+      if (typeof dialog.showModal === 'function') dialog.showModal();
+      else dialog.setAttribute('open', '');
+      document.getElementById('live-status').textContent = `Открыт рецепт: ${title}.`;
+    }
 
     function closeRecipeDialog() {
       const dialog = document.getElementById('recipe-dialog');
@@ -771,18 +988,89 @@
       if (!meal || !details) return;
       const [day, type] = meal;
       const dish = meal[dishIndex];
-      document.getElementById('recipe-eyebrow').textContent = `${week.label} · ${day} · ${type}`;
-      document.getElementById('recipe-title').textContent = dish;
-      document.getElementById('recipe-meta').innerHTML = [details.time, details.portions, plan.name].map((value) => `<span>${escapeHTML(value)}</span>`).join('');
-      document.getElementById('recipe-ingredients').innerHTML = details.ingredients
+      const selectedDetails = {
+        ...details,
+        ingredients: details.ingredients
         .filter(([, amount]) => tierValue(amount, tierIndex) !== '—')
-        .map(([name, amount]) => `<li><strong>${escapeHTML(tierValue(name, tierIndex))}</strong> — ${escapeHTML(tierValue(amount, tierIndex))}</li>`).join('');
-      document.getElementById('recipe-steps').innerHTML = details.steps.map((step) => `<li>${escapeHTML(step)}</li>`).join('');
-      document.getElementById('recipe-tip').innerHTML = `<strong>Лайфхак.</strong> ${escapeHTML(details.tip)}`;
-      const dialog = document.getElementById('recipe-dialog');
-      if (typeof dialog.showModal === 'function') dialog.showModal();
-      else dialog.setAttribute('open', '');
-      document.getElementById('live-status').textContent = `Открыт рецепт: ${dish}.`;
+        .map(([name, amount]) => [tierValue(name, tierIndex), tierValue(amount, tierIndex)])
+      };
+      openRecipeDetails({ eyebrow: `${week.label} · ${day} · ${type}`, title: dish, meta: [details.time, details.portions, plan.name], details: selectedDetails });
+    }
+
+    function openActualRecipe(mealIndex) {
+      const meal = actualWeekMeals[mealIndex];
+      const details = meal && actualWeekRecipes[meal.key];
+      if (!meal || !details) return;
+      openRecipeDetails({ eyebrow: `Фактическая неделя · ${meal.day} · ${meal.type}`, title: meal.title, meta: [details.time, details.portions, meal.status], details });
+    }
+
+    function loadActualExpenseState() {
+      try {
+        const raw = window.localStorage.getItem(actualExpenseStorageKey);
+        if (!raw) return;
+        const saved = JSON.parse(raw);
+        customActualExpenses = Array.isArray(saved.custom) ? saved.custom.filter((entry) => entry && typeof entry.name === 'string' && Number.isFinite(entry.amount)) : [];
+        actualExpenseOverrides = saved.overrides && typeof saved.overrides === 'object' ? saved.overrides : {};
+      } catch (_) {
+        customActualExpenses = [];
+        actualExpenseOverrides = {};
+      }
+    }
+
+    function saveActualExpenseState() {
+      try {
+        window.localStorage.setItem(actualExpenseStorageKey, JSON.stringify({ custom: customActualExpenses, overrides: actualExpenseOverrides }));
+      } catch (_) {
+        document.getElementById('expense-form-hint').textContent = 'Браузер не дал сохранить новые записи, но они останутся до перезагрузки страницы.';
+      }
+    }
+
+    function actualEntries() {
+      return actualExpenseSeed.map((entry) => {
+        const override = entry.id && actualExpenseOverrides[entry.id];
+        return override ? { ...entry, ...override, id: entry.id, pending: false, status: 'Учтено', overridden: true } : entry;
+      }).concat(customActualExpenses);
+    }
+
+    function actualPendingLabel(count) {
+      const word = count === 1 ? 'позиция' : count > 1 && count < 5 ? 'позиции' : 'позиций';
+      return `${count} ${word}`;
+    }
+
+    function renderActualExpenses() {
+      const entries = actualEntries();
+      const total = entries.filter((entry) => !entry.excluded && Number.isFinite(entry.amount)).reduce((sum, entry) => sum + entry.amount, 0);
+      const pending = entries.filter((entry) => entry.pending);
+      const gap = actualWeekPlan - total;
+      document.getElementById('actual-known-total').textContent = exactTxt(total);
+      document.getElementById('actual-plan-gap').textContent = exactTxt(Math.abs(gap));
+      document.getElementById('actual-pending-count').textContent = actualPendingLabel(pending.length);
+      document.getElementById('expense-total').textContent = exactTxt(total);
+      document.getElementById('expense-gap').textContent = exactTxt(Math.abs(gap));
+      document.getElementById('expense-pending-note').textContent = pending.length ? `${actualPendingLabel(pending.length)} ещё без цены.` : 'Все известные покупки учтены.';
+      document.getElementById('expense-total-note').textContent = pending.length ? 'Без исключённых и неоценённых позиций.' : 'Все внесённые расходы учтены.';
+      document.getElementById('actual-plan-gap').nextElementSibling.textContent = gap >= 0 ? 'Запас до плановой недели 25 000 ₽.' : 'План недели уже превышен.';
+      document.getElementById('expense-gap').parentElement.querySelector('span').textContent = gap >= 0 ? 'Резерв до плана' : 'Превышение плана';
+
+      const groups = new Map();
+      entries.filter((entry) => !entry.excluded && Number.isFinite(entry.amount)).forEach((entry) => groups.set(entry.category, (groups.get(entry.category) || 0) + entry.amount));
+      const groupRows = [...groups.entries()].sort((a, b) => b[1] - a[1]);
+      const max = Math.max(...groupRows.map(([, amount]) => amount), 1);
+      document.getElementById('actual-category-list').innerHTML = groupRows.map(([name, amount]) => `<div class="actual-category-row"><span>${escapeHTML(name)}</span><div class="actual-category-track"><i style="width:${Math.round(amount / max * 100)}%"></i></div><strong>${exactTxt(amount)}</strong></div>`).join('');
+
+      document.getElementById('expense-body').innerHTML = entries.map((entry) => {
+        const rowClass = entry.excluded ? 'expense-row--excluded' : entry.pending ? 'expense-row--pending' : '';
+        const statusClass = entry.excluded ? 'expense-status--excluded' : entry.pending ? 'expense-status--pending' : '';
+        const amount = Number.isFinite(entry.amount) ? exactTxt(entry.amount) : '—';
+        const action = entry.custom ? `<button class="expense-delete" type="button" data-expense-delete="${escapeHTML(entry.id)}">Удалить</button>` : entry.overridden ? `<button class="expense-delete" type="button" data-expense-reset="${escapeHTML(entry.id)}">Сбросить</button>` : '';
+        return `<tr class="${rowClass}"><td data-label="Дата">${escapeHTML(entry.date)}</td><td data-label="Позиция">${escapeHTML(entry.name)}</td><td data-label="Категория">${escapeHTML(entry.category)}</td><td data-label="Статус"><span class="expense-status ${statusClass}">${escapeHTML(entry.status)}</span></td><td data-label="Сумма">${amount}</td><td data-label="Действие">${action}</td></tr>`;
+      }).join('');
+    }
+
+    function renderActualWeek() {
+      document.getElementById('actual-meal-list').innerHTML = actualWeekMeals.map((meal, index) => `<li class="actual-meal"><button class="actual-meal__button" type="button" data-actual-recipe="${index}" aria-haspopup="dialog" aria-label="Открыть фактический рецепт: ${escapeHTML(meal.title)}"><span class="actual-meal__when">${escapeHTML(meal.day)}<br>${escapeHTML(meal.type)}</span><span><span class="actual-meal__name">${escapeHTML(meal.title)}</span><span class="actual-meal__meta">${escapeHTML(meal.meta)}</span></span><span class="actual-meal__status ${meal.done ? '' : 'actual-meal__status--planned'}">${escapeHTML(meal.status)}</span></button></li>`).join('');
+      document.getElementById('actual-stock-list').innerHTML = actualRemainingStock.map(([name, amount]) => `<li><span>${escapeHTML(name)}</span><strong>${escapeHTML(amount)}</strong></li>`).join('');
+      renderActualExpenses();
     }
 
     function renderBudget() {
@@ -846,15 +1134,72 @@
       document.getElementById('recipe-grid').innerHTML = recipes.map(([name, time, body]) => `<article class="recipe"><div class="recipe__top"><h3>${name}</h3><time>${time}</time></div><p>${body}</p></article>`).join('');
     }
 
+    function pendingExpenseIdFor(name) {
+      const normalized = name.toLocaleLowerCase('ru-RU');
+      if (normalized.includes('картоф')) return 'potatoes';
+      if (normalized.includes('тесто') || normalized.includes('пицц')) return 'pizza-dough';
+      if (normalized.includes('помидор')) return 'tomatoes';
+      return null;
+    }
+
+    function todayShort() {
+      return new Intl.DateTimeFormat('ru-RU', { day: '2-digit', month: '2-digit' }).format(new Date());
+    }
+
     document.querySelectorAll('[data-budget]').forEach((button) => button.addEventListener('click', () => { currentBudget = button.dataset.budget; renderBudget(); }));
     document.getElementById('print-button').addEventListener('click', () => window.print());
     document.getElementById('menu-body').addEventListener('click', (event) => {
       const trigger = event.target.closest('[data-recipe]');
       if (trigger) openRecipe(Number(trigger.dataset.recipe));
     });
+    document.getElementById('actual-meal-list').addEventListener('click', (event) => {
+      const trigger = event.target.closest('[data-actual-recipe]');
+      if (trigger) openActualRecipe(Number(trigger.dataset.actualRecipe));
+    });
     document.getElementById('recipe-close').addEventListener('click', closeRecipeDialog);
     document.getElementById('recipe-dialog').addEventListener('click', (event) => {
       if (event.target === event.currentTarget) closeRecipeDialog();
+    });
+    document.getElementById('expense-form').addEventListener('submit', (event) => {
+      event.preventDefault();
+      const form = event.currentTarget;
+      const name = form.elements.name.value.trim();
+      const category = form.elements.category.value;
+      const amount = Number(String(form.elements.amount.value).replace(',', '.'));
+      const hint = document.getElementById('expense-form-hint');
+      if (!name || !Number.isFinite(amount) || amount <= 0) {
+        hint.textContent = 'Введите название покупки и сумму больше нуля.';
+        return;
+      }
+      const pendingId = pendingExpenseIdFor(name);
+      if (pendingId && actualExpenseSeed.some((entry) => entry.id === pendingId && entry.pending)) {
+        actualExpenseOverrides[pendingId] = { date: todayShort(), name, category, amount };
+        hint.textContent = `Цена записана для позиции «${name}».`;
+      } else {
+        customActualExpenses.push({ id: `custom-${Date.now()}-${Math.random().toString(16).slice(2)}`, date: todayShort(), name, category, amount, status: 'Учтено', custom: true });
+        hint.textContent = `Расход «${name}» добавлен в статистику.`;
+      }
+      saveActualExpenseState();
+      form.reset();
+      renderActualExpenses();
+      document.getElementById('live-status').textContent = 'Статистика расходов недели обновлена.';
+    });
+    document.getElementById('expense-body').addEventListener('click', (event) => {
+      const deleteButton = event.target.closest('[data-expense-delete]');
+      const resetButton = event.target.closest('[data-expense-reset]');
+      if (deleteButton) {
+        customActualExpenses = customActualExpenses.filter((entry) => entry.id !== deleteButton.dataset.expenseDelete);
+        document.getElementById('expense-form-hint').textContent = 'Дополнительный расход удалён.';
+      }
+      if (resetButton) {
+        delete actualExpenseOverrides[resetButton.dataset.expenseReset];
+        document.getElementById('expense-form-hint').textContent = 'Цена снова ожидает ввода.';
+      }
+      if (deleteButton || resetButton) {
+        saveActualExpenseState();
+        renderActualExpenses();
+        document.getElementById('live-status').textContent = 'Статистика расходов недели обновлена.';
+      }
     });
     document.getElementById('copy-list').addEventListener('click', async () => {
       const plan = plans[currentBudget];
@@ -883,6 +1228,8 @@
 
     renderWeekTabs();
     renderRecipes();
+    loadActualExpenseState();
+    renderActualWeek();
     renderBudget();
   </script>
 </body>
