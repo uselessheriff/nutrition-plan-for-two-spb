@@ -62,3 +62,23 @@ test("has a complete, detailed recipe for every planned meal", async () => {
   assert.match(details, /до горячего центра/);
   assert.match(page, /Все количества рассчитаны/);
 });
+
+test("rotates grains and limits rice on weeks three and four", async () => {
+  const [page, details] = await Promise.all([
+    readFile(new URL("../app/page.tsx", import.meta.url), "utf8"),
+    readFile(new URL("../app/recipe-details.ts", import.meta.url), "utf8"),
+  ]);
+
+  const weekThreeStart = page.indexOf("number: 3");
+  const weekFourStart = page.indexOf("number: 4");
+  const weeksEnd = page.indexOf("const recipeCount");
+  const weekThree = page.slice(weekThreeStart, weekFourStart);
+  const weekFour = page.slice(weekFourStart, weeksEnd);
+
+  assert.equal((weekThree.match(/Рис —/g) ?? []).length, 1);
+  assert.equal((weekFour.match(/Рис —/g) ?? []).length, 1);
+  assert.doesNotMatch(`${page}\n${details}`, /перлов/iu);
+  assert.match(page, /Тёплый салат с креветками и белой фасолью/);
+  assert.match(page, /Тёплый салат с кальмаром и кускусом/);
+  assert.match(page, /Рис × 1/);
+});
