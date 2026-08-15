@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useMemo, useState } from "react";
+import { recipeDetails } from "./recipe-details";
 
 type Expense = { name: string; category: string; amount: number; source: string };
 type Recipe = { time: string; portions: string; ingredients: string[]; steps: string[]; note?: string };
@@ -49,7 +50,7 @@ const stock = [
   ["Свиные эскалопы", "4 шт., заморожены"], ["Кетчуп", "200 г"],
 ];
 
-const weeks: Week[] = [
+const baseWeeks: Week[] = [
   {
     number: 2,
     title: "Сначала используем остатки",
@@ -62,7 +63,7 @@ const weeks: Week[] = [
       meal("Четверг", "Ужин", "Котлеты, картофель и капустный салат", "3 порции · фарш из запаса", "45 мин", "Фарш свинина + говядина — 400 г|Картофель — 700 г|Яйцо — 1 шт. из запаса|Капуста — 350 г|Морковь — 100 г|Кетчуп — 60 г", "Смешайте фарш с яйцом и сформируйте 6 котлет.|Картофель запекайте 35 минут, котлеты доведите до полной готовности.|Сделайте капустный салат; одну порцию отложите."),
       meal("Пятница", "Ужин", "Фриттата с Фетаксой и овощами", "2 порции · 6 яиц из запаса", "30 мин", "Яйца — 6 шт. из запаса|Фетакса — 100 г из запаса|Картофель — 300 г|Помидоры — 300 г|Перец — 150 г", "Картофель тонко нарежьте и доведите почти до готовности.|Добавьте овощи и взбитые яйца.|Раскрошите Фетаксу сверху и готовьте под крышкой 8–10 минут."),
       meal("Суббота", "Завтрак", "Манная каша с бананом", "2 порции · крупа из запаса", "15 мин", "Манка — 120 г из запаса|Молоко — 600 мл из запаса|Банан — 250 г|Корица — по желанию", "Молоко доведите почти до кипения.|Тонкой струйкой всыпьте манку и варите 4–5 минут, помешивая.|Добавьте банан в тарелки."),
-      meal("Суббота", "Обед", "Греческий салат с Фетаксой и питой", "2 порции", "15 мин", "Фетакса — 100 г из запаса|Огурцы — 300 г|Помидоры — 300 г|Перец — 150 г|Питы — 2 шт.|Лимон и масло — для заправки", "Овощи нарежьте крупно.|Добавьте Фетаксу и заправку.|Питы прогрейте на сухой сковороде.", "Если Фетаксы осталось меньше 200 г на всю неделю, докупите только разницу."),
+      meal("Суббота", "Обед", "Греческий салат с Фетаксой и питой", "2 порции", "15 мин", "Фетакса — 100 г из запаса|Огурцы — 300 г|Помидоры — 300 г|Перец — 150 г|Питы — 2 шт.", "Овощи нарежьте крупно.|Добавьте Фетаксу и заправку.|Питы прогрейте на сухой сковороде.", "Если Фетаксы осталось меньше 200 г на всю неделю, докупите только разницу."),
       meal("Суббота", "Ужин", "Куриные фахитас", "4 порции · половина на воскресенье", "35 мин", "Куриное филе — 550 г|Тортильи — 8 шт.|Перец — 300 г|Лук — 2 шт.|Помидоры — 200 г|Сыр — 120 г|Йогурт — 120 г", "Курицу и овощи обжарьте до полной готовности.|Разложите начинку и сыр по тортильям.|Половину остудите и уберите на воскресный обед."),
       meal("Воскресенье", "Завтрак", "Овсяно-творожные панкейки с льном", "2 порции · крупы из запаса", "25 мин", "Овсянка — 180 г из запаса|Лён — 30 г из запаса|Творог — 400 г|Яйца — 2 шт. из запаса|Молоко — 250 мл из запаса|Банан — 200 г", "Измельчите половину овсянки и смешайте ингредиенты.|Дайте тесту постоять 7 минут.|Жарьте панкейки по 2–3 минуты с каждой стороны."),
       meal("Воскресенье", "Обед", "Фахитас из субботней заготовки", "2 порции · без новой готовки", "10 мин", "Фахитас — 4 шт. из заготовки|Огурцы и помидоры — 300 г|Йогурт — 80 г", "Прогрейте фахитас до горячего центра.|Нарежьте овощи.|Подайте с йогуртом; повторно не замораживайте."),
@@ -137,6 +138,30 @@ const weeks: Week[] = [
   },
 ];
 
+const recipeCount = baseWeeks.reduce((sum, week) => sum + week.meals.length, 0);
+if (Object.keys(recipeDetails).length !== recipeCount) {
+  throw new Error(`Ожидалось ${recipeCount} подробных рецептов, получено ${Object.keys(recipeDetails).length}.`);
+}
+
+const weeks: Week[] = baseWeeks.map((week) => ({
+  ...week,
+  meals: week.meals.map((item) => {
+    const details = recipeDetails[`${week.number}:${item.title}`];
+    if (!details || details.steps.length < 5) {
+      throw new Error(`Нет полного пошагового рецепта: неделя ${week.number}, ${item.title}.`);
+    }
+    return {
+      ...item,
+      recipe: {
+        ...item.recipe,
+        ingredients: [...item.recipe.ingredients, ...(details.addIngredients ?? [])],
+        steps: details.steps,
+        note: details.note ?? item.recipe.note,
+      },
+    };
+  }),
+}));
+
 const budget = 25_000;
 const mascarponeOutsidePlan = 229.99;
 const confirmedTotal = expenses.reduce((sum, item) => sum + item.amount, 0);
@@ -179,7 +204,7 @@ export default function Home() {
       <header className="topbar"><div className="shell topbar-inner"><a className="brand" href="#top"><span className="brand-mark">ПР</span><span>Петербургский рацион</span></a><nav><a href="#fact">Факт</a><a href="#stock">Остатки</a><a href="#weeks">Недели 2–4</a></nav><span className="location">Санкт-Петербург</span></div></header>
       <main id="top">
         <section className="hero shell">
-          <div className="hero-copy"><span className="eyebrow">Обновлено 15 августа · факт первой недели</span><h1>Питание на месяц для двоих</h1><p>Один бюджет, фактические чеки и пересобранные недели 2–4. Остатки уже вычтены из закупок, а каждое блюдо открывается с точным рецептом.</p></div>
+          <div className="hero-copy"><span className="eyebrow">Обновлено 15 августа · факт первой недели</span><h1>Питание на месяц для двоих</h1><p>Один бюджет, фактические чеки и пересобранные недели 2–4. Остатки уже вычтены из закупок, а каждое блюдо открывается с подробным рецептом и точными количествами.</p></div>
           <aside className="budget-card"><div className="budget-head"><span>Текущий бюджет</span><strong>{money(budget)}</strong></div><div className="meter"><span style={{ width: `${Math.min(100, baseMonth / budget * 100)}%` }} /></div><div className="budget-numbers"><div><span>По точным спискам</span><strong>{exact(baseMonth)}</strong></div><div><span>Реалистичный итог</span><strong>{money(forecastLow)}–{money(forecastHigh)}</strong></div></div><p>Диапазон учитывает повторные докупки молока и десертов и колебание цен. Повторную порчу не закладываем.</p></aside>
         </section>
 
@@ -208,7 +233,7 @@ export default function Home() {
           <div className="section-heading"><div><span className="eyebrow">План дальше</span><h2>Недели 2–4</h2></div><p>Цены — ориентиры, не обещание магазина. Количества уже учитывают домашний запас.</p></div>
           <div className="tabs" role="tablist">{weeks.map((week) => <button type="button" role="tab" aria-selected={week.number === current.number} className={week.number === current.number ? "active" : ""} key={week.number} onClick={() => setWeekNumber(week.number)}><span>Неделя {week.number}</span><strong>{money(total(week.shopping))}</strong></button>)}</div>
           <div className="week-head"><div><span>0{current.number}</span><div><h3>{current.title}</h3><p>{current.focus}</p></div></div><button type="button" className="secondary" onClick={copyShopping}>{copyLabel}</button></div>
-          <div className="week-grid"><div><div className="subhead"><h3>Меню</h3><span>Нажмите на блюдо — откроется рецепт</span></div><div className="meal-list">{current.meals.map((item, index) => <button className="meal" type="button" key={`${item.day}-${index}`} onClick={() => setSelected(item)}><span className="day">{item.day}<small>{item.type}</small></span><span className="dish">{item.title}<small>{item.batch}</small></span><span className="open">Рецепт</span></button>)}</div></div><aside className="prep"><span>Подготовка недели</span><ol>{current.prep.map((item) => <li key={item}>{item}</li>)}</ol></aside></div>
+          <div className="week-grid"><div><div className="subhead"><h3>Меню</h3><span>Нажмите на блюдо — внутри точные количества и 5–7 шагов</span></div><div className="meal-list">{current.meals.map((item, index) => <button className="meal" type="button" key={`${item.day}-${index}`} onClick={() => setSelected(item)}><span className="day">{item.day}<small>{item.type}</small></span><span className="dish">{item.title}<small>{item.batch}</small></span><span className="open">Рецепт</span></button>)}</div></div><aside className="prep"><span>Подготовка недели</span><ol>{current.prep.map((item) => <li key={item}>{item}</li>)}</ol></aside></div>
           <div className="shopping"><div className="shopping-head"><div><h3>Закупка на неделю {current.number}</h3><p>Чистый список: только то, чего не хватает после остатков.</p></div><strong>{money(currentTotal)}</strong></div><div className="table-wrap"><table><thead><tr><th>Раздел</th><th>Что купить</th><th>Количество</th><th>Ориентир</th></tr></thead><tbody>{current.shopping.map((item, index) => <tr key={`${item.name}-${index}`}><td data-label="Раздел">{item.category}</td><td data-label="Что купить">{item.name}</td><td data-label="Количество">{item.quantity}</td><td data-label="Ориентир">{money(item.price)}</td></tr>)}</tbody></table></div></div>
         </section>
 
@@ -216,7 +241,7 @@ export default function Home() {
       </main>
       <footer><div className="shell">Петербургский рацион · расчёт для двоих · август 2026</div></footer>
 
-      {selected && <div className="backdrop" onMouseDown={(event) => event.currentTarget === event.target && setSelected(null)}><section className="recipe" role="dialog" aria-modal="true" aria-labelledby="recipe-title"><div className="recipe-head"><div><span>{selected.day} · {selected.type}</span><h2 id="recipe-title">{selected.title}</h2></div><button type="button" aria-label="Закрыть" onClick={() => setSelected(null)}>×</button></div><div className="recipe-meta"><span>{selected.recipe.time}</span><span>{selected.recipe.portions}</span><span>{selected.batch}</span></div><div className="recipe-body"><div><h3>Ингредиенты</h3><ul>{selected.recipe.ingredients.map((item) => <li key={item}>{item}</li>)}</ul></div><div><h3>Как готовить</h3><ol>{selected.recipe.steps.map((item) => <li key={item}>{item}</li>)}</ol></div></div>{selected.recipe.note && <p className="recipe-note">{selected.recipe.note}</p>}</section></div>}
+      {selected && <div className="backdrop"><button className="backdrop-dismiss" type="button" aria-label="Закрыть рецепт" onClick={() => setSelected(null)} /><section className="recipe" role="dialog" aria-modal="true" aria-labelledby="recipe-title"><div className="recipe-head"><div><span>{selected.day} · {selected.type}</span><h2 id="recipe-title">{selected.title}</h2></div><button type="button" aria-label="Закрыть" onClick={() => setSelected(null)}>×</button></div><div className="recipe-meta"><span>{selected.recipe.time}</span><span>{selected.recipe.steps.length} шагов</span><span>{selected.batch}</span></div><div className="recipe-guide"><strong>Готовьте по порядку</strong><span>Все количества рассчитаны на {selected.recipe.portions}; нужные граммы повторяются прямо в шагах.</span></div><div className="recipe-body"><div><h3>Ингредиенты на {selected.recipe.portions}</h3><ul>{selected.recipe.ingredients.map((item) => <li key={item}>{item}</li>)}</ul></div><div><h3>Пошаговое приготовление</h3><ol>{selected.recipe.steps.map((item) => <li key={item}>{item}</li>)}</ol></div></div>{selected.recipe.note && <p className="recipe-note">{selected.recipe.note}</p>}</section></div>}
     </>
   );
 }

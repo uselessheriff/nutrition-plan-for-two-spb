@@ -39,3 +39,26 @@ test("keeps one current budget and records the new evidence", async () => {
   assert.match(page, /13 шт\./);
   assert.match(layout, /og-v2\.png/);
 });
+
+test("has a complete, detailed recipe for every planned meal", async () => {
+  const [page, details] = await Promise.all([
+    readFile(new URL("../app/page.tsx", import.meta.url), "utf8"),
+    readFile(new URL("../app/recipe-details.ts", import.meta.url), "utf8"),
+  ]);
+
+  const plannedMeals = [...page.matchAll(/^\s+meal\(/gm)].length;
+  const detailedRecipes = [...details.matchAll(/^\s+"[234]:.+": \{$/gm)].length;
+  const stepSections = [...details.matchAll(/steps:\s*\[([\s\S]*?)\n\s+\],/g)];
+
+  assert.equal(plannedMeals, 33);
+  assert.equal(detailedRecipes, plannedMeals);
+  assert.equal(stepSections.length, plannedMeals);
+  for (const [, section] of stepSections) {
+    const steps = [...section.matchAll(/^\s+".+",$/gm)].length;
+    assert.ok(steps >= 5 && steps <= 7, `expected 5–7 steps, got ${steps}`);
+  }
+  assert.match(details, /Разогрейте духовку до 200 °C/);
+  assert.match(details, /Вода — 480 мл/);
+  assert.match(details, /до горячего центра/);
+  assert.match(page, /Все количества рассчитаны/);
+});
