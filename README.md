@@ -2,7 +2,7 @@
 
 Интерактивный план питания и еженедельных закупок для двух человек в Санкт-Петербурге.
 
-**Актуальный сайт:** [pitanie-na-mesyac-dlya-dvoih-spb.santinoporchi.chatgpt.site](https://pitanie-na-mesyac-dlya-dvoih-spb.santinoporchi.chatgpt.site/)
+**Автономная версия на GitHub Pages:** [uselessheriff.github.io/nutrition-plan-for-two-spb](https://uselessheriff.github.io/nutrition-plan-for-two-spb/)
 
 ## Что внутри
 
@@ -32,12 +32,20 @@ npm run build
 node --test tests/rendered-html.test.mjs
 ```
 
+Статическая сборка для GitHub Pages:
+
+```bash
+npm run test:github-pages
+```
+
 ## Структура
 
 - `app/page.tsx` — меню, остатки, закупки и бюджет;
 - `app/recipe-details.ts` — подробные рецепты;
 - `app/globals.css` — оформление и адаптивность;
 - `tests/` — проверки содержимого и ограничений меню;
-- `index.html` — совместимый вход для GitHub Pages с переходом на актуальный опубликованный сайт.
+- `github-pages-main.tsx` — клиентская точка входа автономной версии;
+- `vite.github-pages.config.ts` — статическая сборка в каталог `docs/`;
+- `index.html` — HTML-вход автономной версии GitHub Pages.
 
-GitHub Pages остаётся рабочей точкой входа, а production-версия развёртывается через Sites.
+GitHub Pages публикуется из `docs/` и не зависит от домена Sites.
