@@ -27,5 +27,13 @@ test("includes the current archive, receipts, and revised menu in the static bun
   assert.match(script, /Экономическая полезность продуктов/);
   assert.match(script, /Тёплый салат с кальмаром и кускусом/);
   assert.match(script, /Тёплый салат с креветками, белой фасолью и кускусом/);
+  assert.match(script, /Пшённая каша с яблоком, ягодами и корицей/);
+  assert.match(script, /Сырники с ягодами и йогуртом/);
+  assert.match(script, /Масло сливочное/);
+  assert.doesNotMatch(script, /Обычные блинчики с яблоком, корицей и йогуртом/);
+  assert.match(script, /Омлет с Фетаксой, перцем и питой/);
+  assert.match(script, /Каша «Дружба» с яблоком/);
+  assert.match(script, /Брокколи замороженная, 400 г/);
+  assert.doesNotMatch(script, /капуст/iu);
   assert.doesNotMatch(script, /перловк/iu);
 });
