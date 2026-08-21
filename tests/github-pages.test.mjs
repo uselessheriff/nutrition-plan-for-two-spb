@@ -15,7 +15,7 @@ test("builds a standalone GitHub Pages site without a GPT redirect", async () =>
   assert.ok(assets.some((name) => name.endsWith(".css")), "CSS bundle is missing");
 });
 
-test("includes the current nutrition plan in the static JavaScript bundle", async () => {
+test("includes the current archive, receipts, and revised menu in the static bundle", async () => {
   const assets = await readdir(new URL("assets/", pagesRoot));
   const scriptName = assets.find((name) => name.endsWith(".js"));
 
@@ -23,7 +23,9 @@ test("includes the current nutrition plan in the static JavaScript bundle", asyn
   const script = await readFile(new URL(`assets/${scriptName}`, pagesRoot), "utf8");
 
   assert.match(script, /Питание на месяц для двоих/);
-  assert.match(script, /Тёплый салат с креветками и белой фасолью/);
+  assert.match(script, /Архив: первая неделя/);
+  assert.match(script, /Экономическая полезность продуктов/);
   assert.match(script, /Тёплый салат с кальмаром и кускусом/);
+  assert.match(script, /Тёплый салат с креветками, белой фасолью и кускусом/);
   assert.doesNotMatch(script, /перловк/iu);
 });

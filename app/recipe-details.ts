@@ -1,10 +1,12 @@
+import { revisedRecipeDetails } from "./recipe-details-revised";
+
 export type RecipeDetails = {
   addIngredients?: string[];
   steps: string[];
   note?: string;
 };
 
-export const recipeDetails: Record<string, RecipeDetails> = {
+const legacyRecipeDetails: Record<string, RecipeDetails> = {
   "2:Эскалопы с гречкой и салатом": {
     addIngredients: ["Растительное масло — 10 мл", "Соль и чёрный перец — по вкусу"],
     steps: [
@@ -377,4 +379,13 @@ export const recipeDetails: Record<string, RecipeDetails> = {
     ],
     note: "Понедельничную порцию храните в холодильнике и прогрейте только один раз до горячего центра.",
   },
+};
+
+const weekTwoRecipeDetails = Object.fromEntries(
+  Object.entries(legacyRecipeDetails).filter(([key]) => key.startsWith("2:")),
+) as Record<string, RecipeDetails>;
+
+export const recipeDetails: Record<string, RecipeDetails> = {
+  ...weekTwoRecipeDetails,
+  ...revisedRecipeDetails,
 };
