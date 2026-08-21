@@ -96,7 +96,7 @@ export default function Home() {
       <header className="topbar"><div className="shell topbar-inner"><a className="brand" href="#top"><span className="brand-mark">ПР</span><span>Петербургский рацион</span></a><nav><a href="#fact">Факт</a><a href="#analysis">Анализ</a><a href="#stock">Остатки</a><a href="#weeks">Меню</a></nav><span className="location">Санкт-Петербург</span></div></header>
       <main id="top">
         <section className="hero shell">
-          <div className="hero-copy"><span className="eyebrow">Обновлено 21 августа · 2 недели факта</span><h1>Питание на месяц для двоих</h1><p>Недели 1–2 сохранены как архив рецептов. Третья и четвёртая пересобраны по чекам и остаткам: кальмар, заморозка и яйца используются первыми, рис — не чаще одного раза в неделю.</p></div>
+          <div className="hero-copy"><span className="eyebrow">Обновлено 21 августа · 2 недели факта</span><h1>Питание на месяц для двоих</h1><p>Недели 1–2 сохранены как архив рецептов. Третья и четвёртая пересобраны по чекам и остаткам: кальмар, заморозка и яйца используются первыми, рис как гарнир — не чаще одного раза в неделю.</p></div>
           <aside className="budget-card"><div className="budget-head"><span>Текущий бюджет</span><strong>{money(budget)}</strong></div><div className="meter"><span style={{ width: `${Math.min(100, plannedMonth / budget * 100)}%` }} /></div><div className="budget-numbers"><div><span>Факт за 2 недели</span><strong>{exact(confirmedTotal)}</strong></div><div><span>Коридор месяца</span><strong>{money(forecastLow)}–{money(forecastHigh)}</strong></div></div><p>Плановые корзины на недели 3–4 уже не покупают оплаченные крупы, кальмара, яйца, спагетти, овсянку и манку.</p></aside>
         </section>
 

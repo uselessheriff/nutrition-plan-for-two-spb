@@ -70,9 +70,10 @@ test("has a complete detailed recipe for each planned and archived meal", async 
   assert.match(legacyDetails, /filter\(\(\[key\]\) => key\.startsWith\("2:"\)\)/);
 });
 
-test("rotates grains and limits rice while avoiding pearl barley", async () => {
-  const [data, revisedDetails] = await Promise.all([
+test("rotates grains, keeps rice as a side dish once, and diversifies weekend breakfasts", async () => {
+  const [data, legacyDetails, revisedDetails] = await Promise.all([
     readFile(new URL("../app/plan-data.ts", import.meta.url), "utf8"),
+    readFile(new URL("../app/recipe-details.ts", import.meta.url), "utf8"),
     readFile(new URL("../app/recipe-details-revised.ts", import.meta.url), "utf8"),
   ]);
 
@@ -83,8 +84,29 @@ test("rotates grains and limits rice while avoiding pearl barley", async () => {
   const weekFour = data.slice(weekFourStart, weeksEnd);
 
   assert.equal((weekThree.match(/Рис —/g) ?? []).length, 0);
-  assert.equal((weekFour.match(/Рис —/g) ?? []).length, 1);
+  assert.match(weekFour, /единственный рисовый гарнир недели/);
+  assert.match(weekFour, /Каша «Дружба» с яблоком/);
+  assert.match(weekFour, /Рис — 1 пакетик из запаса/);
+  assert.match(weekFour, /Форель с рисом и брокколи/);
+  assert.match(weekThree, /Пшённая каша с яблоком, ягодами и корицей/);
+  assert.match(weekThree, /Сырники с ягодами и йогуртом/);
+  assert.match(weekThree, /Пшено — 160 г/);
+  assert.match(weekThree, /Масло сливочное/, "сливочное масло должно быть явно внесено в корзину");
+  assert.match(weekThree, /Натуральный йогурт", "700 г"/);
+  assert.doesNotMatch(weekThree, /Обычные блинчики с яблоком, корицей и йогуртом/);
+  assert.match(weekFour, /Омлет с Фетаксой, перцем и питой/);
+  assert.match(weekFour, /Яйца — 4 шт\. из запаса/);
+
+  const eggsFromStock = [...`${weekThree}\n${weekFour}`.matchAll(/Яйц[ао] — (\d+) шт\. из запаса/g)]
+    .reduce((sum, match) => sum + Number(match[1]), 0);
+  assert.equal(eggsFromStock, 13);
   assert.doesNotMatch(`${data}\n${revisedDetails}`, /перлов/iu);
   assert.match(data, /Тёплый салат с креветками, белой фасолью и кускусом/);
   assert.match(data, /Мусака с индейкой, баклажанами и картофелем/);
+  assert.match(data, /Брокколи замороженная, 400 г/);
+  assert.match(data, /Форель с рисом и брокколи/);
+
+  const menuAndRecipes = `${data.slice(data.indexOf("export const baseWeeks"))}\n${legacyDetails}\n${revisedDetails}`;
+  assert.doesNotMatch(menuAndRecipes, /капуст/iu);
+  assert.match(weekThree, /Пшено/);
 });
