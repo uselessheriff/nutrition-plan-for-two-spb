@@ -19,7 +19,7 @@ export async function generateMetadata(): Promise<Metadata> {
     openGraph: {
       title: "Питание на месяц для двоих",
       description:
-        "Бюджет 25 000 ₽: факт первой недели, разные гарниры, ужины с морепродуктами и обновлённые недели 2–4.",
+        "Бюджет 25 000 ₽: факт трёх недель, подробные рецепты, остатки и чистая закупка на неделю 4.",
       type: "website",
       url: origin,
       images: [
@@ -34,7 +34,7 @@ export async function generateMetadata(): Promise<Metadata> {
     twitter: {
       card: "summary_large_image",
       title: "Питание на месяц для двоих",
-      description: "Факт расходов, подробные рецепты и разнообразное меню на недели 2–4.",
+      description: "Факт трёх недель, подробные рецепты и разнообразное меню с чистой закупкой на неделю 4.",
       images: [`${origin}/og-v2.png`],
     },
   };
