@@ -22,7 +22,7 @@ test("renders the compact overview and mobile-visible page tabs", async () => {
   const html = await response.text();
   assert.match(html, /Питание на месяц для двоих/);
   assert.match(html, /Текущий бюджет/);
-  assert.match(html, /Прошедшие недели/);
+  assert.match(html, /Календарь и факт/);
   assert.match(html, /Обзор/);
   assert.match(html, /Текущая неделя/);
   assert.match(html, /Меню и архив/);
@@ -31,6 +31,8 @@ test("renders the compact overview and mobile-visible page tabs", async () => {
   assert.match(html, /Правила/);
   assert.match(html, /4\s*165,51 ₽/);
   assert.match(html, /Действующий прогноз месяца/);
+  assert.match(html, /Сегодня по Москве/);
+  assert.match(html, /Сверяем московскую дату/);
   assert.doesNotMatch(html, /Промежуточный анализ/);
 });
 
@@ -81,7 +83,15 @@ test("keeps one budget and reconciles the locked fourth-week purchase without du
   assert.doesNotMatch(page, /Выберите бюджет|data-budget|economy|30 000 ₽/);
   assert.match(page, /const budget = 25_000/);
   assert.match(page, /archivedActualTotal/);
-  assert.match(page, /const currentWeek = weeks\.find\(\(week\) => week\.number === 4\)/);
+  assert.doesNotMatch(page, /const currentWeek = weeks\.find\(\(week\) => week\.number === 4\)/);
+  assert.match(page, /getPlanCalendar/);
+  assert.match(page, /calendar\?\.activePlanWeek/);
+  assert.match(page, /Дата РФ · московское время/);
+  assert.match(page, /Текущая по Москве/);
+  assert.match(page, /Сейчас нет активной недели в этом плане/);
+  assert.match(page, /Итог подтверждённых закупок цикла/);
+  assert.match(page, /Покупки после 6 сентября относятся уже к следующему циклу/);
+  assert.match(page, /archive-week-tab-/);
   assert.match(page, /exact\(3895\.51\)/);
   assert.match(data, /source: "16\.08 · чек"/);
   assert.match(data, /source: "21\.08 · чек · неделя 3"/);
@@ -91,6 +101,7 @@ test("keeps one budget and reconciles the locked fourth-week purchase without du
   assert.match(data, /number: 1/);
   assert.match(data, /number: 2/);
   assert.match(data, /name: "Яйца", quantity: "11 шт\."/);
+  assert.match(data, /title: "Картофельное пюре"/);
   assert.equal((data.match(/source: "21\.08 · чек · неделя 3"/g) ?? []).length, 8);
 
   const expenseBlock = data.slice(data.indexOf("export const expenses"), data.indexOf("export const stock"));
@@ -101,7 +112,7 @@ test("keeps one budget and reconciles the locked fourth-week purchase without du
   const weekFourPurchaseTotal = [...weekFourPurchaseBlock.matchAll(/, ([\d.]+)(?:, "(?:extra|snack)")?\),?$/gm)]
     .reduce((sum, match) => sum + Number(match[1]), 0);
   assert.equal(Number(weekFourPurchaseTotal.toFixed(2)), 4165.51);
-  assert.match(data, /name: "Тортильи на текущий день, не для недели 4"/);
+  assert.match(data, /name: "Тортильи на 30 августа, не для недели 4"/);
   assert.doesNotMatch(weekFourPurchaseBlock, /Тортильи/);
   assert.match(data, /status: "purchased_locked"/);
   assert.match(layout, /og-v2\.png/);

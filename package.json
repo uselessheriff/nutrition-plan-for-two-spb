@@ -10,8 +10,8 @@
     "build": "vinext build",
     "build:github-pages": "vite build --config vite.github-pages.config.ts",
     "start": "vinext start",
-    "test": "npm run build && node --test tests/rendered-html.test.mjs tests/shopping-planner.test.mjs tests/price-history.test.mjs tests/price-observations.test.mjs tests/purchase-decisions.test.mjs tests/meal-history.test.mjs",
-    "test:github-pages": "npm run build:github-pages && node --test tests/github-pages.test.mjs tests/shopping-planner.test.mjs tests/price-history.test.mjs tests/price-observations.test.mjs tests/purchase-decisions.test.mjs tests/meal-history.test.mjs",
+    "test": "npm run build && node --test tests/rendered-html.test.mjs tests/shopping-planner.test.mjs tests/price-history.test.mjs tests/price-observations.test.mjs tests/purchase-decisions.test.mjs tests/meal-history.test.mjs tests/plan-calendar.test.mjs",
+    "test:github-pages": "npm run build:github-pages && node --test tests/github-pages.test.mjs tests/shopping-planner.test.mjs tests/price-history.test.mjs tests/price-observations.test.mjs tests/purchase-decisions.test.mjs tests/meal-history.test.mjs tests/plan-calendar.test.mjs",
     "lint": "eslint . --ignore-pattern dist --ignore-pattern .next --ignore-pattern docs",
     "db:generate": "drizzle-kit generate"
   },
