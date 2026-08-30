@@ -10,6 +10,8 @@ test("builds a standalone GitHub Pages site without a GPT redirect", async () =>
 
   assert.doesNotMatch(html, /http-equiv=["']refresh/i);
   assert.doesNotMatch(html, /santinoporchi\.chatgpt\.site/);
+  assert.doesNotMatch(html, /факт трёх недель|чистая закупка на неделю 4/i);
+  assert.match(html, /текущая неделя по Москве/i);
   assert.match(html, /\/nutrition-plan-for-two-spb\/assets\/[^"']+\.js/);
   assert.ok(assets.some((name) => name.endsWith(".js")), "JavaScript bundle is missing");
   assert.ok(assets.some((name) => name.endsWith(".css")), "CSS bundle is missing");
@@ -35,6 +37,7 @@ test("includes the current archive, receipts, and revised menu in the static bun
   assert.match(script, /Омлет с Фетаксой, перцем и шоти-пури/);
   assert.match(script, /Каша «Дружба» с яблоком/);
   assert.match(script, /Курица с рисом, брокколи и свежим салатом/);
+  assert.match(script, /Картофельное пюре/);
   assert.match(script, /6691\.15/);
   assert.match(script, /Креветки королевские очищенные/);
   assert.match(script, /Потребность минус остатки/);
@@ -55,5 +58,13 @@ test("includes the current archive, receipts, and revised menu in the static bun
   assert.match(script, /Дешевле прошлой покупки/);
   assert.match(script, /Аналог или другой бренд — только ориентир/);
   assert.match(script, /Убрано из закупки/);
+  assert.match(script, /Europe\/Moscow/);
+  assert.match(script, /Сегодня по Москве/);
+  assert.match(script, /Дата РФ · московское время/);
+  assert.match(script, /Текущая по Москве/);
+  assert.match(script, /Сейчас нет активной недели в этом плане/);
+  assert.match(script, /Итог подтверждённых закупок цикла/);
+  assert.match(script, /Покупки после 6 сентября относятся уже к следующему циклу/);
+  assert.match(script, /Не удалось сверить дату онлайн/);
   assert.doesNotMatch(script, /Промежуточный анализ/);
 });

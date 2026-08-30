@@ -58,6 +58,10 @@ a { color: inherit; }
 h1, h2, h3, p { margin-top: 0; }
 h1 { max-width: 680px; margin-bottom: 18px; font-size: clamp(42px, 6vw, 72px); line-height: 0.98; letter-spacing: -0.065em; }
 .hero-copy p { max-width: 650px; margin: 0; color: var(--ink-soft); font-size: clamp(17px, 2vw, 20px); line-height: 1.55; }
+.live-date { width: max-content; max-width: 100%; margin: -3px 0 24px; padding: 10px 12px; display: flex; align-items: center; gap: 12px; border: 1px solid #d6e3d9; border-radius: 12px; background: #f5f9f5; }
+.live-date strong, .live-date small { display: block; }
+.live-date strong { font-size: 14px; line-height: 1.3; }
+.live-date small { padding-left: 12px; border-left: 1px solid #ccdbcf; color: var(--sage-dark); font-size: 10px; font-weight: 850; letter-spacing: .05em; text-transform: uppercase; white-space: nowrap; }
 .budget-card { padding: 26px; border: 1px solid var(--line); border-radius: 24px; background: var(--white); box-shadow: var(--shadow); }
 .budget-head { display: flex; align-items: end; justify-content: space-between; gap: 16px; }
 .budget-head span { color: var(--muted); font-size: 13px; font-weight: 750; }
@@ -134,10 +138,21 @@ tbody tr:last-child td { border-bottom: 0; }
 .tabs button { padding: 16px 18px; display: flex; justify-content: space-between; gap: 16px; border: 1px solid var(--line); border-radius: 14px; color: var(--ink); background: var(--white); text-align: left; }
 .tabs button span, .tabs button strong { display: block; }
 .tabs button span { color: var(--ink-soft); font-size: 13px; font-weight: 750; }
+.tabs button span small { display: block; margin-top: 5px; color: var(--ink-soft); font-size: 10px; font-weight: 650; line-height: 1.35; }
 .tabs button strong { font-size: 15px; }
 .tabs button.active { color: white; border-color: var(--sage-dark); background: var(--sage-dark); }
-.tabs button.active span { color: #d9e5dc; }
+.tabs button.active span, .tabs button.active span small { color: #d9e5dc; }
 .tabs button.archived-tab:not(.active) { border-style: dashed; background: #fafaf7; }
+.tabs button.calendar-current:not(.active) { border-color: var(--sage); box-shadow: 0 0 0 2px rgba(95,127,107,.14); }
+.current-date-bar { margin-bottom: 28px; padding: 15px 17px; display: flex; align-items: center; justify-content: space-between; gap: 18px; border: 1px solid #d6e3d9; border-radius: 15px; background: #f5f9f5; }
+.current-date-bar span, .current-date-bar strong { display: block; }
+.current-date-bar span { margin-bottom: 3px; color: var(--sage-dark); font-size: 10px; font-weight: 900; letter-spacing: .08em; text-transform: uppercase; }
+.current-date-bar strong { font-size: 15px; }
+.current-date-bar > small { color: var(--ink-soft); font-size: 11px; font-weight: 750; }
+.calendar-empty { padding: 30px; border: 1px dashed #b6c8ba; border-radius: 20px; background: var(--white); }
+.calendar-empty > span { display: block; margin-bottom: 10px; color: var(--sage); font-size: 10px; font-weight: 900; letter-spacing: .08em; text-transform: uppercase; }
+.calendar-empty h2 { margin-bottom: 10px; font-size: clamp(29px, 4vw, 42px); letter-spacing: -.045em; }
+.calendar-empty p { max-width: 700px; margin-bottom: 20px; color: var(--ink-soft); }
 .week-head { margin-bottom: 14px; display: flex; align-items: center; justify-content: space-between; gap: 24px; }
 .week-head > div { display: flex; align-items: center; gap: 18px; }
 .week-head > div > span { display: grid; width: 54px; height: 54px; place-items: center; border-radius: 16px; color: var(--sage-dark); background: var(--sage-pale); font-size: 18px; font-weight: 900; }
@@ -187,7 +202,7 @@ tbody tr:last-child td { border-bottom: 0; }
 .extra-tag { display: block; width: max-content; margin-top: 5px; padding: 3px 7px; border-radius: 99px; color: #8a5b47; background: #faeee8; font-size: 9px; font-weight: 850; letter-spacing: .03em; text-transform: uppercase; }
 .snack-tag { color: var(--sage-dark); background: var(--sage-pale); }
 
-.preference-grid { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 12px; }
+.preference-grid { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 12px; }
 .preference-card { min-height: 188px; padding: 20px; border: 1px solid var(--line); border-radius: 18px; background: var(--white); }
 .preference-card > span { display: block; margin-bottom: 22px; color: var(--coral); font-size: 10px; font-weight: 850; letter-spacing: .08em; text-transform: uppercase; }
 .preference-card h3 { margin: 0 0 9px; font-size: 17px; letter-spacing: -.025em; }
@@ -421,6 +436,8 @@ footer { padding: 24px 0 34px; color: var(--muted); font-size: 12px; }
   .page-tabs button { min-height: 36px; padding-inline: 11px; }
   .hero { padding-block: 42px; }
   h1 { font-size: 45px; }
+  .live-date { align-items: flex-start; flex-direction: column; gap: 5px; }
+  .live-date small { padding: 0; border-left: 0; }
   .budget-card { padding: 20px; border-radius: 19px; }
   .budget-numbers { grid-template-columns: 1fr; }
   .section { padding-block: 52px; }
@@ -436,6 +453,7 @@ footer { padding: 24px 0 34px; color: var(--muted); font-size: 12px; }
   .stat { min-height: 138px; padding: 16px; }
   .stock-grid { grid-template-columns: repeat(2, 1fr); }
   .tabs { grid-template-columns: 1fr; }
+  .current-date-bar { align-items: flex-start; flex-direction: column; gap: 7px; }
   .week-head { align-items: flex-start; }
   .week-head > div > span { display: none; }
   .variety { margin-left: 0; }
