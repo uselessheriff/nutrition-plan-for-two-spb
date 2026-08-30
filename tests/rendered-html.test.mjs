@@ -35,11 +35,12 @@ test("renders the compact overview and mobile-visible page tabs", async () => {
 });
 
 test("separates purchases, price memory, recipes, and rules into dedicated tabs", async () => {
-  const [page, styles, priceMemory, decisions] = await Promise.all([
+  const [page, styles, priceMemory, decisions, mealHistory] = await Promise.all([
     readFile(new URL("../app/page.tsx", import.meta.url), "utf8"),
     readFile(new URL("../app/globals.css", import.meta.url), "utf8"),
     readFile(new URL("../app/price-memory.tsx", import.meta.url), "utf8"),
     readFile(new URL("../app/purchase-decisions.ts", import.meta.url), "utf8"),
+    readFile(new URL("../app/meal-history.ts", import.meta.url), "utf8"),
   ]);
 
   const pageTabBlock = page.slice(page.indexOf("const pageTabs"), page.indexOf("] as const", page.indexOf("const pageTabs")));
@@ -50,11 +51,16 @@ test("separates purchases, price memory, recipes, and rules into dedicated tabs"
   assert.match(page, /<PriceMemory \/>/);
   assert.match(page, /nextMonthPurchaseDecisionPreview/);
   assert.match(page, /Файлы чеков на публичный сайт не публикуются|без хранения самих файлов чеков/);
-  assert.match(page, /1:Пицца с курицей, грибами и томатами/);
-  assert.match(page, /3:Пангасиус с картофелем, фасолью и лимонным соусом/);
-  assert.match(page, /if \(filter === "cooked"\) return item\.cooked/);
-  assert.match(page, /item\.cooked && item\.status !== "cooked"/);
-  assert.match(page, /disabled=\{item\.status === "blocked"\}/);
+  assert.match(page, /getMealHistoryByMenuKey/);
+  assert.match(page, /Рецепты и фактический результат/);
+  assert.match(page, /Что готовили и что убрали/);
+  assert.match(page, /if \(filter === "cooked"\) return item\.outcome === "cooked"/);
+  assert.match(page, /const blocked = item\.preference === "blocked"/);
+  assert.match(page, /disabled=\{blocked\}/);
+  assert.doesNotMatch(page, /week\.number === 3 \|\|/);
+  assert.match(mealHistory, /createMealMenuKey\(1, "Пицца с курицей, грибами и томатами"\)/);
+  assert.match(mealHistory, /createMealMenuKey\(3, "Пангасиус с картофелем, фасолью и лимонным соусом"\)/);
+  assert.match(mealHistory, /planned_to_skip/);
   assert.doesNotMatch(page, /Промежуточный анализ/);
   assert.match(styles, /\.page-tabs-shell \{ overflow-x: auto/);
   assert.match(priceMemory, /Память цен/);
@@ -119,7 +125,8 @@ test("has a complete detailed recipe for each planned and archived meal", async 
   assert.match(page, /Object\.keys\(recipeDetails\)\.length !== recipeCount/);
   assert.match(revisedDetails, /Кальмар 500 г разморозьте только в холодильнике/);
   assert.match(revisedDetails, /Это точечная замена белой рыбы продуктом из уже оплаченного чека/);
-  assert.match(page, /Точные количества и пошаговое приготовление/);
+  assert.match(page, /Меню и сохранённые рецепты/);
+  assert.match(page, /Метка показывает результат, а не просто наличие блюда в плане/);
   assert.match(legacyDetails, /filter\(\(\[key\]\) => key\.startsWith\("2:"\)\)/);
 });
 

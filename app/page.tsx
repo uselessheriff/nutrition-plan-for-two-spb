@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useMemo, useState } from "react";
+import { getMealHistoryByMenuKey, getWeekMealHistory, historyOnlyMealEntries, mealOutcomeLabels, mealPreferenceLabels, weekMealHistoryNotes, weekMealHistorySummaries, type MealHistoryWeek, type MealOutcome, type MealPreference } from "./meal-history";
 import { recipeDetails } from "./recipe-details";
 import { baseWeeks, expenses, foodPreferences, nextMonthReviewProtocol, priceSignals, stock, unitPrices, valueLeaders, weekFourPurchases, type Expense, type Meal, type ShopItem, type Week } from "./plan-data";
 import { PriceMemory } from "./price-memory";
@@ -73,49 +74,113 @@ const pageTabs = [
   { id: "rules", label: "Правила" },
 ] as const;
 type PageId = (typeof pageTabs)[number]["id"];
-type RecipeStatus = "favorite" | "liked" | "cooked" | "blocked" | "unverified" | "planned";
-type RecipeFilter = "all" | "liked" | "cooked" | "blocked" | "unverified" | "planned";
+type RecipeOutcome = MealOutcome | "planned";
+type RecipeFilter = "all" | "liked" | "cooked" | "removed" | "unconfirmed" | "planned" | "blocked";
+type RecipeLibraryItem = {
+  id: string;
+  week: Week;
+  meal: Meal | null;
+  day: string;
+  mealType: string;
+  title: string;
+  batch: string;
+  outcome: RecipeOutcome;
+  preference: MealPreference;
+  note: string;
+  historyOnly: boolean;
+};
 
-const recipeLibrary = weeks.flatMap((week) => week.meals.map((meal, index) => {
-  const reference = `${week.number}:${meal.title}`;
-  const confirmedWeekOneMeals = new Set([
-    "1:Филе с картофелем, огурцами и томатами",
-    "1:Пицца с курицей, грибами и томатами",
-    "1:Творожно-овсяные панкейки",
-  ]);
-  const cooked = week.number === 3 || confirmedWeekOneMeals.has(reference);
-  const status: RecipeStatus = reference === "1:Пицца с курицей, грибами и томатами" ? "favorite"
-    : reference === "3:Сырники с ягодами и йогуртом" ? "liked"
-      : reference === "3:Пангасиус с картофелем, фасолью и лимонным соусом" ? "blocked"
-        : cooked ? "cooked"
-          : week.number === 4 ? "planned" : "unverified";
-  return { id: `${week.number}:${index}:${meal.title}`, week, meal, status, cooked };
+const currentRecipeLibrary: RecipeLibraryItem[] = weeks.flatMap((week) => week.meals.map((meal, index) => {
+  const history = week.number <= 3 ? getMealHistoryByMenuKey(`${week.number}:${meal.title}`) : undefined;
+  return {
+    id: `${week.number}:${index}:${meal.title}`,
+    week,
+    meal,
+    day: meal.day,
+    mealType: meal.type,
+    title: meal.title,
+    batch: meal.batch,
+    outcome: history?.outcome ?? "planned",
+    preference: history?.preference ?? null,
+    note: history?.note ?? "Текущее блюдо четвёртой недели ещё находится в плане.",
+    historyOnly: false,
+  };
 }));
+
+const removedRecipeLibrary: RecipeLibraryItem[] = historyOnlyMealEntries.map((history) => ({
+  id: history.id,
+  week: weeks.find((week) => week.number === history.week) ?? weeks[history.week - 1],
+  meal: null,
+  day: history.day,
+  mealType: history.mealType,
+  title: history.title,
+  batch: "строка из прежней версии меню",
+  outcome: history.outcome,
+  preference: history.preference,
+  note: history.note,
+  historyOnly: true,
+}));
+
+const recipeLibrary: RecipeLibraryItem[] = [...currentRecipeLibrary, ...removedRecipeLibrary];
 
 const matchesRecipeFilter = (item: (typeof recipeLibrary)[number], filter: RecipeFilter) => {
   if (filter === "all") return true;
-  if (filter === "liked") return item.status === "liked" || item.status === "favorite";
-  if (filter === "cooked") return item.cooked;
-  return item.status === filter;
+  if (filter === "liked") return item.preference === "liked" || item.preference === "favorite";
+  if (filter === "cooked") return item.outcome === "cooked";
+  if (filter === "removed") return item.outcome === "not_eaten" || item.outcome === "planned_to_skip";
+  if (filter === "blocked") return item.preference === "blocked";
+  return item.outcome === filter;
 };
 
-const recipeStatusLabels: Record<RecipeStatus, string> = {
-  favorite: "любимое",
-  liked: "понравилось",
-  cooked: "готовили",
-  blocked: "чёрный список",
-  unverified: "оценка не указана",
-  planned: "в плане",
+const recipeOutcomeLabels: Record<RecipeOutcome, string> = {
+  ...mealOutcomeLabels,
+  planned: "В плане",
 };
 
 const recipeFilters: { id: RecipeFilter; label: string }[] = [
   { id: "all", label: "Все" },
   { id: "liked", label: "Понравились" },
   { id: "cooked", label: "Готовили" },
-  { id: "unverified", label: "Без оценки" },
+  { id: "removed", label: "Убрали / пропуск" },
+  { id: "unconfirmed", label: "Не подтверждено" },
   { id: "planned", label: "В плане" },
   { id: "blocked", label: "Чёрный список" },
 ];
+
+function MealHistoryBadges({ outcome, preference }: { outcome: RecipeOutcome; preference: MealPreference }) {
+  return <span className="meal-history-badges">
+    <span className={`meal-outcome outcome-${outcome}`}>{recipeOutcomeLabels[outcome]}</span>
+    {preference && <span className={`meal-outcome preference-${preference}`}>{mealPreferenceLabels[preference]}</span>}
+  </span>;
+}
+
+function WeekHistoryAudit({ week }: { week: number }) {
+  if (week < 1 || week > 3) return null;
+  const historyWeek = week as MealHistoryWeek;
+  const summary = weekMealHistorySummaries[historyWeek];
+  const previousMenuEntries = getWeekMealHistory(historyWeek).filter((entry) => entry.origin === "history_only");
+
+  return <section className="week-history-audit" aria-label={`Факт приготовления недели ${week}`}>
+    <div className="week-history-head">
+      <div><span className="eyebrow">Проверка по сообщениям</span><h3>Что готовили и что убрали</h3></div>
+      <p>Расходы и наличие рецепта не доказывают готовку. Здесь факт, предварительный план и отсутствие отчёта разделены.</p>
+    </div>
+    <div className="week-history-stats">
+      <article><span>Готовили</span><strong>{summary.outcomes.cooked}</strong><small>Подтверждено сообщением</small></article>
+      <article><span>Не ели</span><strong>{summary.outcomes.not_eaten}</strong><small>Подтверждённый пропуск</small></article>
+      <article><span>Планировали пропустить</span><strong>{summary.outcomes.planned_to_skip}</strong><small>Итог ещё не подтверждён</small></article>
+      <article><span>Без подтверждения</span><strong>{summary.outcomes.unconfirmed}</strong><small>Не считаем приготовленным</small></article>
+    </div>
+    <ul className="week-history-notes">{weekMealHistoryNotes[historyWeek].map((note) => <li key={note}>{note}</li>)}</ul>
+    {previousMenuEntries.length > 0 && <div className="previous-menu-entries">
+      <div className="subhead"><h3>Строки, убранные из итогового меню</h3><span>Сохраняем причину и уровень уверенности</span></div>
+      {previousMenuEntries.map((entry) => <article key={entry.id}>
+        <div><span>{entry.day} · {entry.mealType}</span><h4>{entry.title}</h4><p>{entry.note}</p></div>
+        <MealHistoryBadges outcome={entry.outcome} preference={entry.preference} />
+      </article>)}
+    </div>}
+  </section>;
+}
 
 export default function Home() {
   const [activePage, setActivePage] = useState<PageId>("overview");
@@ -158,7 +223,7 @@ export default function Home() {
 
   async function copySelectedRecipes() {
     if (chosenRecipes.length === 0) return;
-    const content = chosenRecipes.map((item) => `Неделя ${item.week.number} — ${item.meal.title}`).join("\n");
+    const content = chosenRecipes.map((item) => `Неделя ${item.week.number} — ${item.title}`).join("\n");
     try {
       await navigator.clipboard.writeText(content);
       setRecipeCopyLabel("Выбор скопирован");
@@ -197,7 +262,22 @@ export default function Home() {
           <section className="section tint" id="stock"><div className="shell"><div className="section-heading"><div><span className="eyebrow">Домашний остаток</span><h2>Что используем в первую очередь</h2></div><p>Белая рыба исключена и не вычитается из потребности. Сначала идут свежие овощи и открытые продукты, сухие крупы остаются резервом.</p></div><div className="stock-grid">{stock.map((item) => <div className="stock-item" key={item.name}><span>{item.name}</span><strong>{item.quantity}</strong><small className={`stock-priority ${item.priority}`}>{item.priority === "сначала" ? "используем раньше" : "долгий запас"}</small></div>)}</div><p className="footnote">Остатки зафиксированы со слов пользователя 29 августа. Оба фарша находятся в морозилке; размораживайте их в холодильнике. Неупомянутые продукты не считаются запасом.</p></div></section>
         </div>}
 
-        {activePage === "archive" && <section className="section shell page-panel page-intro-section" id="page-archive" role="tabpanel" aria-labelledby="page-tab-archive"><div className="section-heading"><div><span className="eyebrow">Меню и архив</span><h2>Все четыре недели</h2></div><p>Недели 1–3 сохраняют историю приготовленных блюд и рецепты. Неделя 4 доступна как текущий план, без повторной таблицы покупок.</p></div><div className="tabs" role="tablist" aria-label="Недели меню">{weeks.map((week) => <button type="button" role="tab" aria-selected={week.number === current.number} className={`${week.number === current.number ? "active" : ""} ${week.archived ? "archived-tab" : ""}`} key={week.number} onClick={() => setWeekNumber(week.number)}><span>{week.archived ? `Неделя ${week.number} · архив` : week.status === "purchased_locked" ? `Неделя ${week.number} · куплено` : `Неделя ${week.number}`}</span><strong>{week.archived ? exact(week.actualTotal ?? 0) : exact(week.status === "purchased_locked" ? total(week.purchases ?? []) : total(week.shopping))}</strong></button>)}</div><div className="week-head"><div><span>0{current.number}</span><div><h3>{current.title}</h3><p>{current.focus}</p></div></div></div><div className="variety" aria-label={`Разнообразие недели ${current.number}`}><strong>В ротации</strong>{current.variety.map((item) => <span key={item}>{item}</span>)}</div><div className="week-grid"><div><div className="subhead"><h3>Меню</h3><span>Точные количества и пошаговое приготовление внутри каждого блюда</span></div><div className="meal-list">{current.meals.map((item, index) => <button className="meal" type="button" key={`${item.day}-${index}`} onClick={() => setSelected(item)}><span className="day">{item.day}<small>{item.type}</small></span><span className="dish">{item.title}<small>{item.batch}</small></span><span className="open">Рецепт</span></button>)}</div></div><aside className="prep"><span>{current.archived ? "Статус архива" : "Подготовка недели"}</span><ol>{current.prep.map((item) => <li key={item}>{item}</li>)}</ol></aside></div>{current.archived && <article className="archive-panel"><span>Архив сохранён</span><p>{current.archiveNote}</p></article>}</section>}
+        {activePage === "archive" && <section className="section shell page-panel page-intro-section" id="page-archive" role="tabpanel" aria-labelledby="page-tab-archive">
+          <div className="section-heading"><div><span className="eyebrow">Меню и архив</span><h2>Все четыре недели</h2></div><p>Недели 1–3 сохраняют рецепты, исходный план и отдельно проверенный результат. Неделя 4 остаётся текущим планом.</p></div>
+          <div className="tabs" role="tablist" aria-label="Недели меню">{weeks.map((week) => <button type="button" role="tab" aria-selected={week.number === current.number} className={`${week.number === current.number ? "active" : ""} ${week.archived ? "archived-tab" : ""}`} key={week.number} onClick={() => setWeekNumber(week.number)}><span>{week.archived ? `Неделя ${week.number} · архив` : week.status === "purchased_locked" ? `Неделя ${week.number} · куплено` : `Неделя ${week.number}`}</span><strong>{week.archived ? exact(week.actualTotal ?? 0) : exact(week.status === "purchased_locked" ? total(week.purchases ?? []) : total(week.shopping))}</strong></button>)}</div>
+          <div className="week-head"><div><span>0{current.number}</span><div><h3>{current.title}</h3><p>{current.focus}</p></div></div></div>
+          <div className="variety" aria-label={`Разнообразие недели ${current.number}`}><strong>В ротации</strong>{current.variety.map((item) => <span key={item}>{item}</span>)}</div>
+          <WeekHistoryAudit week={current.number} />
+          <div className="week-grid"><div><div className="subhead"><h3>Меню и сохранённые рецепты</h3><span>Метка показывает результат, а не просто наличие блюда в плане</span></div><div className="meal-list">{current.meals.map((item, index) => {
+            const history = current.number <= 3 ? getMealHistoryByMenuKey(`${current.number}:${item.title}`) : undefined;
+            return <button className="meal meal-with-history" type="button" key={`${item.day}-${index}`} onClick={() => setSelected(item)}>
+              <span className="day">{item.day}<small>{item.type}</small></span>
+              <span className="dish">{item.title}<small>{item.batch}</small>{history && <small className="meal-history-note">{history.note}</small>}</span>
+              <span className="meal-action"><MealHistoryBadges outcome={history?.outcome ?? "planned"} preference={history?.preference ?? null} /><span className="open">Рецепт</span></span>
+            </button>;
+          })}</div></div><aside className="prep"><span>{current.archived ? "Статус архива" : "Подготовка недели"}</span><ol>{current.prep.map((item) => <li key={item}>{item}</li>)}</ol></aside></div>
+          {current.archived && <article className="archive-panel"><span>Архив сохранён</span><p>{current.archiveNote}</p></article>}
+        </section>}
 
         {activePage === "purchases" && <div className="page-panel" id="page-purchases" role="tabpanel" aria-labelledby="page-tab-purchases">
           <section className="section shell page-intro-section"><div className="section-heading"><div><span className="eyebrow">Закупки и цены</span><h2>Факт, причины и расчёт</h2></div><p>Чеки присылаются в GPT. На сайт попадают только разобранные товарные строки, подтверждённые суммы и понятные причины изменения закупки — без хранения самих файлов чеков.</p></div><div className="purchase-workflow" aria-label="Статусы закупки"><article><span className="purchase-state paid">Куплено</span><h3>Есть товар и цена</h3><p>Строка входит в фактические траты и историю цен.</p></article><article><span className="purchase-state no-price">Нет цены</span><h3>Факт без суммы</h3><p>Позиция сохраняется, но не увеличивает итог до получения цены.</p></article><article><span className="purchase-state skipped">Не куплено</span><h3>Нет подтверждения</h3><p>Плановая позиция не считается фактом, пока покупки нет в чеке или сообщении.</p></article><article><span className="purchase-state removed">Удалено из закупки</span><h3>Покрыто остатком</h3><p>Огурцы и помидоры не добавлены повторно: дома уже было достаточно.</p></article></div><article className="purchase-journal"><div className="panel-head"><h3>Пример журнала следующего месяца</h3><span>проверка механики, не текущая закупка</span></div><p className="planner-note">Огурцы, помидоры, яйца и йогурт ниже — демонстрационные строки формулы. Реальный журнал появится после нового меню, остатков и сообщения о покупках.</p><div className="purchase-journal-list">{nextMonthPurchaseDecisionPreview.map((item) => <div className="purchase-journal-row" key={item.id}><span className={`decision-status ${item.status}`}>{item.statusLabel}</span><strong>{item.productName}</strong><p>{item.reason}</p><b>{item.expectedCost === null ? "нет данных" : exact(item.expectedCost)}</b></div>)}</div></article><div className="shopping purchased"><div className="shopping-head"><div><span className="lock-label">Закуплено · зафиксировано</span><h3>Фактические покупки недели 4</h3><p>Это уже оплаченные позиции, а не повторный список «что купить».</p></div><strong>{exact(total(currentWeek.purchases ?? []))}</strong></div><div className="table-wrap"><table><thead><tr><th>Источник</th><th>Раздел</th><th>Куплено</th><th>Количество</th><th>Факт</th></tr></thead><tbody>{(currentWeek.purchases ?? []).map((item, index) => <tr key={`${item.source}-${item.name}-${index}`}><td data-label="Источник">{item.source}</td><td data-label="Раздел">{item.category}</td><td data-label="Куплено">{item.name}{item.role === "extra" && <small className="extra-tag">вне основных рецептов</small>}{item.role === "snack" && <small className="extra-tag snack-tag">запланировано как перекус</small>}</td><td data-label="Количество">{item.quantity}</td><td data-label="Факт">{exact(item.price)}</td></tr>)}</tbody></table></div></div></section>
@@ -206,7 +286,21 @@ export default function Home() {
           <section className="section shell"><div className="section-heading"><div><span className="eyebrow">Формула закупки</span><h2>Потребность минус остатки</h2></div><p>Ингредиенты считаются в момент готовки. Доедание порции не списывает их второй раз; дефицит округляется до доступной фасовки.</p></div><article className="planner-card"><div className="planner-intro"><div><span className="eyebrow">Расчётная модель</span><h3>Нужное количество → чистая закупка</h3></div><p>Домашний остаток вычитается только если пригоден к дате блюда. Затем учитываются уже купленные партии, чтобы не повторять овощи и другие продукты.</p></div><div className="formula-chain"><span>Σ ингредиентов всех готовок</span><b>−</b><span>пригодные остатки дома</span><b>−</b><span>уже купленные партии</span><b>=</b><span>дефицит → фасовка</span></div><div className="planner-example"><strong>Проверка механики, не закупка сентября</strong><span>Если нужно 900 г огурцов, а дома пригодны 700 г, купить нужно 200 г. Если 700 г помидоров покрывают 500 г рецептов, строка покупки равна нулю.</span></div><div className="table-wrap"><table className="planner-table"><thead><tr><th>Продукт</th><th>Нужно</th><th>Дома</th><th>Уже куплено</th><th>Дефицит</th><th>Купить</th><th>Останется</th><th>Цена</th></tr></thead><tbody>{nextMonthFormulaPreview.map((row) => <tr key={row.productId}><td data-label="Продукт">{row.productName}{row.warning && <small className="planner-warning">{row.warning}</small>}</td><td data-label="Нужно">{amount(row.grossNeed, row.unit)}</td><td data-label="Дома">{amount(row.homeAvailable, row.unit)}</td><td data-label="Уже куплено">{amount(row.alreadyPurchasedAvailable, row.unit)}</td><td data-label="Дефицит">{amount(row.netDeficit, row.unit)}</td><td data-label="Купить">{amount(row.purchaseQuantity, row.unit)}{row.packageBreakdown.length > 0 && <small>{row.packageBreakdown.join(", ")}</small>}</td><td data-label="Останется">{amount(row.projectedRemainder, row.unit)}</td><td data-label="Цена">{exact(row.expectedCost)}</td></tr>)}</tbody></table></div><p className="planner-note">Следующий месячный план дополнительно учитывает дату блюда, срок годности и причину исключения строки. Продукт без цены остаётся помеченным «нет данных», а не получает выдуманную стоимость.</p></article><details className="expenses analysis-details"><summary>Выгода продуктов и ценовые сигналы</summary><div className="details-content"><div className="value-grid">{valueLeaders.map((item) => <article className="value-card" key={item.rank}><span className="value-rank">{item.rank}</span><div><span className="value-criterion">{item.criterion}</span><h3>{item.product}</h3><p className="value-evidence">{item.evidence}</p><p>{item.conclusion}</p></div></article>)}</div><div className="signal-grid">{priceSignals.map((item) => <article className="signal-card" key={item.label}><span>{item.label}</span><h3>{item.evidence}</h3><p>{item.conclusion}</p></article>)}</div><details className="expenses price-list"><summary>Нормализованные цены из чеков</summary><div className="table-wrap"><table><thead><tr><th>Продукт</th><th>Цена</th></tr></thead><tbody>{unitPrices.map(([name, value]) => <tr key={name}><td data-label="Продукт">{name}</td><td data-label="Цена">{value}</td></tr>)}</tbody></table></div></details><p className="method-note"><strong>Метод.</strong> Цена за белок и калории — ориентир на типичные пищевые значения, а не данные чеков. Покупки без разбивки по весу входят в общий факт, но не в нормализованные цены.</p></div></details></section>
         </div>}
 
-        {activePage === "recipes" && <section className="section shell page-panel page-intro-section" id="page-recipes" role="tabpanel" aria-labelledby="page-tab-recipes"><div className="section-heading"><div><span className="eyebrow">База рецептов</span><h2>Приготовленное и запланированное</h2></div><p>Пицца отмечена как любимая, сырники — как понравившиеся. Факт приготовления и оценка вкуса разделены: приготовленное блюдо не считается понравившимся без вашего отзыва.</p></div><div className="recipe-library-toolbar"><div className="recipe-filters" role="group" aria-label="Фильтр рецептов">{recipeFilters.map((filter) => <button type="button" key={filter.id} className={recipeFilter === filter.id ? "active" : ""} aria-pressed={recipeFilter === filter.id} onClick={() => setRecipeFilter(filter.id)}>{filter.label}<small>{recipeLibrary.filter((item) => matchesRecipeFilter(item, filter.id)).length}</small></button>)}</div><div className="recipe-selection"><span>Выбрано: <strong>{chosenRecipes.length}</strong></span><button type="button" className="secondary" disabled={chosenRecipes.length === 0} onClick={copySelectedRecipes}>{recipeCopyLabel}</button></div></div><p className="local-note"><strong>Локальный выбор.</strong> Отметки ниже живут только до перезагрузки этой страницы и никуда не отправляются. Чтобы закрепить подборку или новую оценку в плане, пришлите её в GPT.</p><div className="recipe-library-grid">{visibleRecipes.map((item) => <article className={`recipe-library-card status-${item.status}`} key={item.id}><div className="recipe-card-top"><label className={item.status === "blocked" ? "selection-disabled" : undefined}><input type="checkbox" disabled={item.status === "blocked"} checked={selectedRecipeIds.includes(item.id)} onChange={() => toggleRecipe(item.id)} /><span>{item.status === "blocked" ? "Не выбирать" : "Выбрать"}</span></label><div className="recipe-card-statuses"><span className={`recipe-status ${item.status}`}>{recipeStatusLabels[item.status]}</span>{item.cooked && item.status !== "cooked" && <span className="recipe-status cooked">готовили</span>}</div></div><span className="recipe-week">Неделя {item.week.number} · {item.meal.day} · {item.meal.type}</span><h3>{item.meal.title}</h3><p>{item.meal.batch}</p><button type="button" className="recipe-open-button" onClick={() => setSelected(item.meal)}>Открыть рецепт</button></article>)}</div>{visibleRecipes.length === 0 && <div className="empty-state"><h3>В этой категории пока пусто</h3><p>Оценка появится только после вашего сообщения, поэтому сайт не делает выводы за вас.</p></div>}</section>}
+        {activePage === "recipes" && <section className="section shell page-panel page-intro-section" id="page-recipes" role="tabpanel" aria-labelledby="page-tab-recipes">
+          <div className="section-heading"><div><span className="eyebrow">База рецептов</span><h2>Рецепты и фактический результат</h2></div><p>Подтверждены пицца и панкейки недели 1 и рыба недели 3. По неделе 2 нет по-блюдного отчёта. Оценка вкуса хранится отдельно от факта готовки.</p></div>
+          <div className="recipe-library-toolbar"><div className="recipe-filters" role="group" aria-label="Фильтр рецептов">{recipeFilters.map((filter) => <button type="button" key={filter.id} className={recipeFilter === filter.id ? "active" : ""} aria-pressed={recipeFilter === filter.id} onClick={() => setRecipeFilter(filter.id)}>{filter.label}<small>{recipeLibrary.filter((item) => matchesRecipeFilter(item, filter.id)).length}</small></button>)}</div><div className="recipe-selection"><span>Выбрано: <strong>{chosenRecipes.length}</strong></span><button type="button" className="secondary" disabled={chosenRecipes.length === 0} onClick={copySelectedRecipes}>{recipeCopyLabel}</button></div></div>
+          <p className="local-note"><strong>Локальный выбор.</strong> Отметки ниже живут только до перезагрузки этой страницы и никуда не отправляются. Чтобы закрепить подборку или новую оценку в плане, пришлите её в GPT.</p>
+          <div className="recipe-library-grid">{visibleRecipes.map((item) => {
+            const blocked = item.preference === "blocked";
+            return <article className={`recipe-library-card status-${item.preference ?? item.outcome}`} key={item.id}>
+              <div className="recipe-card-top"><label className={blocked ? "selection-disabled" : undefined}><input type="checkbox" disabled={blocked} checked={selectedRecipeIds.includes(item.id)} onChange={() => toggleRecipe(item.id)} /><span>{blocked ? "Не выбирать" : "Выбрать"}</span></label><MealHistoryBadges outcome={item.outcome} preference={item.preference} /></div>
+              <span className="recipe-week">Неделя {item.week.number} · {item.day} · {item.mealType}</span>
+              <h3>{item.title}</h3><p>{item.batch}</p><p className="recipe-history-note">{item.note}</p>
+              {item.meal ? <button type="button" className="recipe-open-button" onClick={() => setSelected(item.meal)}>Открыть рецепт</button> : <span className="recipe-history-only">Запись из прежней версии меню</span>}
+            </article>;
+          })}</div>
+          {visibleRecipes.length === 0 && <div className="empty-state"><h3>В этой категории пока пусто</h3><p>Сайт не делает выводы о готовке без вашего сообщения.</p></div>}
+        </section>}
 
         {activePage === "rules" && <section className="section shell page-panel page-intro-section" id="page-rules" role="tabpanel" aria-labelledby="page-tab-rules"><div className="section-heading"><div><span className="eyebrow">Правила планирования</span><h2>Вкусы и выводы месяца</h2></div><p>Эти ограничения применяются к будущим меню. Текущая уже купленная неделя меняется только точечно, чтобы не списывать продукты без причины.</p></div><div className="preference-grid">{foodPreferences.map((item) => <article className="preference-card" key={item.title}><span>{item.timing}</span><h3>{item.title}</h3><p>{item.rule}</p></article>)}</div><div className="review-head"><span className="eyebrow">После завершения четырёх недель</span><h3>Как факт месяца превратится в новый план</h3><p>Проверяем чеки, реальное приготовление, отмены, размер порций, доедание и причины списаний.</p></div><div className="review-grid">{nextMonthReviewProtocol.map((item, index) => <article key={item.label}><span>0{index + 1}</span><h4>{item.label}</h4><p>{item.check}</p><small>{item.result}</small></article>)}</div></section>}
       </main>
