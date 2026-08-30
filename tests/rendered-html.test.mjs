@@ -14,7 +14,7 @@ async function render(path = "/") {
   );
 }
 
-test("renders the four-week plan, archive, and purchase analysis", async () => {
+test("renders the four-week plan, locked purchase, and purchase analysis", async () => {
   const response = await render();
   assert.equal(response.status, 200);
   assert.match(response.headers.get("content-type") ?? "", /^text\/html\b/i);
@@ -24,13 +24,18 @@ test("renders the four-week plan, archive, and purchase analysis", async () => {
   assert.match(html, /Текущий бюджет/);
   assert.match(html, /Недели 1–4/);
   assert.match(html, /Экономическая полезность продуктов/);
-  assert.match(html, /Оставшаяся рыба с рисом, брокколи и салатом/);
+  assert.match(html, /Курица с рисом, брокколи и свежим салатом/);
   assert.match(html, /Неделя 1 · архив/);
   assert.match(html, /Неделя 3 · архив/);
-  assert.match(html, /4\s*290 ₽/);
+  assert.match(html, /4\s*165,51 ₽/);
+  assert.match(html, /наличие масла, горчицы и лимонного сока/);
+  assert.match(html, /Потребность → остаток → уже куплено → чистая закупка/);
+  assert.match(html, /Как факт месяца превратится в новый план/);
+  assert.match(html, /Сливы и персики съесть как перекус в первые дни/);
+  assert.match(html, /оставшиеся 400 г порциями по 200 г/);
 });
 
-test("keeps one budget and reconciles three completed weeks without duplicates", async () => {
+test("keeps one budget and reconciles the locked fourth-week purchase without duplicates", async () => {
   const [page, data, layout] = await Promise.all([
     readFile(new URL("../app/page.tsx", import.meta.url), "utf8"),
     readFile(new URL("../app/plan-data.ts", import.meta.url), "utf8"),
@@ -41,12 +46,12 @@ test("keeps one budget and reconciles three completed weeks without duplicates",
   assert.match(page, /const budget = 25_000/);
   assert.match(page, /archivedActualTotal/);
   assert.match(page, /useState\(4\)/);
-  assert.match(page, /exact\(783\.57\)/);
+  assert.match(page, /exact\(3895\.51\)/);
   assert.match(data, /source: "16\.08 · чек"/);
   assert.match(data, /source: "21\.08 · чек · неделя 3"/);
   assert.match(data, /source: "22\.08 · чек «Лента»"/);
   assert.match(data, /actualTotal: 3785\.39/);
-  assert.match(data, /actualTotal: 6561\.15/);
+  assert.match(data, /actualTotal: 6691\.15/);
   assert.match(data, /number: 1/);
   assert.match(data, /number: 2/);
   assert.match(data, /name: "Яйца", quantity: "11 шт\."/);
@@ -55,7 +60,14 @@ test("keeps one budget and reconciles three completed weeks without duplicates",
   const expenseBlock = data.slice(data.indexOf("export const expenses"), data.indexOf("export const stock"));
   const expenseTotal = [...expenseBlock.matchAll(/amount: ([\d.]+)/g)]
     .reduce((sum, match) => sum + Number(match[1]), 0);
-  assert.equal(Number(expenseTotal.toFixed(2)), 15395.53);
+  assert.equal(Number(expenseTotal.toFixed(2)), 15525.53);
+  const weekFourPurchaseBlock = data.slice(data.indexOf("export const weekFourPurchases"), data.indexOf("export const foodPreferences"));
+  const weekFourPurchaseTotal = [...weekFourPurchaseBlock.matchAll(/, ([\d.]+)(?:, "(?:extra|snack)")?\),?$/gm)]
+    .reduce((sum, match) => sum + Number(match[1]), 0);
+  assert.equal(Number(weekFourPurchaseTotal.toFixed(2)), 4165.51);
+  assert.match(data, /name: "Тортильи на текущий день, не для недели 4"/);
+  assert.doesNotMatch(weekFourPurchaseBlock, /Тортильи/);
+  assert.match(data, /status: "purchased_locked"/);
   assert.match(layout, /og-v2\.png/);
 });
 
@@ -76,15 +88,14 @@ test("has a complete detailed recipe for each planned and archived meal", async 
   assert.equal(weekTwoRecipes, 11);
   assert.match(page, /Object\.keys\(recipeDetails\)\.length !== recipeCount/);
   assert.match(revisedDetails, /Кальмар 500 г разморозьте только в холодильнике/);
-  assert.match(revisedDetails, /Накануне переложите замороженные 300 г рыбы/);
+  assert.match(revisedDetails, /Это точечная замена белой рыбы продуктом из уже оплаченного чека/);
   assert.match(page, /точные количества и 5–7 шагов/);
   assert.match(legacyDetails, /filter\(\(\[key\]\) => key\.startsWith\("2:"\)\)/);
 });
 
 test("rotates grains, keeps rice as a side dish once, and diversifies weekend breakfasts", async () => {
-  const [data, legacyDetails, revisedDetails] = await Promise.all([
+  const [data, revisedDetails] = await Promise.all([
     readFile(new URL("../app/plan-data.ts", import.meta.url), "utf8"),
-    readFile(new URL("../app/recipe-details.ts", import.meta.url), "utf8"),
     readFile(new URL("../app/recipe-details-revised.ts", import.meta.url), "utf8"),
   ]);
 
@@ -95,32 +106,33 @@ test("rotates grains, keeps rice as a side dish once, and diversifies weekend br
   const weekFour = data.slice(weekFourStart, weeksEnd);
 
   assert.equal((weekThree.match(/Рис —/g) ?? []).length, 0);
-  assert.match(weekFour, /единственный рисовый гарнир недели/);
+  assert.match(weekFour, /Рис как гарнир × 1/);
   assert.match(weekFour, /Каша «Дружба» с яблоком/);
   assert.match(weekFour, /Рис — 1 пакетик из остатка/);
-  assert.match(weekFour, /Оставшаяся рыба с рисом, брокколи и салатом/);
+  assert.match(weekFour, /Курица с рисом, брокколи и свежим салатом/);
   assert.match(weekThree, /Пшённая каша с яблоком, ягодами и корицей/);
   assert.match(weekThree, /Сырники с ягодами и йогуртом/);
   assert.match(weekThree, /Пшено — 80 г/);
   assert.match(weekThree, /shopping: \[\]/);
-  assert.match(weekThree, /actualTotal: 6561\.15/);
+  assert.match(weekThree, /actualTotal: 6691\.15/);
   assert.doesNotMatch(weekThree, /Обычные блинчики с яблоком, корицей и йогуртом/);
-  assert.match(weekFour, /Омлет с Фетаксой, перцем и питой/);
+  assert.match(weekFour, /Омлет с Фетаксой, перцем и шоти-пури/);
   assert.match(weekFour, /Яйца — 4 шт\. из остатка/);
 
   const eggsFromStock = [...weekFour.matchAll(/Яйц[ао] — (\d+) шт\. из остатка/g)]
     .reduce((sum, match) => sum + Number(match[1]), 0);
   assert.equal(eggsFromStock, 11);
-  assert.doesNotMatch(`${data}\n${revisedDetails}`, /перлов/iu);
+  assert.doesNotMatch(`${weekFour}\n${revisedDetails.slice(revisedDetails.indexOf('"4:'))}`, /перлов/iu);
   assert.match(data, /Тёплый салат с креветками и кускусом/);
   assert.match(data, /Овощная мусака с фасолью и баклажанами/);
-  assert.match(data, /Брокколи замороженная, 400 г/);
-  assert.match(data, /Брокколи — 500 г/);
-  assert.match(data, /Рыба и оба фарша находятся в морозилке/);
+  assert.match(data, /Брокколи «Морозко Green»/);
+  assert.match(data, /Брокколи — 400 г из покупки/);
+  assert.match(data, /Белую рыбу не размораживать и не использовать/);
 
   const riceSideMeals = weekFour.match(/meal\("[^"]+", "[^"]+", "[^"]*с рисом[^"]*"/g) ?? [];
   assert.equal(riceSideMeals.length, 1);
-  assert.match(weekFour, /Филе рыбы — 300 г из остатка/);
+  assert.doesNotMatch(weekFour, /meal\([^\n]*(Филе рыбы|Пангасиус|белая рыба)/iu);
+  assert.match(weekFour, /Куриное филе — 250 г из покупки/);
   assert.match(weekFour, /Фарш индейки — 400 г из остатка/);
   assert.match(weekFour, /Говяжий фарш — 300 г из остатка/);
   assert.match(weekFour, /Овощное рагу — 400 г из остатка/);
@@ -128,7 +140,14 @@ test("rotates grains, keeps rice as a side dish once, and diversifies weekend br
   assert.match(weekFour, /Картофель — 700 г из остатка/);
   assert.equal((weekFour.match(/Фетакса — 100 г из остатка/g) ?? []).length, 2);
 
-  const menuAndRecipes = `${data.slice(data.indexOf("export const baseWeeks"))}\n${legacyDetails}\n${revisedDetails}`;
-  assert.doesNotMatch(menuAndRecipes, /капуст/iu);
+  const futureMenuAndRecipes = `${weekFour}\n${revisedDetails.slice(revisedDetails.indexOf('"4:'))}`;
+  assert.doesNotMatch(futureMenuAndRecipes, /капуст/iu);
+  assert.doesNotMatch(futureMenuAndRecipes, /стручков/iu);
+  assert.match(data, /Стручковая фасоль.*Не подавать отдельно/);
+  assert.match(data, /Выходная выпечка/);
+  assert.match(data, /Купили \/ не купили/);
+  assert.match(data, /Размер порций/);
+  assert.match(data, /оставшиеся после каши 398 г яблок и 70 г йогурта/);
+  assert.match(data, /остальные 2,94 л — только для питья/);
   assert.match(weekThree, /Пшено/);
 });
