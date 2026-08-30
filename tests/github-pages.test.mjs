@@ -25,7 +25,7 @@ test("includes the current archive, receipts, and revised menu in the static bun
   assert.match(script, /Питание на месяц для двоих/);
   assert.match(script, /Архив: первая неделя/);
   assert.match(script, /Архив: третья неделя по факту/);
-  assert.match(script, /Экономическая полезность продуктов/);
+  assert.match(script, /Выгода продуктов и ценовые сигналы/);
   assert.match(script, /Тёплый салат с кальмаром и кускусом/);
   assert.match(script, /Тёплый салат с креветками и кускусом/);
   assert.match(script, /Пшённая каша с яблоком, ягодами и корицей/);
@@ -37,7 +37,7 @@ test("includes the current archive, receipts, and revised menu in the static bun
   assert.match(script, /Курица с рисом, брокколи и свежим салатом/);
   assert.match(script, /6691\.15/);
   assert.match(script, /Креветки королевские очищенные/);
-  assert.match(script, /Потребность → остаток → уже куплено → чистая закупка/);
+  assert.match(script, /Потребность минус остатки/);
   assert.match(script, /Белокочанная капуста и перловка/);
   assert.match(script, /Выходная выпечка/);
   assert.match(script, /Как факт месяца превратится в новый план/);
@@ -45,4 +45,11 @@ test("includes the current archive, receipts, and revised menu in the static bun
   assert.match(script, /Закуплено · зафиксировано/);
   assert.match(script, /Сливы и персики съесть как перекус в первые дни/);
   assert.match(script, /После плана останется/);
+  assert.match(script, /Закупки и цены/);
+  assert.match(script, /База рецептов/);
+  assert.match(script, /Память цен/);
+  assert.match(script, /Дешевле прошлой покупки/);
+  assert.match(script, /Аналог или другой бренд — только ориентир/);
+  assert.match(script, /Убрано из закупки/);
+  assert.doesNotMatch(script, /Промежуточный анализ/);
 });

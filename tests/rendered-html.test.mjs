@@ -14,7 +14,7 @@ async function render(path = "/") {
   );
 }
 
-test("renders the four-week plan, locked purchase, and purchase analysis", async () => {
+test("renders the compact overview and mobile-visible page tabs", async () => {
   const response = await render();
   assert.equal(response.status, 200);
   assert.match(response.headers.get("content-type") ?? "", /^text\/html\b/i);
@@ -22,17 +22,47 @@ test("renders the four-week plan, locked purchase, and purchase analysis", async
   const html = await response.text();
   assert.match(html, /Питание на месяц для двоих/);
   assert.match(html, /Текущий бюджет/);
-  assert.match(html, /Недели 1–4/);
-  assert.match(html, /Экономическая полезность продуктов/);
-  assert.match(html, /Курица с рисом, брокколи и свежим салатом/);
-  assert.match(html, /Неделя 1 · архив/);
-  assert.match(html, /Неделя 3 · архив/);
+  assert.match(html, /Прошедшие недели/);
+  assert.match(html, /Обзор/);
+  assert.match(html, /Текущая неделя/);
+  assert.match(html, /Меню и архив/);
+  assert.match(html, /Закупки и цены/);
+  assert.match(html, /База рецептов/);
+  assert.match(html, /Правила/);
   assert.match(html, /4\s*165,51 ₽/);
-  assert.match(html, /наличие масла, горчицы и лимонного сока/);
-  assert.match(html, /Потребность → остаток → уже куплено → чистая закупка/);
-  assert.match(html, /Как факт месяца превратится в новый план/);
-  assert.match(html, /Сливы и персики съесть как перекус в первые дни/);
-  assert.match(html, /оставшиеся 400 г порциями по 200 г/);
+  assert.match(html, /Действующий прогноз месяца/);
+  assert.doesNotMatch(html, /Промежуточный анализ/);
+});
+
+test("separates purchases, price memory, recipes, and rules into dedicated tabs", async () => {
+  const [page, styles, priceMemory, decisions] = await Promise.all([
+    readFile(new URL("../app/page.tsx", import.meta.url), "utf8"),
+    readFile(new URL("../app/globals.css", import.meta.url), "utf8"),
+    readFile(new URL("../app/price-memory.tsx", import.meta.url), "utf8"),
+    readFile(new URL("../app/purchase-decisions.ts", import.meta.url), "utf8"),
+  ]);
+
+  const pageTabBlock = page.slice(page.indexOf("const pageTabs"), page.indexOf("] as const", page.indexOf("const pageTabs")));
+  assert.equal((pageTabBlock.match(/\{ id:/g) ?? []).length, 6);
+  assert.match(page, /activePage === "purchases"/);
+  assert.match(page, /activePage === "recipes"/);
+  assert.match(page, /activePage === "rules"/);
+  assert.match(page, /<PriceMemory \/>/);
+  assert.match(page, /nextMonthPurchaseDecisionPreview/);
+  assert.match(page, /Файлы чеков на публичный сайт не публикуются|без хранения самих файлов чеков/);
+  assert.match(page, /1:Пицца с курицей, грибами и томатами/);
+  assert.match(page, /3:Пангасиус с картофелем, фасолью и лимонным соусом/);
+  assert.match(page, /if \(filter === "cooked"\) return item\.cooked/);
+  assert.match(page, /item\.cooked && item\.status !== "cooked"/);
+  assert.match(page, /disabled=\{item\.status === "blocked"\}/);
+  assert.doesNotMatch(page, /Промежуточный анализ/);
+  assert.match(styles, /\.page-tabs-shell \{ overflow-x: auto/);
+  assert.match(priceMemory, /Память цен/);
+  assert.match(priceMemory, /Тот же товар|currentComparabilityLabel/);
+  assert.match(priceMemory, /Точно дешевле/);
+  assert.match(priceMemory, /Сравнений-аналогов/);
+  assert.match(decisions, /Убрано из закупки/);
+  assert.match(decisions, /Нет данных о закупке/);
 });
 
 test("keeps one budget and reconciles the locked fourth-week purchase without duplicates", async () => {
@@ -45,7 +75,7 @@ test("keeps one budget and reconciles the locked fourth-week purchase without du
   assert.doesNotMatch(page, /Выберите бюджет|data-budget|economy|30 000 ₽/);
   assert.match(page, /const budget = 25_000/);
   assert.match(page, /archivedActualTotal/);
-  assert.match(page, /useState\(4\)/);
+  assert.match(page, /const currentWeek = weeks\.find\(\(week\) => week\.number === 4\)/);
   assert.match(page, /exact\(3895\.51\)/);
   assert.match(data, /source: "16\.08 · чек"/);
   assert.match(data, /source: "21\.08 · чек · неделя 3"/);
@@ -89,7 +119,7 @@ test("has a complete detailed recipe for each planned and archived meal", async 
   assert.match(page, /Object\.keys\(recipeDetails\)\.length !== recipeCount/);
   assert.match(revisedDetails, /Кальмар 500 г разморозьте только в холодильнике/);
   assert.match(revisedDetails, /Это точечная замена белой рыбы продуктом из уже оплаченного чека/);
-  assert.match(page, /точные количества и 5–7 шагов/);
+  assert.match(page, /Точные количества и пошаговое приготовление/);
   assert.match(legacyDetails, /filter\(\(\[key\]\) => key\.startsWith\("2:"\)\)/);
 });
 
