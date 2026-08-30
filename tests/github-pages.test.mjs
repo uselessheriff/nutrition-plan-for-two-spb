@@ -24,7 +24,7 @@ test("includes the current archive, receipts, and revised menu in the static bun
 
   assert.match(script, /Питание на месяц для двоих/);
   assert.match(script, /Архив: первая неделя/);
-  assert.match(script, /Архив: третья неделя по факту/);
+  assert.match(script, /Архив: третья неделя и подтверждения/);
   assert.match(script, /Выгода продуктов и ценовые сигналы/);
   assert.match(script, /Тёплый салат с кальмаром и кускусом/);
   assert.match(script, /Тёплый салат с креветками и кускусом/);
@@ -47,6 +47,10 @@ test("includes the current archive, receipts, and revised menu in the static bun
   assert.match(script, /После плана останется/);
   assert.match(script, /Закупки и цены/);
   assert.match(script, /База рецептов/);
+  assert.match(script, /Рецепты и фактический результат/);
+  assert.match(script, /Что готовили и что убрали/);
+  assert.match(script, /Факт не подтверждён/);
+  assert.match(script, /Планировали пропустить/);
   assert.match(script, /Память цен/);
   assert.match(script, /Дешевле прошлой покупки/);
   assert.match(script, /Аналог или другой бренд — только ориентир/);
