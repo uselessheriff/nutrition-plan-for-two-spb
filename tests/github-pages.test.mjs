@@ -1,70 +1,25 @@
+
 import assert from "node:assert/strict";
-import { readdir, readFile } from "node:fs/promises";
+import { readFile } from "node:fs/promises";
 import test from "node:test";
-
-const pagesRoot = new URL("../docs/", import.meta.url);
-
-test("builds a standalone GitHub Pages site without a GPT redirect", async () => {
-  const html = await readFile(new URL("index.html", pagesRoot), "utf8");
-  const assets = await readdir(new URL("assets/", pagesRoot));
-
-  assert.doesNotMatch(html, /http-equiv=["']refresh/i);
-  assert.doesNotMatch(html, /santinoporchi\.chatgpt\.site/);
-  assert.doesNotMatch(html, /факт трёх недель|чистая закупка на неделю 4/i);
-  assert.match(html, /текущая неделя по Москве/i);
-  assert.match(html, /\/nutrition-plan-for-two-spb\/assets\/[^"']+\.js/);
-  assert.ok(assets.some((name) => name.endsWith(".js")), "JavaScript bundle is missing");
-  assert.ok(assets.some((name) => name.endsWith(".css")), "CSS bundle is missing");
+const root=new URL("../docs/",import.meta.url);
+test("builds standalone Pages with correctly resolved current assets",async()=>{
+ const html=await readFile(new URL("index.html",root),"utf8");
+ assert.doesNotMatch(html,/http-equiv=["']refresh/i);
+ assert.doesNotMatch(html,/santinoporchi\.chatgpt\.site/);
+ assert.match(html,/\/nutrition-plan-for-two-spb\/assets\/[^"']+\.js/);
+ const path=html.match(/src="\/nutrition-plan-for-two-spb\/(assets\/[^"]+\.js)"/)[1];
+ const script=await readFile(new URL(path,root),"utf8");
+ for(const label of ["Меню и архив","Что купить","Сначала остатки","Архив: первая неделя","29.08 · чек «Лента»","Europe/Moscow","Пошаговое приготовление"])assert(script.includes(label),label);
+ for(const label of ["Новые 4 недели","Выгода продуктов и ценовые сигналы","Пример журнала следующего месяца","База рецептов"])assert(!script.includes(label),label);
+ assert(script.includes("nutrition-plan.html?embed=1&view="));
 });
-
-test("includes the current archive, receipts, and revised menu in the static bundle", async () => {
-  const assets = await readdir(new URL("assets/", pagesRoot));
-  const scriptName = assets.find((name) => name.endsWith(".js"));
-
-  assert.ok(scriptName, "JavaScript bundle is missing");
-  const script = await readFile(new URL(`assets/${scriptName}`, pagesRoot), "utf8");
-
-  assert.match(script, /Питание на месяц для двоих/);
-  assert.match(script, /Архив: первая неделя/);
-  assert.match(script, /Архив: третья неделя и подтверждения/);
-  assert.match(script, /Выгода продуктов и ценовые сигналы/);
-  assert.match(script, /Тёплый салат с кальмаром и кускусом/);
-  assert.match(script, /Тёплый салат с креветками и кускусом/);
-  assert.match(script, /Пшённая каша с яблоком, ягодами и корицей/);
-  assert.match(script, /Сырники с ягодами и йогуртом/);
-  assert.match(script, /Масло сливочное/);
-  assert.doesNotMatch(script, /Обычные блинчики с яблоком, корицей и йогуртом/);
-  assert.match(script, /Омлет с Фетаксой, перцем и шоти-пури/);
-  assert.match(script, /Каша «Дружба» с яблоком/);
-  assert.match(script, /Курица с рисом, брокколи и свежим салатом/);
-  assert.match(script, /Картофельное пюре/);
-  assert.match(script, /6691\.15/);
-  assert.match(script, /Креветки королевские очищенные/);
-  assert.match(script, /Потребность минус остатки/);
-  assert.match(script, /Белокочанная капуста и перловка/);
-  assert.match(script, /Выходная выпечка/);
-  assert.match(script, /Как факт месяца превратится в новый план/);
-  assert.match(script, /29\.08 · чек «Лента»/);
-  assert.match(script, /Закуплено · зафиксировано/);
-  assert.match(script, /Сливы и персики съесть как перекус в первые дни/);
-  assert.match(script, /После плана останется/);
-  assert.match(script, /Закупки и цены/);
-  assert.match(script, /База рецептов/);
-  assert.match(script, /Рецепты и фактический результат/);
-  assert.match(script, /Что готовили и что убрали/);
-  assert.match(script, /Факт не подтверждён/);
-  assert.match(script, /Планировали пропустить/);
-  assert.match(script, /Память цен/);
-  assert.match(script, /Дешевле прошлой покупки/);
-  assert.match(script, /Аналог или другой бренд — только ориентир/);
-  assert.match(script, /Убрано из закупки/);
-  assert.match(script, /Europe\/Moscow/);
-  assert.match(script, /Сегодня по Москве/);
-  assert.match(script, /Дата РФ · московское время/);
-  assert.match(script, /Текущая по Москве/);
-  assert.match(script, /Сейчас нет активной недели в этом плане/);
-  assert.match(script, /Итог подтверждённых закупок цикла/);
-  assert.match(script, /Покупки после 6 сентября относятся уже к следующему циклу/);
-  assert.match(script, /Не удалось сверить дату онлайн/);
-  assert.doesNotMatch(script, /Промежуточный анализ/);
+test("publishes the same weekly shopping artifact as Sites",async()=>{
+ const html=await readFile(new URL("nutrition-plan.html",root),"utf8");
+ const canonical=await readFile(new URL("../public/nutrition-plan.html",import.meta.url),"utf8");
+ assert.equal(html,canonical);
+ assert(html.includes('id="shopping-weeks"'));
+ assert(html.includes('Что купить на неделю'));
+ assert(html.includes('const activeTier=1'));
+ assert(!html.includes('id="budget-switch"'));
 });

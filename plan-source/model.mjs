@@ -44,7 +44,7 @@ export function R(id,title,time,protein,items,steps,note='',salt=2) {
  const r={id,title,time,protein,items:full,steps,note};recipes.push(r);return r;
 }
 export const S = 'Ингредиенты и все граммовки рассчитаны на 2 порции. Делите белок поровну; указанные калории — половина общего блюда, не дневная норма.';
-export function recipeFor(id,tier=0) {
+export function recipeFor(id,tier=1) {
  const r=recipes.find(x=>x.id===id); if(!r) throw Error('Unknown recipe '+id);
  const copy={...r,items:{...r.items},steps:[...r.steps]};
  if(tier===0 && ['w1cutlet','w2meatballs'].includes(id)) {delete copy.items.mince;copy.items.mixedmince=400;copy.title=copy.title.replace('Говяжьи','Домашние');copy.protein='Смешанный фарш';copy.steps=copy.steps.map(s=>s.replace('400 г фарша','400 г смешанного фарша (свинина + говядина)'));}
@@ -72,7 +72,7 @@ export function extras(tier,week) {
  if(tier===2) {e[0].items.apple=1200;e[0].how='По 200 г яблок каждому в Пн, Вт и Чт. В Ср и Пт яблоки заменены ягодным йогуртом.';e.push({title:'Ягодный йогурт',items:{berries:600,yogurt:500},how:'В Ср и Пт вместо яблок: каждому по 150 г ягод и 125 г йогурта.'});e[2].items.bar=2;e[2].how='Во вторник по 1 сырку каждому. В четверг — орехи вместо сырка.';e.push({title:'Орехи к перекусу',items:{nuts:100},how:'Чт и Сб: по 25 г каждому, не дополнительная обязательная еда.'});}
  return e;
 }
-export function calculate(tier=0,grainStock={}) {
+export function calculate(tier=1,grainStock={}) {
  const inventory=Object.fromEntries(Object.values(ingredients).map(i=>[i.id,i.stock]));
  for(const id of ['rice','bulgur','couscous']) inventory[id]=Math.max(0,Number(grainStock[id])||0);
  const result=[];

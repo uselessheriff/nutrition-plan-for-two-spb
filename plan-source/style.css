@@ -5,3 +5,28 @@
 @media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}*{transition:none!important}}
 :root{--ink:#20302c;--soft:#53635f;--muted:#798783;--line:#dfe5df;--rail:#f3f5f0;--red:#c9684c;--green:#5f7f6b;--blue:#345643}body{background:#fbfbf7}.notice{background:#edf4ed;color:#345643}.tag{background:#edf4ed;color:#345643}.embedded .topbar{display:none}.embedded .hero{padding-top:30px}.embedded html{scroll-padding-top:20px}
 @media print{.topbar,.utility,.primary,form,.budget-switch,dialog,.week-tabs{display:none!important}.shell{max-width:none;padding:0}.hero{padding:10px 0;gap:20px}h1{font-size:32px}.section{padding:18px 0}.meal-card,.surface{break-inside:avoid;box-shadow:none}.menu-layout{display:block}.side{margin-top:15px}.table-scroll{overflow:visible}table{min-width:0}.dashboard,.journal-grid{grid-template-columns:1fr 1fr}body{font-size:11px}.notice{font-size:11px}a{color:inherit}.big-number{font-size:28px}}
+
+/* Focused surfaces share the same calculation and local storage. */
+html[data-view] main > * {display:none}
+html[data-view="shopping"] #shopping, html[data-view="stock"] #stock, html[data-view="expenses"] #expenses {display:block}
+html.embedded, html.embedded body {min-height:0;height:auto}
+html.embedded main {min-height:0}
+.shopping-week {margin:16px 0;overflow:hidden}
+.shopping-week > summary {display:flex;align-items:center;gap:14px;padding:20px;cursor:pointer;list-style:none;min-height:76px}
+.shopping-week > summary::-webkit-details-marker {display:none}
+.shopping-week > summary:focus-visible {outline:3px solid var(--green,#477f56);outline-offset:-4px}
+.shopping-week > summary strong {font-size:1.125rem}
+.shopping-week summary small {display:block;font-weight:400;font-size:.875rem;margin-top:5px}
+.week-price {margin-left:auto;text-align:right;white-space:nowrap}
+.disclosure-icon {font-size:1.5rem;transition:transform .15s}
+.shopping-week[open] > summary .disclosure-icon {transform:rotate(180deg)}
+.shopping-week[open] > summary {border-bottom:1px solid #d4dfdc}
+.shopping-week-content {padding:20px}
+.buy-list {list-style:none;padding:0;margin:0 0 20px}
+.buy-list > li {display:flex;align-items:start;gap:18px;justify-content:space-between;padding:14px 0;border-bottom:1px solid #e2e8e5}
+.buy-list li > div:last-child {text-align:right;flex-shrink:0}
+.buy-list small {display:block;font-size:.875rem;line-height:1.5;margin-top:4px;color:#4e6264}
+.shopping-actions {display:flex;gap:15px;align-items:center;flex-wrap:wrap;margin:18px 0}
+.calculation-details {margin-top:18px}
+.calculation-details > summary {padding:12px 0;cursor:pointer;font-weight:600}
+@media(max-width:440px){.shopping-week > summary{padding:15px 12px;gap:8px}.shopping-week-content{padding:14px}.shopping-week summary strong{font-size:1rem}.week-price{white-space:normal}.buy-list li{gap:10px}.buy-list li>div:first-child{min-width:0;overflow-wrap:anywhere}}

@@ -1,0 +1,15 @@
+.workspace-frame {display:block;width:100%;border:0;min-height:500px;background:transparent}
+.compact-workspace .section {padding-top:28px;padding-bottom:28px}
+.all-weeks {display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px}
+.all-weeks button {min-width:0;width:100%;text-align:left}
+.all-weeks button small {font-size:.875rem}
+.compact-workspace .week-head {gap:20px;flex-wrap:wrap}
+.text-button {border:0;background:none;color:#215a3e;text-decoration:underline;padding:7px 0;cursor:pointer;font:inherit}
+.expense-period-cards {display:grid;grid-template-columns:1fr 1fr;gap:20px}
+.finance-total {display:block;font-size:2rem;margin:12px 0}
+.compact-totals {display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:18px}
+.compact-totals span strong {display:block;margin-top:5px}
+.receipt-history>div {display:flex;justify-content:space-between;gap:14px;padding:12px 0;border-bottom:1px solid #dce3e5}
+.receipt-history small {display:block;font-size:.875rem;color:#536777}
+.week-extras article {margin:18px 0}
+@media(max-width:680px){.all-weeks{grid-template-columns:1fr 1fr}.expense-period-cards{grid-template-columns:1fr}.compact-workspace .section{padding-top:18px}.location{font-size:.875rem}.workspace-frame{min-height:500px}}

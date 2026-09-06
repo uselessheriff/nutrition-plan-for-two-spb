@@ -33,7 +33,7 @@ function harness(initialStorage={}){
  vm.runInContext(script,context);return{nodes,context,storage,node};
 }
 const h=harness();assert.equal(vm.runInContext('seed.reduce((s,x)=>s+x.amount,0)',h.context),5075.51);
-for(let tier=0;tier<3;tier++)for(let week=0;week<4;week++) {vm.runInContext(`activeTier=${tier};activeWeek=${week};render()`,h.context);assert.equal((h.node('meal-list').innerHTML.match(/data-recipe=/g)||[]).length,11);for(const id of weeks[week].ids){vm.runInContext(`openRecipe('${id}',null)`,h.context);assert(h.node('recipe-dialog').open);assert(h.node('recipe-title').textContent);assert.equal((h.node('recipe-ingredients').innerHTML.match(/<li>/g)||[]).length,Object.keys(recipeFor(id,tier).items).length);assert.equal((h.node('recipe-steps').innerHTML.match(/<li>/g)||[]).length,4);vm.runInContext('closeRecipe()',h.context);assert(!h.node('recipe-dialog').open);}}
+for(const tier of [1])for(let week=0;week<4;week++) {vm.runInContext(`activeWeek=${week};render()`,h.context);assert.equal((h.node('meal-list').innerHTML.match(/data-recipe=/g)||[]).length,11);for(const id of weeks[week].ids){vm.runInContext(`openRecipe('${id}',null)`,h.context);assert(h.node('recipe-dialog').open);assert(h.node('recipe-title').textContent);assert.equal((h.node('recipe-ingredients').innerHTML.match(/<li>/g)||[]).length,Object.keys(recipeFor(id,tier).items).length);assert.equal((h.node('recipe-steps').innerHTML.match(/<li>/g)||[]).length,4);vm.runInContext('closeRecipe()',h.context);assert(!h.node('recipe-dialog').open);}}
 for(const id of ['rice','bulgur','couscous'])h.node('grain-form:'+id).value=id==='rice'?'640':'';
 h.node('grain-form').events.submit({preventDefault(){},target:h.node('grain-form')});assert(h.storage.get('petersburg-ration-september-2026-v2').includes('640'));
 h.node('expense-form:name').value='<img src=x onerror=alert(1)>';
@@ -42,3 +42,21 @@ h.node('expense-form').events.submit({preventDefault(){},target:h.node('expense-
 const legacy='{"entries":[{"name":"old","amount":100}]}';const h2=harness({'petersburg-ration-actual-week-expenses-v1':legacy});assert.equal(h2.storage.get('petersburg-ration-actual-week-expenses-v1'),legacy);assert(h2.node('legacy-note').innerHTML.includes('старый журнал'));
 console.log('PASS: 44 recipes, 132 variants, 12 weekly menus, budgets, package rounding, inventory conservation, first-week pantry, modal rendering, forms, XSS escaping, legacy preservation.');
 console.log(JSON.stringify(tiers.map((t,i)=>({limit:t.cap,total:calculate(i).total,weeks:calculate(i).weeks.map(w=>w.total)}))));
+assert.equal((h.node('shopping-weeks').innerHTML.match(/class="shopping-week surface"/g)||[]).length,4);
+for(let index=0;index<4;index++){
+ const rendered=h.node('shopping-weeks').innerHTML.split('data-shopping-week="'+index+'"')[1].split('</details></div></details>')[0];
+ assert(rendered.includes('Что купить на неделю '+(index+5)));
+ assert(rendered.indexOf('class="buy-list"')<rendered.indexOf('Подробный расчёт'));
+ const expected=calculate(1,{rice:640}).weeks[index].rows.filter(r=>r.purchase>0);
+ assert.equal((rendered.match(/data-buy-product=/g)||[]).length,expected.length);
+ for(const row of expected)assert(rendered.includes('data-buy-product="'+row.id+'"'));
+}
+h.node('shopping-weeks').events.toggle({target:{dataset:{shoppingWeek:'2'},open:true}});
+vm.runInContext('renderShopping()',h.context);
+assert.match(h.node('shopping-weeks').innerHTML,/data-shopping-week="2" open/);
+vm.runInContext('download=(name,data,type)=>{globalThis.exported={name,data,type}};downloadShopping(2)',h.context);
+assert.equal(vm.runInContext('exported.name',h.context),'zakupka-nedelya-7-25000.csv');
+assert(!html.includes('id="budget-switch"'));
+assert(!html.includes('id="journal"'));
+assert(!html.includes('id="price-analysis"'));
+console.log('PASS: 4 weekly purchase disclosures, purchase-only lists, fixed 25k, CSV week 7, hidden methodology removed');
