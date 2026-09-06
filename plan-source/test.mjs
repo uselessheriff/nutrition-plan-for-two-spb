@@ -60,3 +60,32 @@ assert(!html.includes('id="budget-switch"'));
 assert(!html.includes('id="journal"'));
 assert(!html.includes('id="price-analysis"'));
 console.log('PASS: 4 weekly purchase disclosures, purchase-only lists, fixed 25k, CSV week 7, hidden methodology removed');
+
+// Primary mobile rows show purchase deficit, not the total recipe requirement.
+const mobile=harness();
+for(let index=0;index<4;index++){
+ const list=mobile.node('shopping-weeks').innerHTML.split('data-shopping-week="'+index+'"')[1].split('</ul>')[0];
+ assert.match(list,/<span>Продукт<\/span><span>Купить<\/span><span>Цена<\/span>/);
+ for(const row of calculate(1).weeks[index].rows.filter(r=>r.purchase>0)){
+  const item=list.split('data-buy-product="'+row.id+'"')[1].split('</li>')[0];
+  assert(item.indexOf('class="buy-product"')<item.indexOf('class="buy-quantity"'));
+  assert(item.indexOf('class="buy-quantity"')<item.indexOf('class="buy-price"'));
+  const expectedQuantity=vm.runInContext(`qty('${row.id}',${row.purchase})`,mobile.context);
+  const expectedPrice=vm.runInContext(`money(${row.cost})`,mobile.context);
+  assert(item.split('class="buy-quantity"')[1].split('</div>')[0].includes(expectedQuantity));
+  assert(item.split('class="buy-price"')[1].split('</div>')[0].includes(expectedPrice));
+  assert(!item.includes('Фасовка'));
+ }
+}
+const fillet=calculate(1).weeks[0].rows.find(r=>r.id==='chicken');
+assert.equal(fillet.used,1140);assert.equal(fillet.opening,760);assert.equal(fillet.purchase,400);
+const grainRow=mobile.node('shopping-weeks').innerHTML.split('data-buy-product="rice"')[1].split('</li>')[0];
+assert(grainRow.includes('неизвестные граммы пока не вычтены'));
+assert(grainRow.indexOf('buy-warning')>grainRow.indexOf('buy-price'));
+const known=harness({'petersburg-ration-september-2026-v2':JSON.stringify({grains:{rice:640},entries:[]})});
+assert(!known.node('shopping-weeks').innerHTML.split('data-shopping-week="0"')[1].split('</ul>')[0].includes('data-buy-product="rice"'));
+const css=await readFile(new URL('style.css',import.meta.url),'utf8');
+assert(css.includes('grid-template-columns:minmax(0,1.4fr) minmax(0,.8fr) minmax(0,.8fr)'));
+assert(css.includes('.buy-list strong {font-size:1rem'));
+assert(!css.includes('.buy-list li > div:last-child'));
+console.log('PASS: product-buy-price reading order, pantry-adjusted buy quantities, exact row prices, grain warnings and responsive CSS guardrails');

@@ -24,13 +24,22 @@ html.embedded main {min-height:0}
 .shopping-week[open] > summary {border-bottom:1px solid #d4dfdc}
 .shopping-week-content {padding:20px}
 .buy-list {list-style:none;padding:0;margin:0 0 20px}
-.buy-list > li {display:flex;align-items:start;gap:18px;justify-content:space-between;padding:14px 0;border-bottom:1px solid #e2e8e5}
-.buy-list li > div:last-child {text-align:right;flex-shrink:0}
-.buy-list small {display:block;font-size:.875rem;line-height:1.5;margin-top:4px;color:#4e6264}
+.buy-columns,.buy-list > li {display:grid;grid-template-columns:minmax(0,1.6fr) minmax(0,.75fr) minmax(0,.75fr);column-gap:12px;align-items:start}
+.buy-columns {padding:10px 0;border-block:1px solid var(--line);font-size:.875rem;font-weight:700;color:var(--soft)}
+.buy-list > li {row-gap:8px;padding:16px 0;border-bottom:1px solid var(--line);font-size:1rem;line-height:1.45}
+.buy-list > li > div,.buy-columns > span {min-width:0;overflow-wrap:anywhere}
+.buy-quantity,.buy-price,.buy-columns > span:nth-child(n+2) {text-align:right;font-variant-numeric:tabular-nums}
+.buy-list strong {font-size:1rem;color:var(--ink)}
+.buy-explanation {font-size:.875rem;color:var(--soft);line-height:1.5;margin-bottom:12px}
+.buy-warning,.buy-hint {grid-column:1/-1;margin:0;font-size:.875rem;line-height:1.5;color:var(--soft)}
+.buy-warning {border-left:3px solid #a55e24;padding-left:8px;color:#70451f}
+.shopping-week > summary > span {min-width:0}
+.calculation-details table {font-size:.875rem}
+.calculation-details th,.calculation-details td small,.calculation-details td details {font-size:.875rem}
 .shopping-actions {display:flex;gap:15px;align-items:center;flex-wrap:wrap;margin:18px 0}
 .calculation-details {margin-top:18px}
 .calculation-details > summary {padding:12px 0;cursor:pointer;font-weight:600}
-@media(max-width:440px){.shopping-week > summary{padding:15px 12px;gap:8px}.shopping-week-content{padding:14px}.shopping-week summary strong{font-size:1rem}.week-price{white-space:normal}.buy-list li{gap:10px}.buy-list li>div:first-child{min-width:0;overflow-wrap:anywhere}}
+@media(max-width:440px){.shopping-week > summary{padding:15px 12px;gap:8px}.shopping-week-content{padding:14px}.shopping-week summary strong{font-size:1rem}.week-price{white-space:normal}.buy-columns,.buy-list > li{column-gap:8px;grid-template-columns:minmax(0,1.4fr) minmax(0,.8fr) minmax(0,.8fr)}.shopping-week-content{padding:14px 10px}.shopping-actions .utility{width:100%;font-size:.875rem}}
 </style></head><body>
 <header class="topbar"><div class="shell topbar-inner"><strong>Петербургский рацион</strong><nav aria-label="Разделы"><a href="#menu">Меню</a><a href="#shopping">Закупки</a><a href="#stock">Остатки</a><a href="#expenses">Расходы</a></nav></div></header>
 <main class="shell">
@@ -582,14 +591,14 @@ function renderShopping(){
   const grainWarning=id=>['rice','bulgur','couscous'].includes(id)&&!(id in saved.grains);
   return `<details class="shopping-week surface" data-shopping-week="${index}" ${expandedShopping.has(index)?'open':''}>
   <summary><span><strong>Неделя ${index+5}</strong><small>${weeks[index].label} · ${buying.length} позиций к покупке</small></span><span class="week-price">${money(week.total)}<small>План с резервами</small></span><span class="disclosure-icon" aria-hidden="true">⌄</span></summary>
-  <div class="shopping-week-content"><h3>Что купить на неделю ${index+5}</h3>
-  <ul class="buy-list">${buying.map(r=>{const i=ingredients[r.id];return `<li data-buy-product="${r.id}"><div><strong>${i.name}</strong><small>${num.format(r.purchase/i.pack)} × ${qty(r.id,i.pack)}${grainWarning(r.id)?' · сначала взвесьте домашние пакетики':''}${r.id==='banana'?' · вес мякоти; с кожурой берите примерно в 1,5 раза больше':''}</small></div><div><strong>${qty(r.id,r.purchase)}</strong><small>${money(r.cost)}</small></div></li>`}).join('')}</ul>
+  <div class="shopping-week-content"><h3>Что купить на неделю ${index+5}</h3><p class="buy-explanation">«Купить» — только недостающее после вычета запасов, с округлением до фасовки. Цена — за всё количество к покупке.${index>0?' Остатки будущих недель — прогноз по меню.':' Учтён ваш список остатков от 06.09.'}</p><div class="buy-columns" aria-hidden="true"><span>Продукт</span><span>Купить</span><span>Цена</span></div>
+  <ul class="buy-list">${buying.map(r=>{const i=ingredients[r.id];return `<li data-buy-product="${r.id}"><div class="buy-product"><strong>${i.name}</strong></div><div class="buy-quantity"><span class="sr-only">Купить: </span><strong>${qty(r.id,r.purchase)}</strong></div><div class="buy-price"><span class="sr-only">Плановая цена: </span><strong>${money(r.cost)}</strong></div>${grainWarning(r.id)?'<p class="buy-warning">Сначала взвесьте домашний остаток: его неизвестные граммы пока не вычтены.</p>':''}${r.id==='banana'?'<p class="buy-hint">Указана мякоть; с кожурой берите примерно в 1,5 раза больше.</p>':''}</li>`}).join('')}</ul>
   <div class="shopping-actions"><button type="button" class="utility" data-download-week="${index}">Скачать список недели ${index+5}</button><span>Основная закупка: ${purchaseDates[index]}</span></div>
   <div class="chips">${chip('Продукты',money(week.food))}${chip('Покупаем сами','без доставки')}${chip('База · резерв',money(week.base))}${chip('5% на цены',money(week.buffer))}</div>
   <p class="muted">Цены плановые, не факт оплаты. Перед походом в магазин проверьте остатки и планы на выходные.${week.base?' На пополнение масла, муки, сахара и прочей базы зарезервировано 800 ₽; покупайте только недостающее.':''}</p>
-  <details class="calculation-details"><summary>Подробный расчёт: что есть дома и куда идёт</summary>
-  <div class="table-scroll"><table><caption class="sr-only">Расчёт недели ${index+5}</caption><thead><tr><th>Продукт</th><th>Нужно</th><th>Есть</th><th>Купить</th><th>Цена</th><th>Останется</th></tr></thead><tbody>
-  ${rows.map(r=>`<tr><td><strong>${ingredients[r.id].name}</strong><details><summary>Куда идёт</summary><ul>${r.alloc.map(([name,n])=>`<li>${esc(name)}: ${qty(r.id,n)}</li>`).join('')}</ul></details></td><td>${qty(r.id,r.used)}</td><td>${grainWarning(r.id)?'Неизвестно + ':''}${qty(r.id,r.opening)}</td><td>${r.purchase?qty(r.id,r.purchase):'Не нужно'}</td><td>${r.cost?money(r.cost):'—'}</td><td>${qty(r.id,r.closing)}</td></tr>`).join('')}
+  <details class="calculation-details"><summary>Подробный расчёт: фасовка, остатки и блюда</summary>
+  <div class="table-scroll"><table><caption class="sr-only">Расчёт недели ${index+5}</caption><thead><tr><th scope="col">Продукт</th><th scope="col">Купить</th><th scope="col">Цена</th><th scope="col">Нужно</th><th scope="col">Есть</th><th scope="col">Останется</th></tr></thead><tbody>
+  ${rows.map(r=>`<tr><td><strong>${ingredients[r.id].name}</strong><small>Фасовка: ${qty(r.id,ingredients[r.id].pack)} · ${money(ingredients[r.id].price)}${r.purchase?`; купить ${num.format(r.purchase/ingredients[r.id].pack)} уп. / мерных долей`:''}.</small><details><summary>Куда идёт</summary><ul>${r.alloc.map(([name,n])=>`<li>${esc(name)}: ${qty(r.id,n)}</li>`).join('')}</ul></details></td><td>${r.purchase?qty(r.id,r.purchase):'Не нужно'}</td><td>${r.cost?money(r.cost):'—'}</td><td>${qty(r.id,r.used)}</td><td>${grainWarning(r.id)?'Неизвестно + ':''}${qty(r.id,r.opening)}</td><td>${qty(r.id,r.closing)}</td></tr>`).join('')}
   </tbody></table></div><h4>Расход домашней базы</h4><ul>${week.rows.filter(r=>ingredients[r.id].base).map(r=>`<li>${ingredients[r.id].name}: ${qty(r.id,r.used)}</li>`).join('')}</ul><p class="muted">Остаток после недели — прогноз. Переносить скоропортящееся можно только в пределах срока или после подходящей заморозки.</p></details></div></details>`;
  }).join('');
  $('shopping-budget').innerHTML=chip('Лимит цикла',money(25000))+chip('Все 4 закупки с резервами',money(p.total));

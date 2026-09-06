@@ -23,10 +23,19 @@ html.embedded main {min-height:0}
 .shopping-week[open] > summary {border-bottom:1px solid #d4dfdc}
 .shopping-week-content {padding:20px}
 .buy-list {list-style:none;padding:0;margin:0 0 20px}
-.buy-list > li {display:flex;align-items:start;gap:18px;justify-content:space-between;padding:14px 0;border-bottom:1px solid #e2e8e5}
-.buy-list li > div:last-child {text-align:right;flex-shrink:0}
-.buy-list small {display:block;font-size:.875rem;line-height:1.5;margin-top:4px;color:#4e6264}
+.buy-columns,.buy-list > li {display:grid;grid-template-columns:minmax(0,1.6fr) minmax(0,.75fr) minmax(0,.75fr);column-gap:12px;align-items:start}
+.buy-columns {padding:10px 0;border-block:1px solid var(--line);font-size:.875rem;font-weight:700;color:var(--soft)}
+.buy-list > li {row-gap:8px;padding:16px 0;border-bottom:1px solid var(--line);font-size:1rem;line-height:1.45}
+.buy-list > li > div,.buy-columns > span {min-width:0;overflow-wrap:anywhere}
+.buy-quantity,.buy-price,.buy-columns > span:nth-child(n+2) {text-align:right;font-variant-numeric:tabular-nums}
+.buy-list strong {font-size:1rem;color:var(--ink)}
+.buy-explanation {font-size:.875rem;color:var(--soft);line-height:1.5;margin-bottom:12px}
+.buy-warning,.buy-hint {grid-column:1/-1;margin:0;font-size:.875rem;line-height:1.5;color:var(--soft)}
+.buy-warning {border-left:3px solid #a55e24;padding-left:8px;color:#70451f}
+.shopping-week > summary > span {min-width:0}
+.calculation-details table {font-size:.875rem}
+.calculation-details th,.calculation-details td small,.calculation-details td details {font-size:.875rem}
 .shopping-actions {display:flex;gap:15px;align-items:center;flex-wrap:wrap;margin:18px 0}
 .calculation-details {margin-top:18px}
 .calculation-details > summary {padding:12px 0;cursor:pointer;font-weight:600}
-@media(max-width:440px){.shopping-week > summary{padding:15px 12px;gap:8px}.shopping-week-content{padding:14px}.shopping-week summary strong{font-size:1rem}.week-price{white-space:normal}.buy-list li{gap:10px}.buy-list li>div:first-child{min-width:0;overflow-wrap:anywhere}}
+@media(max-width:440px){.shopping-week > summary{padding:15px 12px;gap:8px}.shopping-week-content{padding:14px}.shopping-week summary strong{font-size:1rem}.week-price{white-space:normal}.buy-columns,.buy-list > li{column-gap:8px;grid-template-columns:minmax(0,1.4fr) minmax(0,.8fr) minmax(0,.8fr)}.shopping-week-content{padding:14px 10px}.shopping-actions .utility{width:100%;font-size:.875rem}}
