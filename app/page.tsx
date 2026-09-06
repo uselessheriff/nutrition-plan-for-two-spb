@@ -72,6 +72,7 @@ const planPeriodLabel = formatPlanWeekRange({
 });
 
 const pageTabs = [
+  { id: "next", label: "Новые 4 недели" },
   { id: "overview", label: "Обзор" },
   { id: "current", label: "Текущая неделя" },
   { id: "archive", label: "Меню и архив" },
@@ -259,7 +260,7 @@ function useMoscowClock() {
 }
 
 export default function Home() {
-  const [activePage, setActivePage] = useState<PageId>("overview");
+  const [activePage, setActivePage] = useState<PageId>("next");
   const [weekNumber, setWeekNumber] = useState(1);
   const [selected, setSelected] = useState<Meal | null>(null);
   const [recipeFilter, setRecipeFilter] = useState<RecipeFilter>("all");
@@ -294,7 +295,7 @@ export default function Home() {
   const cycleStatusLabel = calendar?.phase === "before_plan"
     ? `Цикл начнётся ${formatPlanWeekRange(PLAN_WEEK_RANGES[0])}.`
     : calendar?.phase === "after_plan"
-      ? `Цикл завершён ${PLAN_WEEK_RANGES[PLAN_WEEK_RANGES.length - 1].end.split("-").reverse().join(".")}. Новый месяц ещё не составлен.`
+      ? `Цикл завершён ${PLAN_WEEK_RANGES[PLAN_WEEK_RANGES.length - 1].end.split("-").reverse().join(".")}. Следующий цикл доступен во вкладке «Новые 4 недели».`
       : activePlanRange
         ? `Сейчас идёт неделя ${activePlanRange.number} из 4 · ${formatPlanWeekRange(activePlanRange)}.`
         : "Определяем неделю плана.";
@@ -363,6 +364,8 @@ export default function Home() {
       </header>
 
       <main id="top">
+        {activePage === "next" && <div className="page-panel" id="page-next" role="tabpanel" aria-labelledby="page-tab-next"><iframe className="next-cycle-frame" src="./nutrition-plan.html?embed=1" title="Питание на месяц для двоих: 7 сентября — 4 октября 2026" /></div>}
+        {activePage !== "next" && <p className="shell cycle-archive-note">Архив цикла 10 августа — 6 сентября. Здесь сохранены прежние рецепты, чеки и память цен; новые остатки и следующий месяц находятся во вкладке «Новые 4 недели».</p>}
         {activePage === "overview" && <div className="page-panel" id="page-overview" role="tabpanel" aria-labelledby="page-tab-overview">
           <section className="hero shell">
             <div className="hero-copy">
@@ -371,9 +374,9 @@ export default function Home() {
               <h1>Питание на месяц для двоих</h1>
               <p>{cycleStatusLabel} Финансовый статус считается отдельно: закупленная заранее неделя не становится текущей до своей календарной даты.</p>
             </div>
-            <aside className="budget-card"><div className="budget-head"><span>Текущий бюджет</span><strong>{money(budget)}</strong></div><div className="meter" aria-label={`Использовано ${Math.min(100, plannedMonth / budget * 100).toFixed(0)} процентов бюджета`}><span style={{ width: `${Math.min(100, plannedMonth / budget * 100)}%` }} /></div><div className="budget-numbers"><div><span>Продукты · подтверждено</span><strong>{exact(confirmedTotal)}</strong></div><div><span>Коридор месяца</span><strong>{money(forecastLow)}–{money(forecastHigh)}</strong></div></div><p>За неделю 4 заранее оплачено {exact(currentWeekPaid)}. Неподтверждённые покупки и цены в факт не добавляются.</p></aside>
+            <aside className="budget-card"><div className="budget-head"><span>Текущий бюджет</span><strong>{money(budget)}</strong></div><div className="meter" aria-label={`Использовано ${Math.min(100, plannedMonth / budget * 100).toFixed(0)} процентов бюджета`}><span style={{ width: `${Math.min(100, plannedMonth / budget * 100)}%` }} /></div><div className="budget-numbers"><div><span>Продукты · подтверждено</span><strong>{exact(confirmedTotal)}</strong></div><div><span>Коридор месяца</span><strong>{money(forecastLow)}–{money(forecastHigh)}</strong></div></div><p>За неделю 4 учтено {exact(currentWeekPaid)}. Неподтверждённые покупки и цены в факт не добавляются.</p></aside>
           </section>
-          <section className="section shell overview-fact" id="fact"><div className="section-heading"><div><span className="eyebrow">Календарь и факт</span><h2>Факт четырёхнедельного цикла</h2></div><p>{cycleStatusLabel} Расходы недель 1–3 уже зафиксированы, а неделя 4 оплачена заранее.</p></div><div className="stats"><article className="stat stat-primary"><span>Недели 1–3 · зафиксировано</span><strong>{exact(confirmedPreviousTotal)}</strong><small>Н1 — {exact(weekOneTotal)}, Н2 — {exact(weekTwoTotal)}, Н3 — {exact(weekThreeTotal)}.</small></article><article className="stat"><span>Неделя 4 · оплачено заранее</span><strong>{exact(currentWeekPaid)}</strong><small>Чек {exact(3895.51)} + фрукты {exact(130)} + молоко {exact(140)}.</small></article><article className="stat"><span>Продукты · подтверждено</span><strong>{exact(confirmedTotal)}</strong><small>Только покупки с известной ценой, без предположений.</small></article><article className="stat"><span>Резерв бюджета</span><strong>{exact(budget - confirmedTotal)}</strong><small>Оплачено всего {exact(confirmedTotal + mascarponeOutsidePlan)} с маскарпоне {exact(mascarponeOutsidePlan)} вне рациона.</small></article></div></section>
+          <section className="section shell overview-fact" id="fact"><div className="section-heading"><div><span className="eyebrow">Календарь и факт</span><h2>Факт четырёхнедельного цикла</h2></div><p>{cycleStatusLabel} Расходы четырёх недель сохранены; новые допокупки 910 ₽ добавлены один раз.</p></div><div className="stats"><article className="stat stat-primary"><span>Недели 1–3 · зафиксировано</span><strong>{exact(confirmedPreviousTotal)}</strong><small>Н1 — {exact(weekOneTotal)}, Н2 — {exact(weekTwoTotal)}, Н3 — {exact(weekThreeTotal)}.</small></article><article className="stat"><span>Неделя 4 · подтверждено</span><strong>{exact(currentWeekPaid)}</strong><small>Чек {exact(3895.51)} + фрукты {exact(130)} + молоко {exact(140)} + допокупки {exact(910)}.</small></article><article className="stat"><span>Продукты · подтверждено</span><strong>{exact(confirmedTotal)}</strong><small>Только покупки с известной ценой, без предположений.</small></article><article className="stat"><span>Резерв бюджета</span><strong>{exact(budget - confirmedTotal)}</strong><small>Оплачено всего {exact(confirmedTotal + mascarponeOutsidePlan)} с маскарпоне {exact(mascarponeOutsidePlan)} вне рациона.</small></article></div></section>
           <section className="section forecast"><div className="shell forecast-card"><div><span className="eyebrow">{forecastStatusLabel}</span><h2>{forecastValueLabel}</h2><p>{forecastStatusCopy}</p></div><div className="forecast-weeks">{archivedWeeks.map((week) => <div key={week.number}><span>Неделя {week.number} · факт</span><strong>{exact(week.actualTotal ?? 0)}</strong></div>)}<div><span>Неделя 4 · оплачено</span><strong>{exact(currentWeekPaid)}</strong></div></div>{cycleIsComplete ? <p className="method"><strong>Подтверждённый итог:</strong> {exact(confirmedTotal)}. <strong>Остаток бюджета:</strong> {exact(budget - confirmedTotal)}. Неподтверждённые суммы в итог не добавлены.</p> : <p className="method"><strong>Факт продуктов:</strong> {exact(confirmedTotal)}. <strong>Коридор:</strong> до {money(forecastHigh)} при дополнительных покупках не больше {money(1_000)}. <strong>Ожидаемый резерв:</strong> не менее {money(Math.max(0, budget - forecastHigh))}.</p>}</div></section>
         </div>}
 

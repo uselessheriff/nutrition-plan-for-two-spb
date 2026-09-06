@@ -14,25 +14,22 @@ async function render(path = "/") {
   );
 }
 
-test("renders the compact overview and mobile-visible page tabs", async () => {
+test("renders the new cycle entry and keeps archive tabs mobile-visible", async () => {
   const response = await render();
   assert.equal(response.status, 200);
   assert.match(response.headers.get("content-type") ?? "", /^text\/html\b/i);
 
   const html = await response.text();
   assert.match(html, /Питание на месяц для двоих/);
-  assert.match(html, /Текущий бюджет/);
-  assert.match(html, /Календарь и факт/);
+  assert.match(html, /nutrition-plan\.html\?embed=1/);
+  assert.match(html, /Новые 4 недели/);
   assert.match(html, /Обзор/);
   assert.match(html, /Текущая неделя/);
   assert.match(html, /Меню и архив/);
   assert.match(html, /Закупки и цены/);
   assert.match(html, /База рецептов/);
   assert.match(html, /Правила/);
-  assert.match(html, /4\s*165,51 ₽/);
-  assert.match(html, /Действующий прогноз месяца/);
-  assert.match(html, /Сегодня по Москве/);
-  assert.match(html, /Сверяем московскую дату/);
+  assert.match(html, /7 сентября — 4 октября 2026/);
   assert.doesNotMatch(html, /Промежуточный анализ/);
 });
 
@@ -46,7 +43,7 @@ test("separates purchases, price memory, recipes, and rules into dedicated tabs"
   ]);
 
   const pageTabBlock = page.slice(page.indexOf("const pageTabs"), page.indexOf("] as const", page.indexOf("const pageTabs")));
-  assert.equal((pageTabBlock.match(/\{ id:/g) ?? []).length, 6);
+  assert.equal((pageTabBlock.match(/\{ id:/g) ?? []).length, 7);
   assert.match(page, /activePage === "purchases"/);
   assert.match(page, /activePage === "recipes"/);
   assert.match(page, /activePage === "rules"/);
@@ -111,7 +108,7 @@ test("keeps one budget and reconciles the locked fourth-week purchase without du
   const weekFourPurchaseBlock = data.slice(data.indexOf("export const weekFourPurchases"), data.indexOf("export const foodPreferences"));
   const weekFourPurchaseTotal = [...weekFourPurchaseBlock.matchAll(/, ([\d.]+)(?:, "(?:extra|snack)")?\),?$/gm)]
     .reduce((sum, match) => sum + Number(match[1]), 0);
-  assert.equal(Number(weekFourPurchaseTotal.toFixed(2)), 4165.51);
+  assert.equal(Number(weekFourPurchaseTotal.toFixed(2)), 5075.51);
   assert.match(data, /name: "Тортильи на 30 августа, не для недели 4"/);
   assert.doesNotMatch(weekFourPurchaseBlock, /Тортильи/);
   assert.match(data, /status: "purchased_locked"/);
