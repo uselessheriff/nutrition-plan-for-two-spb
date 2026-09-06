@@ -1,10 +1,12 @@
+import {activeRecipe, portionPolicy, portionLabel} from './active-plan.mjs';
+export {portionPolicy, portionLabel};
 // Quantities are raw/edible weights unless a counted unit is explicitly shown.
 // Prices below are planning assumptions, never historical spending.
 export const period = '07.09–04.10.2026';
 export const reviewDate = '06.09.2026';
 export const tiers = [
   {name:'До 20 000 ₽',cap:20000,copy:'Самовывоз; смешанный фарш, свинина вместо индейки и два блюда из одной упаковки печени. Салат с яйцом вместо креветок. Сок и сырки остаются, но реже.'},
-  {name:'До 25 000 ₽',cap:25000,copy:'Говяжий фарш, индейка, креветки, больше фруктов, четыре сырка на двоих в неделю. Резерв доставки 200 ₽ в неделю.'},
+  {name:'До 25 000 ₽',cap:25000,copy:'Полные порции, смешанный фарш и свинина, говяжье болоньезе, тунец и креветки. Покупаем сами, доставка 0 ₽; резерв на цены 5%.'},
   {name:'До 30 000 ₽',cap:30000,copy:'Лосось вместо горбуши, говядина вместо двух блюд из свинины, ягоды и орехи вместо части перекусов. Резерв доставки 400 ₽ в неделю.'}
 ];
 // name, unit, purchase increment, price per increment, kcal per unit, initial stock
@@ -35,7 +37,7 @@ export const stockNotes = [
  'Баклажаны учтены поштучно (3), томаты — поштучно (4), шпинат — упаковкой (1). Для калорий приняты 300 г / 200 г / 100 г соответственно; фактическая масса неизвестна.',
  '2 банки белой фасоли и 1 кетчуп остаются резервом: фасоль не навязываем, масса содержимого не известна. Для всех основных блюд белок предусмотрен без фасоли.',
  'Два штруделя 1,8 кг и шарлотка 600 г — факт приготовления, не подтверждённый остаток. В закупку и калории будущих дней не добавлены. Если остались, замените ими запланированную сладость, а не добавляйте сверху.',
- 'Масло растительное, мука, сахар, соль, специи, горчица и лимонный сок считаются домашней базой без известного веса. Их точный расход указан; до заказа проверьте запас. На пополнение заложено 600–800 ₽ в первый заказ — это резерв, не расход по чеку.'
+ 'Масло растительное, мука, сахар, соль, специи, горчица и лимонный сок считаются домашней базой без известного веса. Их точный расход указан; перед походом в магазин проверьте запас. На пополнение заложено 800 ₽ в первую закупку — это резерв, не расход по чеку.'
 ];
 export const recipes = [];
 export function R(id,title,time,protein,items,steps,note='',salt=2) {
@@ -55,9 +57,9 @@ export function recipeFor(id,tier=1) {
  if(tier===0 && id==='w3shrimp') {delete copy.items.shrimp;copy.items.egg=4;copy.items.cheese=60;copy.title='Салат с яйцом, сыром и кускусом';copy.protein='Яйца';copy.note='Эконом-вариант: креветки заменены яйцом и сыром, кускус остаётся 100 г на двоих. Креветочная версия доступна в бюджетах 25 и 30 тысяч.';copy.steps=['Ровно 100 г сухого кускуса залейте 120–150 мл кипятка по упаковке, накройте на 5 минут и разрыхлите вилкой.','4 яйца сварите вкрутую за 10 минут. Нарежьте 60 г сыра, 200 г огурцов, 2 помидора и 150 г перца.','Смешайте 100 г йогурта, 20 мл лимонного сока, 20 г масла, соль и специи.','Каждому положите половину кускуса (из 50 г сухого), 2 яйца, 30 г сыра и половину овощей и соуса.'];}
  if(tier===2 && ['w2pork','w4pork'].includes(id)) {copy.items.beef=copy.items.pork;delete copy.items.pork;copy.title=copy.title.replace('Свинина','Говядина');copy.steps=copy.steps.map(s=>s.replace('свинину','говядину').replace('свинины','говядины').replace('45–60 минут','75–90 минут'));copy.time=110;}
  if(tier===2 && id==='w4fish') {copy.items.salmon=copy.items.fish;delete copy.items.fish;copy.title=copy.title.replace('Горбуша','Лосось');}
- return copy;
+ return tier===1?activeRecipe(copy):{...copy,portions:2};
 }
-export function calories(r){return Math.round(Object.entries(r.items).reduce((s,[id,q])=>s+ingredients[id].kcal*q,0)/2);}
+export function calories(r){return Math.round(Object.entries(r.items).reduce((s,[id,q])=>s+ingredients[id].kcal*q,0)/(r.portions||2));}
 export const weeks=[
  {label:'7–13 сентября',date:'2026-09-07',theme:'Сначала остатки',ids:['w1chicken','w1eggplant','w1tortilla','w1pasta','w1cutlet','w1oats','w1salad','w1bolognese','w1syrniki','w1toast','w1pork']},
  {label:'14–20 сентября',date:'2026-09-14',theme:'Тунец и домашняя классика',ids:['w2turkey','w2liver','w2tuna','w2pork','w2pizza','w2millet','w2salad','w2meatballs','w2eggs','w2pita','w2chicken']},
@@ -68,8 +70,9 @@ export const slots=[['Пн','Ужин',0],['Вт','Ужин',1],['Ср','Ужи�
 export function extras(tier,week) {
  const e=[{title:'Фрукты Пн–Пт',items:{apple:2000},how:'По 200 г яблок каждому в Пн–Пт, например после ужина. Фрукты в самих рецептах посчитаны отдельно.'},{title:'Сок Пн / Ср / Пт',items:{juice:1000},how:'Пн и Ср: по 150 мл каждому; Пт: по 200 мл. Не вместо воды.'},{title:'Сырки Вт / Чт',items:{bar:4},how:'По 1 сырку 40 г каждому во Вт и Чт. При оставшейся домашней выпечке замените сырок порцией выпечки по её составу.'}];
  e.push({title:'Перекус выходных: овсянка с молоком и бананом',items:{oats:120,milk:1000,banana:600},how:'В Сб и Вс каждому: 30 г овсянки, 250 мл молока и 150 г мякоти банана. Хлопья сварить в молоке по упаковке, добавить банан. Можно разделить между основными приёмами по аппетиту. Это еда на день, а не обязательный четвёртый приём.'});
- if(tier===0) {e[0].items.apple=1000;e[0].how='По 100 г яблок каждому в Пн–Пт. Это дополнение к овощам, а не полный дневной объём фруктов и овощей.';e[1].items.juice=500;e[1].title='Сок Пн / Пт';e[1].how='В Пн и Пт по 125 мл каждому; открытую упаковку хранить по этикетке. Если срок меньше, выпить в два соседних дня.';e[2].items.bar=2;e[2].title='Сырки во вторник';e[2].how='По 1 сырку 40 г каждому во вторник. В четверг отдельная сладость не предусмотрена.';}
+ if(tier===0||tier===1) {e[0].items.apple=1000;e[0].how='По 100 г яблок каждому в Пн–Пт. Это дополнение к овощам, а не полный дневной объём фруктов и овощей.';e[1].items.juice=500;e[1].title='Сок Пн / Пт';e[1].how='В Пн и Пт по 125 мл каждому; открытую упаковку хранить по этикетке. Если срок меньше, выпить в два соседних дня.';e[2].items.bar=2;e[2].title='Сырки во вторник';e[2].how='По 1 сырку 40 г каждому во вторник. В четверг отдельная сладость не предусмотрена.';}
  if(tier===2) {e[0].items.apple=1200;e[0].how='По 200 г яблок каждому в Пн, Вт и Чт. В Ср и Пт яблоки заменены ягодным йогуртом.';e.push({title:'Ягодный йогурт',items:{berries:600,yogurt:500},how:'В Ср и Пт вместо яблок: каждому по 150 г ягод и 125 г йогурта.'});e[2].items.bar=2;e[2].how='Во вторник по 1 сырку каждому. В четверг — орехи вместо сырка.';e.push({title:'Орехи к перекусу',items:{nuts:100},how:'Чт и Сб: по 25 г каждому, не дополнительная обязательная еда.'});}
+ if(tier===1)e[1].how+=' При покупке 1 л неиспользованные 500 мл сразу заморозьте порциями для следующей недели; не храните открытую упаковку неделю дольше срока на этикетке.';
  return e;
 }
 export function calculate(tier=1,grainStock={}) {
@@ -81,8 +84,8 @@ export function calculate(tier=1,grainStock={}) {
   weeks[w].ids.forEach((id,j)=>Object.entries(recipeFor(id,tier).items).forEach(([key,q])=>add(key,q,`${slots[j][0]} ${slots[j][1]} · ${recipeFor(id,tier).title}`)));
   extras(tier,w).forEach(e=>Object.entries(e.items).forEach(([id,q])=>add(id,q,e.title)));
 const rows=Object.entries(used).map(([id,q])=>{const i=ingredients[id],opening=inventory[id]||0;if(i.base)return {id,used:q,opening:null,purchase:0,cost:0,closing:null,alloc:alloc[id]};const count=Math.max(0,Math.ceil(Math.max(0,q-opening)/i.pack-1e-9)),purchase=count*i.pack,cost=count*i.price;inventory[id]=opening+purchase-q;return{id,used:q,opening,purchase,cost,closing:inventory[id],alloc:alloc[id]};});
-  const food=rows.reduce((s,r)=>s+r.cost,0),delivery=[0,200,400][tier],base=w===0?(tier===0?600:800):0,buffer=Math.ceil((food+base)*.1),total=food+delivery+base+buffer;
-  result.push({rows,food,delivery,base,buffer,total,remaining:{...inventory}});
+  const food=rows.reduce((s,r)=>s+r.cost,0),delivery=tier===1?0:[0,200,400][tier],base=w===0?(tier===0?600:800):0,bufferRate=tier===1?.05:.1,buffer=Math.ceil((food+base)*bufferRate),total=food+delivery+base+buffer;
+  result.push({rows,food,delivery,base,bufferRate,buffer,total,remaining:{...inventory}});
  }
  return {weeks:result,total:result.reduce((s,w)=>s+w.total,0),food:result.reduce((s,w)=>s+w.food,0)};
 }

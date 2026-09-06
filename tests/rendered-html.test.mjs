@@ -21,14 +21,15 @@ test("renders four useful sections with weeks 1–8 and week 5 selected",async()
 test("generates all 44 new native recipes from the same fixed-25k shopping source",async()=>{
  const data=await moduleFrom("app/future-plan-data.ts");
  assert.deepEqual(data.futureMenuWeeks.map(w=>w.number),[5,6,7,8]);
- assert.equal(data.futurePlanTotal,24471);
+ assert.equal(data.futurePlanTotal,24693);
  assert.deepEqual(data.futureWeekTotals,calculate(1).weeks.map(w=>w.total));
  assert.equal(data.futureMenuWeeks.flatMap(w=>w.meals).length,44);
  for(let i=0;i<4;i++)for(let j=0;j<11;j++){
   const meal=data.futureMenuWeeks[i].meals[j],recipe=recipeFor(weeks[i].ids[j],1);
   assert.equal(meal.title,recipe.title);assert.deepEqual(meal.recipe.steps,recipe.steps);
   assert.equal(meal.recipe.ingredients.length,Object.keys(recipe.items).length);
-  assert.match(meal.batch,/2 порции.*ккал/);
+  assert.equal(meal.recipe.portions,recipe.portions+' порции');
+  assert.match(meal.batch,new RegExp(recipe.portions+' порции.*ккал'));
  }
 });
 test("keeps historical accounting separate from future weeks and never invents cooked status",async()=>{
