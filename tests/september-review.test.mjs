@@ -39,8 +39,8 @@ test('remaining beef is used once and no future Peking cabbage or oat pancakes r
  assert.equal(recipeFor('w4cabbage').items.zucchini,600);
 });
 test('current budget separates week5 payments from remaining purchases, with explicit base and zero delivery',()=>{
- const p=calculate();assert.equal(p.confirmed,3331.3);assert.equal(p.remainingTotal,14829);assert.equal(p.total,18160.3);
- assert.deepEqual(p.weeks.map(w=>w.total),[3331.3,4805,4258,5766]);assert(p.total<=25000);
+ const p=calculate();assert.equal(p.confirmed,3331.3);assert.equal(p.remainingTotal,14747);assert.equal(p.total,18078.3);
+ assert.deepEqual(p.weeks.map(w=>w.total),[3331.3,4912,4069,5766]);assert(p.total<=25000);
  for(let w=1;w<4;w++){
   const projected=p.weeks[w],needs={};
   for(const {id} of mealEntries(w))for(const [i,n]of Object.entries(recipeFor(id).items))needs[i]=(needs[i]||0)+n;
@@ -73,6 +73,21 @@ test('future weekends have breakfast and dinner only with hearty breakfasts and 
  assert.match(weekendPolicy,/Пт и Сб: ужин на 2/);
  assert.equal(recipeFor('w2eggs').items.feta,200);
  assert.equal(recipeFor('w3pancake').items.curd,180);
+});
+test('week6 Saturday replaces only the curd side with cheese toasts and recalculates packages',()=>{
+ const r=recipeFor('w2millet'),p=calculate();
+ assert(!r.items.curd);assert.equal(r.items.bread,100);assert.equal(r.items.cheese,60);
+ assert.deepEqual([r.items.millet,r.items.milk,r.items.apple,r.items.butter,r.items.jam,r.items.salt],[150,500,300,15,30,.5]);
+ assert.equal(r.portions,2);assert.equal(calories(r),804);assert.match(r.title,/тосты с сыром/);
+ assert.match(r.steps[3],/100 г хлеба/);assert.match(r.steps[3],/60 г тёртого/);assert.match(r.steps[3],/50 г хлеба и 30 г сыра/);
+ assert(!p.weeks[1].rows.some(x=>x.id==='curd'));
+ const bread=p.weeks[1].rows.find(x=>x.id==='bread'),cheese=p.weeks[1].rows.find(x=>x.id==='cheese');
+ assert.deepEqual([bread.used,bread.purchase,bread.cost,bread.closing],[480,800,180,320]);
+ assert.deepEqual([cheese.used,cheese.purchase,cheese.cost,cheese.closing],[220,400,360,180]);
+ assert.equal(p.weeks[2].rows.find(x=>x.id==='cheese').purchase,0);
+ assert.equal(recipeFor('w3pancake').items.curd,180,'not a blanket ban on curd');
+ assert.equal(recipeFor('w3oats').items.curd,360);assert.equal(recipeFor('w4millet').items.curd,360);
+ assert.equal(recipeFor('w2millet',1,true).items.curd,200,'older recipe retained');
 });
 test('receipt foods and extras exactly once, with original menu outcomes not invented',()=>{
  assert.equal(Math.round(weekFivePurchases.reduce((s,r)=>s+r.amount,0)*100),333130);
