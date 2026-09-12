@@ -30,6 +30,11 @@ html.embedded main {min-height:0}
 .buy-quantity,.buy-price,.buy-columns > span:nth-child(n+2) {text-align:right;font-variant-numeric:tabular-nums}
 .buy-list strong {font-size:1rem;color:var(--ink)}
 .buy-explanation {font-size:.875rem;color:var(--soft);line-height:1.5;margin-bottom:12px}
+.buy-department {margin-top:24px}
+.department-heading {display:flex;align-items:baseline;justify-content:space-between;gap:8px 16px;flex-wrap:wrap;padding:12px;background:var(--rail);border-left:3px solid var(--green)}
+.department-heading h4 {margin:0;flex:1 1 190px;font-size:1rem;line-height:1.45;color:var(--ink);overflow-wrap:anywhere}
+.department-heading > span {font-size:.875rem;font-weight:600;white-space:nowrap;font-variant-numeric:tabular-nums;color:var(--soft)}
+@media print{.department-heading{break-after:avoid}.buy-list > li{break-inside:avoid}}
 .buy-warning,.buy-hint {grid-column:1/-1;margin:0;font-size:.875rem;line-height:1.5;color:var(--soft)}
 .buy-warning {border-left:3px solid #a55e24;padding-left:8px;color:#70451f}
 .shopping-week > summary > span {min-width:0}

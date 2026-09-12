@@ -39,8 +39,8 @@ test('remaining beef is used once and no future Peking cabbage or oat pancakes r
  assert.equal(recipeFor('w4cabbage').items.zucchini,600);
 });
 test('current budget separates week5 payments from remaining purchases, with explicit base and zero delivery',()=>{
- const p=calculate();assert.equal(p.confirmed,3331.3);assert.equal(p.remainingTotal,14747);assert.equal(p.total,18078.3);
- assert.deepEqual(p.weeks.map(w=>w.total),[3331.3,4912,4069,5766]);assert(p.total<=25000);
+ const p=calculate();assert.equal(p.confirmed,3331.3);assert.equal(p.remainingTotal,14380);assert.equal(p.total,17711.3);
+ assert.deepEqual(p.weeks.map(w=>w.total),[3331.3,4545,4069,5766]);assert(p.total<=25000);
  for(let w=1;w<4;w++){
   const projected=p.weeks[w],needs={};
   for(const {id} of mealEntries(w))for(const [i,n]of Object.entries(recipeFor(id).items))needs[i]=(needs[i]||0)+n;
@@ -88,6 +88,16 @@ test('week6 Saturday replaces only the curd side with cheese toasts and recalcul
  assert.equal(recipeFor('w3pancake').items.curd,180,'not a blanket ban on curd');
  assert.equal(recipeFor('w3oats').items.curd,360);assert.equal(recipeFor('w4millet').items.curd,360);
  assert.equal(recipeFor('w2millet',1,true).items.curd,200,'older recipe retained');
+});
+test('reported mustard and cloudberry jam cover weeks6–8 without repeated purchases',()=>{
+ const p=calculate(),mustard=p.weeks.slice(1).map(w=>w.rows.find(r=>r.id==='mustard')),jam=p.weeks.slice(1).map(w=>w.rows.find(r=>r.id==='jam'));
+ assert.equal(latestStock.mustard,80);assert.equal(latestStock.jam,380);
+ assert.deepEqual(mustard.map(r=>[r.opening,r.used,r.closing]),[[80,45,35],[35,10,25],[25,15,10]]);
+ assert.deepEqual(jam.map(r=>[r.opening,r.used,r.closing]),[[380,30,350],[350,30,320],[320,60,260]]);
+ for(const r of [...mustard,...jam]){assert.equal(r.purchase,0);assert.equal(r.cost,0);}
+ assert.equal(currentIngredient('jam').name,'Варенье морошки');
+ assert.equal(recipeFor('w2millet').items.jam,30);assert.equal(recipeFor('w2chicken').items.mustard,30);
+ assert.equal(calculate(1,{},true).total,24693,'historical plan unaffected');
 });
 test('receipt foods and extras exactly once, with original menu outcomes not invented',()=>{
  assert.equal(Math.round(weekFivePurchases.reduce((s,r)=>s+r.amount,0)*100),333130);

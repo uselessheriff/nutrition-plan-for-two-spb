@@ -648,7 +648,7 @@ export const futureMenuWeeks: Week[] = [
             "Сливочное масло — 15 г",
             "Хлеб цельнозерновой — 100 г",
             "Твёрдый сыр — 60 г",
-            "Варенье (любимое) — 30 г",
+            "Варенье морошки — 30 г",
             "Соль — 0.5 г"
           ],
           "steps": [
@@ -743,172 +743,160 @@ export const futureMenuWeeks: Week[] = [
     ],
     "shopping": [
       {
-        "category": "План",
-        "name": "Свинина без кости",
-        "quantity": "1100 г",
-        "price": 374
-      },
-      {
-        "category": "План",
-        "name": "Шампиньоны свежие",
-        "quantity": "400 г",
-        "price": 130
-      },
-      {
-        "category": "План",
-        "name": "Йогурт греческий",
-        "quantity": "250 г",
-        "price": 85
-      },
-      {
-        "category": "План",
-        "name": "Лук репчатый",
-        "quantity": "600 г",
-        "price": 84
-      },
-      {
-        "category": "План",
-        "name": "Растительное масло",
-        "quantity": "1000 г",
-        "price": 170
-      },
-      {
-        "category": "План",
-        "name": "Соль",
-        "quantity": "1000 г",
-        "price": 40
-      },
-      {
-        "category": "План",
-        "name": "Куриная печень",
-        "quantity": "800 г",
-        "price": 320
-      },
-      {
-        "category": "План",
-        "name": "Гречка",
-        "quantity": "800 г",
-        "price": 130
-      },
-      {
-        "category": "План",
-        "name": "Морковь",
-        "quantity": "1200 г",
-        "price": 72
-      },
-      {
-        "category": "План",
-        "name": "Сметана 15%",
-        "quantity": "200 г",
-        "price": 100
-      },
-      {
-        "category": "План",
-        "name": "Тунец, ≥120 г рыбы после слива",
-        "quantity": "3 бан.",
-        "price": 510
-      },
-      {
-        "category": "План",
+        "category": "Овощи, фрукты и зелень",
         "name": "Картофель",
         "quantity": "1400 г",
         "price": 140
       },
       {
-        "category": "План",
-        "name": "Свежие огурцы",
-        "quantity": "300 г",
-        "price": 48
+        "category": "Овощи, фрукты и зелень",
+        "name": "Лук репчатый",
+        "quantity": "600 г",
+        "price": 84
       },
       {
-        "category": "План",
+        "category": "Овощи, фрукты и зелень",
+        "name": "Морковь",
+        "quantity": "1200 г",
+        "price": 72
+      },
+      {
+        "category": "Овощи, фрукты и зелень",
         "name": "Помидор, условно 200 г",
         "quantity": "2 шт.",
         "price": 80
       },
       {
-        "category": "План",
-        "name": "Хлеб цельнозерновой",
-        "quantity": "800 г",
-        "price": 180
+        "category": "Овощи, фрукты и зелень",
+        "name": "Свежие огурцы",
+        "quantity": "300 г",
+        "price": 48
       },
       {
-        "category": "План",
-        "name": "Лимонный сок",
-        "quantity": "200 мл",
-        "price": 90
-      },
-      {
-        "category": "План",
-        "name": "Горчица",
-        "quantity": "140 г",
-        "price": 100
-      },
-      {
-        "category": "План",
-        "name": "Пассата",
-        "quantity": "500 г",
-        "price": 140
-      },
-      {
-        "category": "План",
-        "name": "Тесто для пиццы",
-        "quantity": "400 г",
-        "price": 180
-      },
-      {
-        "category": "План",
-        "name": "Твёрдый сыр",
-        "quantity": "400 г",
-        "price": 360
-      },
-      {
-        "category": "План",
+        "category": "Овощи, фрукты и зелень",
         "name": "Сладкий перец",
         "quantity": "200 г",
         "price": 50
       },
       {
-        "category": "План",
-        "name": "Молоко 3,2%",
-        "quantity": "1900 мл",
-        "price": 195
+        "category": "Овощи, фрукты и зелень",
+        "name": "Шампиньоны свежие",
+        "quantity": "400 г",
+        "price": 130
       },
       {
-        "category": "План",
+        "category": "Овощи, фрукты и зелень",
         "name": "Яблоки",
         "quantity": "1300 г",
         "price": 195
       },
       {
-        "category": "План",
-        "name": "Варенье (любимое)",
-        "quantity": "300 г",
-        "price": 250
+        "category": "Хлеб и лаваш",
+        "name": "Хлеб цельнозерновой",
+        "quantity": "800 г",
+        "price": 180
       },
       {
-        "category": "План",
+        "category": "Крупы, макароны и бакалея",
+        "name": "Гречка",
+        "quantity": "800 г",
+        "price": 130
+      },
+      {
+        "category": "Крупы, макароны и бакалея",
         "name": "Паста / спагетти сухие",
         "quantity": "400 г",
         "price": 75
       },
       {
-        "category": "План",
-        "name": "Куриное филе",
-        "quantity": "550 г",
-        "price": 290
+        "category": "Крупы, макароны и бакалея",
+        "name": "Растительное масло",
+        "quantity": "1000 г",
+        "price": 170
       },
       {
-        "category": "План",
+        "category": "Крупы, макароны и бакалея",
+        "name": "Соль",
+        "quantity": "1000 г",
+        "price": 40
+      },
+      {
+        "category": "Консервы, соусы и варенье",
+        "name": "Лимонный сок",
+        "quantity": "200 мл",
+        "price": 90
+      },
+      {
+        "category": "Консервы, соусы и варенье",
+        "name": "Пассата",
+        "quantity": "500 г",
+        "price": 140
+      },
+      {
+        "category": "Консервы, соусы и варенье",
+        "name": "Тунец, ≥120 г рыбы после слива",
+        "quantity": "3 бан.",
+        "price": 510
+      },
+      {
+        "category": "Соки и напитки",
         "name": "Сок",
         "quantity": "1000 мл",
         "price": 180
       },
       {
-        "category": "План",
+        "category": "Мясо, птица и рыба",
+        "name": "Куриная печень",
+        "quantity": "800 г",
+        "price": 320
+      },
+      {
+        "category": "Мясо, птица и рыба",
+        "name": "Куриное филе",
+        "quantity": "550 г",
+        "price": 290
+      },
+      {
+        "category": "Мясо, птица и рыба",
+        "name": "Свинина без кости",
+        "quantity": "1100 г",
+        "price": 374
+      },
+      {
+        "category": "Молочные продукты, сыр и яйца",
+        "name": "Йогурт греческий",
+        "quantity": "250 г",
+        "price": 85
+      },
+      {
+        "category": "Молочные продукты, сыр и яйца",
+        "name": "Молоко 3,2%",
+        "quantity": "1900 мл",
+        "price": 195
+      },
+      {
+        "category": "Молочные продукты, сыр и яйца",
+        "name": "Сметана 15%",
+        "quantity": "200 г",
+        "price": 100
+      },
+      {
+        "category": "Молочные продукты, сыр и яйца",
         "name": "Сырок глазированный, 40 г",
         "quantity": "2 шт.",
         "price": 110
+      },
+      {
+        "category": "Молочные продукты, сыр и яйца",
+        "name": "Твёрдый сыр",
+        "quantity": "400 г",
+        "price": 360
+      },
+      {
+        "category": "Заморозка и тесто",
+        "name": "Тесто для пиццы",
+        "quantity": "400 г",
+        "price": 180
       }
     ]
   },
@@ -1087,7 +1075,7 @@ export const futureMenuWeeks: Week[] = [
             "Растительное масло — 10 г",
             "Йогурт греческий — 250 г",
             "Творог 5% — 180 г",
-            "Варенье (любимое) — 30 г",
+            "Варенье морошки — 30 г",
             "Соль — 0.5 г"
           ],
           "steps": [
@@ -1182,142 +1170,142 @@ export const futureMenuWeeks: Week[] = [
     ],
     "shopping": [
       {
-        "category": "План",
-        "name": "Куриное филе",
-        "quantity": "550 г",
-        "price": 290
-      },
-      {
-        "category": "План",
-        "name": "Картофель",
-        "quantity": "1100 г",
-        "price": 110
-      },
-      {
-        "category": "План",
-        "name": "Яйца",
-        "quantity": "10 шт.",
-        "price": 110
-      },
-      {
-        "category": "План",
-        "name": "Лук репчатый",
-        "quantity": "700 г",
-        "price": 98
-      },
-      {
-        "category": "План",
-        "name": "Свинина без кости",
-        "quantity": "1800 г",
-        "price": 612
-      },
-      {
-        "category": "План",
-        "name": "Шампиньоны свежие",
-        "quantity": "400 г",
-        "price": 130
-      },
-      {
-        "category": "План",
-        "name": "Сметана 15%",
-        "quantity": "400 г",
-        "price": 200
-      },
-      {
-        "category": "План",
-        "name": "Кабачок",
-        "quantity": "900 г",
-        "price": 135
-      },
-      {
-        "category": "План",
-        "name": "Сладкий перец",
-        "quantity": "300 г",
-        "price": 75
-      },
-      {
-        "category": "План",
-        "name": "Помидор, условно 200 г",
-        "quantity": "3 шт.",
-        "price": 120
-      },
-      {
-        "category": "План",
-        "name": "Фетакса / фета",
-        "quantity": "400 г",
-        "price": 340
-      },
-      {
-        "category": "План",
-        "name": "Булгур сухой",
-        "quantity": "450 г",
-        "price": 110
-      },
-      {
-        "category": "План",
-        "name": "Морковь",
-        "quantity": "900 г",
-        "price": 54
-      },
-      {
-        "category": "План",
-        "name": "Брокколи замороженная",
-        "quantity": "400 г",
-        "price": 140
-      },
-      {
-        "category": "План",
+        "category": "Овощи, фрукты и зелень",
         "name": "Бананы (мякоть)",
         "quantity": "200 г",
         "price": 24
       },
       {
-        "category": "План",
-        "name": "Йогурт греческий",
-        "quantity": "500 г",
-        "price": 170
+        "category": "Овощи, фрукты и зелень",
+        "name": "Кабачок",
+        "quantity": "900 г",
+        "price": 135
       },
       {
-        "category": "План",
-        "name": "Творог 5%",
-        "quantity": "540 г",
-        "price": 252
+        "category": "Овощи, фрукты и зелень",
+        "name": "Картофель",
+        "quantity": "1100 г",
+        "price": 110
       },
       {
-        "category": "План",
-        "name": "Фарш свинина + говядина",
+        "category": "Овощи, фрукты и зелень",
+        "name": "Лук репчатый",
+        "quantity": "700 г",
+        "price": 98
+      },
+      {
+        "category": "Овощи, фрукты и зелень",
+        "name": "Морковь",
+        "quantity": "900 г",
+        "price": 54
+      },
+      {
+        "category": "Овощи, фрукты и зелень",
+        "name": "Помидор, условно 200 г",
+        "quantity": "3 шт.",
+        "price": 120
+      },
+      {
+        "category": "Овощи, фрукты и зелень",
+        "name": "Сладкий перец",
+        "quantity": "300 г",
+        "price": 75
+      },
+      {
+        "category": "Овощи, фрукты и зелень",
+        "name": "Шампиньоны свежие",
         "quantity": "400 г",
-        "price": 280
+        "price": 130
       },
       {
-        "category": "План",
-        "name": "Манка",
-        "quantity": "800 г",
-        "price": 100
-      },
-      {
-        "category": "План",
+        "category": "Овощи, фрукты и зелень",
         "name": "Яблоки",
         "quantity": "1300 г",
         "price": 195
       },
       {
-        "category": "План",
-        "name": "Сахар",
-        "quantity": "1000 г",
-        "price": 80
+        "category": "Крупы, макароны и бакалея",
+        "name": "Булгур сухой",
+        "quantity": "450 г",
+        "price": 110
       },
       {
-        "category": "План",
+        "category": "Крупы, макароны и бакалея",
+        "name": "Манка",
+        "quantity": "800 г",
+        "price": 100
+      },
+      {
+        "category": "Крупы, макароны и бакалея",
         "name": "Рис сухой",
         "quantity": "500 г",
         "price": 140
       },
       {
-        "category": "План",
+        "category": "Крупы, макароны и бакалея",
+        "name": "Сахар",
+        "quantity": "1000 г",
+        "price": 80
+      },
+      {
+        "category": "Мясо, птица и рыба",
+        "name": "Куриное филе",
+        "quantity": "550 г",
+        "price": 290
+      },
+      {
+        "category": "Мясо, птица и рыба",
+        "name": "Свинина без кости",
+        "quantity": "1800 г",
+        "price": 612
+      },
+      {
+        "category": "Мясо, птица и рыба",
+        "name": "Фарш свинина + говядина",
+        "quantity": "400 г",
+        "price": 280
+      },
+      {
+        "category": "Молочные продукты, сыр и яйца",
+        "name": "Йогурт греческий",
+        "quantity": "500 г",
+        "price": 170
+      },
+      {
+        "category": "Молочные продукты, сыр и яйца",
+        "name": "Сметана 15%",
+        "quantity": "400 г",
+        "price": 200
+      },
+      {
+        "category": "Молочные продукты, сыр и яйца",
         "name": "Сырок глазированный, 40 г",
         "quantity": "2 шт.",
         "price": 110
+      },
+      {
+        "category": "Молочные продукты, сыр и яйца",
+        "name": "Творог 5%",
+        "quantity": "540 г",
+        "price": 252
+      },
+      {
+        "category": "Молочные продукты, сыр и яйца",
+        "name": "Фетакса / фета",
+        "quantity": "400 г",
+        "price": 340
+      },
+      {
+        "category": "Молочные продукты, сыр и яйца",
+        "name": "Яйца",
+        "quantity": "10 шт.",
+        "price": 110
+      },
+      {
+        "category": "Заморозка и тесто",
+        "name": "Брокколи замороженная",
+        "quantity": "400 г",
+        "price": 140
       }
     ]
   },
@@ -1500,7 +1488,7 @@ export const futureMenuWeeks: Week[] = [
             "Растительное масло — 10 г",
             "Йогурт греческий — 200 г",
             "Бананы (мякоть) — 250 г",
-            "Варенье (любимое) — 30 г",
+            "Варенье морошки — 30 г",
             "Соль — 0.5 г"
           ],
           "steps": [
@@ -1554,7 +1542,7 @@ export const futureMenuWeeks: Week[] = [
             "Бананы (мякоть) — 300 г",
             "Творог 5% — 360 г",
             "Сливочное масло — 15 г",
-            "Варенье (любимое) — 30 г",
+            "Варенье морошки — 30 г",
             "Соль — 0.5 г"
           ],
           "steps": [
@@ -1596,142 +1584,142 @@ export const futureMenuWeeks: Week[] = [
     ],
     "shopping": [
       {
-        "category": "План",
-        "name": "Куриное филе",
-        "quantity": "550 г",
-        "price": 290
-      },
-      {
-        "category": "План",
-        "name": "Булгур сухой",
-        "quantity": "450 г",
-        "price": 110
-      },
-      {
-        "category": "План",
-        "name": "Брокколи замороженная",
-        "quantity": "800 г",
-        "price": 280
-      },
-      {
-        "category": "План",
-        "name": "Йогурт греческий",
-        "quantity": "500 г",
-        "price": 170
-      },
-      {
-        "category": "План",
-        "name": "Чеснок",
-        "quantity": "100 г",
-        "price": 60
-      },
-      {
-        "category": "План",
-        "name": "Филе горбуши (красная рыба)",
-        "quantity": "800 г",
-        "price": 900
-      },
-      {
-        "category": "План",
-        "name": "Картофель",
-        "quantity": "1800 г",
-        "price": 180
-      },
-      {
-        "category": "План",
-        "name": "Морковь",
-        "quantity": "1200 г",
-        "price": 72
-      },
-      {
-        "category": "План",
-        "name": "Кабачок",
-        "quantity": "1500 г",
-        "price": 225
-      },
-      {
-        "category": "План",
-        "name": "Свинина без кости",
-        "quantity": "1000 г",
-        "price": 340
-      },
-      {
-        "category": "План",
-        "name": "Лук репчатый",
-        "quantity": "700 г",
-        "price": 98
-      },
-      {
-        "category": "План",
-        "name": "Пассата",
-        "quantity": "1000 г",
-        "price": 280
-      },
-      {
-        "category": "План",
-        "name": "Сметана 15%",
-        "quantity": "200 г",
-        "price": 100
-      },
-      {
-        "category": "План",
-        "name": "Фарш свинина + говядина",
-        "quantity": "1200 г",
-        "price": 840
-      },
-      {
-        "category": "План",
-        "name": "Паста / спагетти сухие",
-        "quantity": "400 г",
-        "price": 75
-      },
-      {
-        "category": "План",
-        "name": "Шампиньоны свежие",
-        "quantity": "400 г",
-        "price": 130
-      },
-      {
-        "category": "План",
-        "name": "Шпинат, упаковка 125 г",
-        "quantity": "1 уп.",
-        "price": 130
-      },
-      {
-        "category": "План",
-        "name": "Творог 5%",
-        "quantity": "1080 г",
-        "price": 504
-      },
-      {
-        "category": "План",
-        "name": "Молоко 3,2%",
-        "quantity": "1900 мл",
-        "price": 195
-      },
-      {
-        "category": "План",
+        "category": "Овощи, фрукты и зелень",
         "name": "Бананы (мякоть)",
         "quantity": "600 г",
         "price": 72
       },
       {
-        "category": "План",
+        "category": "Овощи, фрукты и зелень",
+        "name": "Кабачок",
+        "quantity": "1500 г",
+        "price": 225
+      },
+      {
+        "category": "Овощи, фрукты и зелень",
+        "name": "Картофель",
+        "quantity": "1800 г",
+        "price": 180
+      },
+      {
+        "category": "Овощи, фрукты и зелень",
+        "name": "Лук репчатый",
+        "quantity": "700 г",
+        "price": 98
+      },
+      {
+        "category": "Овощи, фрукты и зелень",
+        "name": "Морковь",
+        "quantity": "1200 г",
+        "price": 72
+      },
+      {
+        "category": "Овощи, фрукты и зелень",
+        "name": "Чеснок",
+        "quantity": "100 г",
+        "price": 60
+      },
+      {
+        "category": "Овощи, фрукты и зелень",
+        "name": "Шампиньоны свежие",
+        "quantity": "400 г",
+        "price": 130
+      },
+      {
+        "category": "Овощи, фрукты и зелень",
+        "name": "Шпинат, упаковка 125 г",
+        "quantity": "1 уп.",
+        "price": 130
+      },
+      {
+        "category": "Овощи, фрукты и зелень",
         "name": "Яблоки",
         "quantity": "1000 г",
         "price": 150
       },
       {
-        "category": "План",
+        "category": "Крупы, макароны и бакалея",
+        "name": "Булгур сухой",
+        "quantity": "450 г",
+        "price": 110
+      },
+      {
+        "category": "Крупы, макароны и бакалея",
+        "name": "Паста / спагетти сухие",
+        "quantity": "400 г",
+        "price": 75
+      },
+      {
+        "category": "Консервы, соусы и варенье",
+        "name": "Пассата",
+        "quantity": "1000 г",
+        "price": 280
+      },
+      {
+        "category": "Соки и напитки",
         "name": "Сок",
         "quantity": "1000 мл",
         "price": 180
       },
       {
-        "category": "План",
+        "category": "Мясо, птица и рыба",
+        "name": "Куриное филе",
+        "quantity": "550 г",
+        "price": 290
+      },
+      {
+        "category": "Мясо, птица и рыба",
+        "name": "Свинина без кости",
+        "quantity": "1000 г",
+        "price": 340
+      },
+      {
+        "category": "Мясо, птица и рыба",
+        "name": "Фарш свинина + говядина",
+        "quantity": "1200 г",
+        "price": 840
+      },
+      {
+        "category": "Мясо, птица и рыба",
+        "name": "Филе горбуши (красная рыба)",
+        "quantity": "800 г",
+        "price": 900
+      },
+      {
+        "category": "Молочные продукты, сыр и яйца",
+        "name": "Йогурт греческий",
+        "quantity": "500 г",
+        "price": 170
+      },
+      {
+        "category": "Молочные продукты, сыр и яйца",
+        "name": "Молоко 3,2%",
+        "quantity": "1900 мл",
+        "price": 195
+      },
+      {
+        "category": "Молочные продукты, сыр и яйца",
+        "name": "Сметана 15%",
+        "quantity": "200 г",
+        "price": 100
+      },
+      {
+        "category": "Молочные продукты, сыр и яйца",
         "name": "Сырок глазированный, 40 г",
         "quantity": "2 шт.",
         "price": 110
+      },
+      {
+        "category": "Молочные продукты, сыр и яйца",
+        "name": "Творог 5%",
+        "quantity": "1080 г",
+        "price": 504
+      },
+      {
+        "category": "Заморозка и тесто",
+        "name": "Брокколи замороженная",
+        "quantity": "800 г",
+        "price": 280
       }
     ]
   }
@@ -1811,8 +1799,8 @@ export const futureExtras = [
     }
   ]
 ];
-export const futureWeekTotals = [3331.3,4912,4069,5766];
-export const futurePlanTotal = 18078.3;
+export const futureWeekTotals = [3331.3,4545,4069,5766];
+export const futurePlanTotal = 17711.3;
 export const futureConfirmedTotal = 3331.3;
-export const futureRemainingTotal = 14747;
+export const futureRemainingTotal = 14380;
 export const futureWeekFiveOutcomes: Record<number,{outcome:MealOutcome;preference:MealPreference;note:string}> = {"2":{"outcome":"not_eaten","preference":"blocked","note":"Тортилью не готовили: идея не понравилась. Вместо неё приготовили пюре с котлетами и малосольными огурцами; фактические граммовки не сообщены."},"4":{"outcome":"not_eaten","preference":null,"note":"Пятничный ужин дома пропустили, ели в другом месте. Продукты планового блюда не списываются автоматически."},"5":{"outcome":"not_eaten","preference":null,"note":"Вместо овсяных приготовили банановые панкейки: они вкуснее, овсяные надоели. Рецептура фактической партии не сообщена."}};
