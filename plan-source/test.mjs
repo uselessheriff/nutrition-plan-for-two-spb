@@ -2,7 +2,7 @@ import assert from 'node:assert/strict';
 import {readFile} from 'node:fs/promises';
 import vm from 'node:vm';
 import './recipes.mjs';
-import {recipes,ingredients,weeks,tiers,calculate,recipeFor,calories,extras} from './model.mjs';
+import {recipes,ingredients,weeks,tiers,calculate,recipeFor,calories,extras,mealEntries} from './model.mjs';
 assert.equal(recipes.length,44);
 assert.equal(new Set(recipes.map(r=>r.id)).size,44);
 assert.equal(weeks.flatMap(w=>w.ids).length,44);
@@ -33,7 +33,7 @@ function harness(initialStorage={}){
  vm.runInContext(script,context);return{nodes,context,storage,node};
 }
 const h=harness();assert.equal(vm.runInContext('seed.filter(x=>x.period==="review").reduce((s,x)=>s+x.amount,0)',h.context),5075.51);
-for(const tier of [1])for(let week=0;week<4;week++) {vm.runInContext(`activeWeek=${week};render()`,h.context);assert.equal((h.node('meal-list').innerHTML.match(/data-recipe=/g)||[]).length,11);for(const id of weeks[week].ids){vm.runInContext(`openRecipe('${id}',null)`,h.context);assert(h.node('recipe-dialog').open);assert(h.node('recipe-title').textContent);assert.equal((h.node('recipe-ingredients').innerHTML.match(/<li>/g)||[]).length,Object.keys(recipeFor(id,tier).items).length);assert.equal((h.node('recipe-steps').innerHTML.match(/<li>/g)||[]).length,4);vm.runInContext('closeRecipe()',h.context);assert(!h.node('recipe-dialog').open);}}
+for(const tier of [1])for(let week=0;week<4;week++) {vm.runInContext(`activeWeek=${week};render()`,h.context);assert.equal((h.node('meal-list').innerHTML.match(/data-recipe=/g)||[]).length,week===0?11:9);for(const {id} of mealEntries(week)){vm.runInContext(`openRecipe('${id}',null)`,h.context);assert(h.node('recipe-dialog').open);assert(h.node('recipe-title').textContent);assert.equal((h.node('recipe-ingredients').innerHTML.match(/<li>/g)||[]).length,Object.keys(recipeFor(id,tier).items).length);assert.equal((h.node('recipe-steps').innerHTML.match(/<li>/g)||[]).length,4);vm.runInContext('closeRecipe()',h.context);assert(!h.node('recipe-dialog').open);}}
 for(const id of ['rice','bulgur','couscous'])h.node('grain-form:'+id).value=id==='rice'?'640':'';
 h.node('grain-form').events.submit({preventDefault(){},target:h.node('grain-form')});assert(h.storage.get('petersburg-ration-september-2026-v2').includes('640'));
 h.node('expense-form:name').value='<img src=x onerror=alert(1)>';

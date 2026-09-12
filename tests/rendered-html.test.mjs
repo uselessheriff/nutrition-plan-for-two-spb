@@ -4,7 +4,7 @@ import { readFile } from "node:fs/promises";
 import test from "node:test";
 import ts from "typescript";
 import "../plan-source/recipes.mjs";
-import { calculate, weeks, recipeFor } from "../plan-source/model.mjs";
+import { calculate, weeks, recipeFor, mealEntries, slots } from "../plan-source/model.mjs";
 const read=(name)=>readFile(new URL("../"+name,import.meta.url),"utf8");
 async function moduleFrom(name){const compiled=ts.transpileModule(await read(name),{compilerOptions:{target:ts.ScriptTarget.ES2022,module:ts.ModuleKind.ES2022}}).outputText;return import("data:text/javascript;base64,"+Buffer.from(compiled).toString("base64"));}
 test("renders four useful sections with weeks 1–8 and week 6 selected",async()=>{
@@ -18,15 +18,15 @@ test("renders four useful sections with weeks 1–8 and week 6 selected",async()
  assert(html.includes("Тунец и домашняя классика"));
  for(const removed of ["Новые 4 недели","Пример журнала","Выгода продуктов и ценовые сигналы","База рецептов","Выберите месячный лимит"])assert(!html.includes(removed),removed);
 });
-test("generates all 44 new native recipes from the same fixed-25k shopping source",async()=>{
+test("generates archived week5 and nine meals per future week from the same fixed-25k shopping source",async()=>{
  const data=await moduleFrom("app/future-plan-data.ts");
  assert.deepEqual(data.futureMenuWeeks.map(w=>w.number),[5,6,7,8]);
- assert.equal(data.futurePlanTotal,calculate(1).total);assert.equal(data.futureConfirmedTotal,3331.3);assert.equal(data.futureRemainingTotal,18130);
+ assert.equal(data.futurePlanTotal,calculate(1).total);assert.equal(data.futureConfirmedTotal,3331.3);assert.equal(data.futureRemainingTotal,calculate(1).remainingTotal);
  assert.deepEqual(data.futureWeekTotals,calculate(1).weeks.map(w=>w.total));
- assert.equal(data.futureMenuWeeks.flatMap(w=>w.meals).length,44);
- for(let i=0;i<4;i++)for(let j=0;j<11;j++){
-  const meal=data.futureMenuWeeks[i].meals[j],recipe=recipeFor(weeks[i].ids[j],1);
-  assert.equal(meal.title,recipe.title);assert.deepEqual(meal.recipe.steps,recipe.steps);
+ assert.equal(data.futureMenuWeeks.flatMap(w=>w.meals).length,38);
+ for(let i=0;i<4;i++)for(let j=0;j<mealEntries(i).length;j++){
+  const meal=data.futureMenuWeeks[i].meals[j],recipe=recipeFor(mealEntries(i)[j].id,1);
+  assert.equal(meal.day,slots[mealEntries(i)[j].slot][0]);assert.equal(meal.type,slots[mealEntries(i)[j].slot][1]);assert.equal(meal.title,recipe.title);assert.deepEqual(meal.recipe.steps,recipe.steps);
   assert.equal(meal.recipe.ingredients.length,Object.keys(recipe.items).length);
   assert.equal(meal.recipe.portions,recipe.portions+' порции');
   assert.match(meal.batch,new RegExp(recipe.portions+' порции.*ккал'));

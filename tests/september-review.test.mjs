@@ -1,7 +1,8 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import '../plan-source/recipes.mjs';
-import {recipeFor,calculate,weeks,extras,ingredients,currentIngredient,calories} from '../plan-source/model.mjs';
+import {recipeFor,calculate,weeks,extras,ingredients,currentIngredient,calories,mealEntries,slots} from '../plan-source/model.mjs';
+import {deferredWeekendLunches,weekendPolicy} from '../plan-source/weekend-plan.mjs';
 import {latestStock,weekFivePurchases,weekFiveActual,weekFiveMealUpdates} from '../plan-source/revision-september.mjs';
 
 test('closing snapshot resets week6 rather than carrying consumed or spoiled week5 items',()=>{
@@ -11,7 +12,7 @@ test('closing snapshot resets week6 rather than carrying consumed or spoiled wee
  for(const id of ['rice','bulgur','egg','feta','mince','butter','oats','millet'])assert.equal(row(id).purchase,0,id);
  assert.equal(row('rice').opening,300);assert.equal(row('bulgur').opening,180);
  assert.equal(row('chicken').used,600);assert.equal(row('chicken').opening,150);assert.equal(row('chicken').purchase,550);
- assert.equal(row('passata').used,1200);assert.equal(row('passata').opening,400);assert.equal(row('passata').purchase,1000);
+ assert.equal(row('passata').used,900);assert.equal(row('passata').opening,400);assert.equal(row('passata').purchase,500);
  assert(!row('spinach'));assert.equal(calculate().weeks[3].rows.find(r=>r.id==='spinach').opening,0);
 });
 test('Monday has exactly two new portions for Anya; all other weekday lunch portions survive',()=>{
@@ -23,12 +24,12 @@ test('Monday has exactly two new portions for Anya; all other weekday lunch port
  assert.match(r.steps[3],/Ане на ужин понедельника/);assert.match(r.steps[3],/Обед понедельника у Ани и ужин парня/);
  assert(!r.items.potato);assert(!r.items.cabbage);assert.match(r.portionText,/ужин Пн \+ обед Вт/);
 });
-test('Sunday hot shrimp pasta is coherent and transfers only unthawed remaining shrimp',()=>{
+test('deferred shrimp pasta remains in history but creates no purchase or fictional carryover',()=>{
  const r=recipeFor('w2pita');assert.match(r.title,/Горячая паста с креветками/);assert.equal(r.portions,2);
  assert.equal(r.items.pasta,160);assert.equal(r.items.shrimp,350);assert.equal(r.items.passata,300);
  assert(!r.items.pita&&!r.items.curd&&!r.items.spinach);assert.match(r.steps[3],/175 г креветок/);
- assert.equal(calories(r),570);assert.equal(calculate().weeks[1].remaining.shrimp,150);
- assert.equal(calculate().weeks[2].rows.find(r=>r.id==='shrimp').opening,150);
+ assert.equal(calories(r),570);
+ for(const week of calculate().weeks.slice(1)){assert.equal(week.remaining.shrimp,0);assert(!week.rows.some(r=>r.id==='shrimp'));}
 });
 test('remaining beef is used once and no future Peking cabbage or oat pancakes remain',()=>{
  assert.equal(recipeFor('w2meatballs').items.mince,400);assert(!recipeFor('w2meatballs').items.mixedmince);
@@ -38,11 +39,11 @@ test('remaining beef is used once and no future Peking cabbage or oat pancakes r
  assert.equal(recipeFor('w4cabbage').items.zucchini,600);
 });
 test('current budget separates week5 payments from remaining purchases, with explicit base and zero delivery',()=>{
- const p=calculate();assert.equal(p.confirmed,3331.3);assert.equal(p.remainingTotal,18130);assert.equal(p.total,21461.3);
- assert.deepEqual(p.weeks.map(w=>w.total),[3331.3,6332,5802,5996]);assert(p.total<=25000);
+ const p=calculate();assert.equal(p.confirmed,3331.3);assert.equal(p.remainingTotal,14829);assert.equal(p.total,18160.3);
+ assert.deepEqual(p.weeks.map(w=>w.total),[3331.3,4805,4258,5766]);assert(p.total<=25000);
  for(let w=1;w<4;w++){
   const projected=p.weeks[w],needs={};
-  for(const id of weeks[w].ids)for(const [i,n]of Object.entries(recipeFor(id).items))needs[i]=(needs[i]||0)+n;
+  for(const {id} of mealEntries(w))for(const [i,n]of Object.entries(recipeFor(id).items))needs[i]=(needs[i]||0)+n;
   for(const e of extras(1,w))for(const [i,n]of Object.entries(e.items))needs[i]=(needs[i]||0)+n;
   assert.deepEqual(Object.fromEntries(projected.rows.map(r=>[r.id,r.used])),needs);
   for(const r of projected.rows)if(r.opening!==null){assert.equal(r.opening+r.purchase-r.used,r.closing);assert(r.closing>=0);assert.equal(r.cost,r.purchase/r.pack*r.unitPrice);}
@@ -51,6 +52,27 @@ test('current budget separates week5 payments from remaining purchases, with exp
  }
  assert.equal(currentIngredient('milk').pack,1900);assert.equal(currentIngredient('curd').pack,180);
  assert.equal(ingredients.milk.pack,900,'historical assumptions preserved');
+});
+test('future weekends have breakfast and dinner only with hearty breakfasts and preserved Sunday lunchbox',()=>{
+ assert.equal(mealEntries(0).length,11,'week5 history preserved');
+ for(let w=1;w<4;w++){
+  const entries=mealEntries(w);assert.equal(entries.length,9);
+  assert.deepEqual(entries.filter(x=>x.slot>=5).map(x=>slots[x.slot].slice(0,2)),[['Сб','Завтрак'],['Сб','Ужин'],['Вс','Завтрак'],['Вс','Ужин']]);
+  for(const {id,slot}of entries){
+   assert(!deferredWeekendLunches.includes(id));
+   const r=recipeFor(id);
+   if([5,8].includes(slot)){assert.equal(r.portions,2);assert(calories(r)>=650&&calories(r)<=900);assert.match(r.portionText,/плотный завтрак/);}
+   if(slot===10)assert.equal(r.portions,3);
+   if([4,7].includes(slot))assert.equal(r.portions,2);
+  }
+  assert.equal(extras(1,w).length,3);assert(!extras(1,w).some(e=>/выходных/.test(e.title)));
+  assert.equal(mealEntries(w,1,true).length,11,'archived schedule still available');
+  assert.equal(extras(1,w,true).length,4,'archived snack still available');
+  assert(!calculate().weeks[w].rows.flatMap(r=>r.alloc).some(([label])=>/^(Сб|Вс) Обед|Перекус выходных/.test(label)));
+ }
+ assert.match(weekendPolicy,/Пт и Сб: ужин на 2/);
+ assert.equal(recipeFor('w2eggs').items.feta,200);
+ assert.equal(recipeFor('w3pancake').items.curd,180);
 });
 test('receipt foods and extras exactly once, with original menu outcomes not invented',()=>{
  assert.equal(Math.round(weekFivePurchases.reduce((s,r)=>s+r.amount,0)*100),333130);

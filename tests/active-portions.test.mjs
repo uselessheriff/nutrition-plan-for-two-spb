@@ -15,7 +15,7 @@ test('archived 06.09 plan keeps full dinner and next-day lunch portions without 
    if(r.portions===3){assert.match(r.note,/третью отложите/);assert.doesNotMatch(r.steps.join(' '),/две тарелки|2 порции|разделите пополам/i);}
    for(const [id,q]of Object.entries(r.items))needs[id]=(needs[id]||0)+q;
   }
-  for(const e of extras(1,w))for(const [id,q]of Object.entries(e.items))needs[id]=(needs[id]||0)+q;
+  for(const e of extras(1,w,true))for(const [id,q]of Object.entries(e.items))needs[id]=(needs[id]||0)+q;
   const result=calculate(1).weeks[w];
   assert.deepEqual(Object.fromEntries(result.rows.map(r=>[r.id,r.used])),needs);
   for(const r of result.rows)if(!ingredients[r.id].base)assert.equal(r.opening+r.purchase-r.used,r.closing);

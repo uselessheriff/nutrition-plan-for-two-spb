@@ -1,5 +1,6 @@
 import {activeRecipe, portionPolicy, portionLabel} from './active-plan.mjs';
 import {revisedRecipe, latestStock, currentPriceOverrides, weekFiveActual} from './revision-september.mjs';
+import {heartyBreakfast, weekendPolicy} from './weekend-plan.mjs';
 export {portionPolicy, portionLabel};
 // Quantities are raw/edible weights unless a counted unit is explicitly shown.
 // Prices below are planning assumptions, never historical spending.
@@ -58,7 +59,7 @@ export function recipeFor(id,tier=1,legacy=false) {
  if(tier===0 && id==='w3shrimp') {delete copy.items.shrimp;copy.items.egg=4;copy.items.cheese=60;copy.title='Салат с яйцом, сыром и кускусом';copy.protein='Яйца';copy.note='Эконом-вариант: креветки заменены яйцом и сыром, кускус остаётся 100 г на двоих. Креветочная версия доступна в бюджетах 25 и 30 тысяч.';copy.steps=['Ровно 100 г сухого кускуса залейте 120–150 мл кипятка по упаковке, накройте на 5 минут и разрыхлите вилкой.','4 яйца сварите вкрутую за 10 минут. Нарежьте 60 г сыра, 200 г огурцов, 2 помидора и 150 г перца.','Смешайте 100 г йогурта, 20 мл лимонного сока, 20 г масла, соль и специи.','Каждому положите половину кускуса (из 50 г сухого), 2 яйца, 30 г сыра и половину овощей и соуса.'];}
  if(tier===2 && ['w2pork','w4pork'].includes(id)) {copy.items.beef=copy.items.pork;delete copy.items.pork;copy.title=copy.title.replace('Свинина','Говядина');copy.steps=copy.steps.map(s=>s.replace('свинину','говядину').replace('свинины','говядины').replace('45–60 минут','75–90 минут'));copy.time=110;}
  if(tier===2 && id==='w4fish') {copy.items.salmon=copy.items.fish;delete copy.items.fish;copy.title=copy.title.replace('Горбуша','Лосось');}
- return tier===1?(legacy?activeRecipe(copy):revisedRecipe(activeRecipe(copy))):{...copy,portions:2};
+ return tier===1?(legacy?activeRecipe(copy):heartyBreakfast(revisedRecipe(activeRecipe(copy)))):{...copy,portions:2};
 }
 export function currentIngredient(id){return {...ingredients[id],...currentPriceOverrides[id]};}
 export function calories(r){return Math.round(Object.entries(r.items).reduce((s,[id,q])=>s+(r.revised?currentIngredient(id):ingredients[id]).kcal*q,0)/(r.portions||2));}
@@ -69,13 +70,17 @@ export const weeks=[
  {label:'28 сентября – 4 октября',date:'2026-09-28',theme:'Рыба, ленивые голубцы и запеканка',ids:['w4chicken','w4fish','w4pork','w4cabbage','w4pasta','w4curd','w4salad','w4turkey','w4millet','w4pita','w4cutlet']}
 ];
 export const slots=[['Пн','Ужин',0],['Вт','Ужин',1],['Ср','Ужин',2],['Чт','Ужин',3],['Пт','Ужин',4],['Сб','Завтрак',5],['Сб','Обед',5],['Сб','Ужин',5],['Вс','Завтрак',6],['Вс','Обед',6],['Вс','Ужин',6]];
-export function extras(tier,week) {
+export function mealEntries(week,tier=1,legacy=false) {
+ return weeks[week].ids.map((id,slot)=>({id,slot})).filter(({slot})=>tier!==1||legacy||week===0||![6,9].includes(slot));
+}
+export function weekTheme(week){return week===2?'Банановые панкейки и домашние ужины':week===3?'Красная рыба, тефтели и сырники':weeks[week].theme;}
+export function extras(tier,week,legacy=false) {
  const e=[{title:'Фрукты Пн–Пт',items:{apple:2000},how:'По 200 г яблок каждому в Пн–Пт, например после ужина. Фрукты в самих рецептах посчитаны отдельно.'},{title:'Сок Пн / Ср / Пт',items:{juice:1000},how:'Пн и Ср: по 150 мл каждому; Пт: по 200 мл. Не вместо воды.'},{title:'Сырки Вт / Чт',items:{bar:4},how:'По 1 сырку 40 г каждому во Вт и Чт. При оставшейся домашней выпечке замените сырок порцией выпечки по её составу.'}];
  e.push({title:'Перекус выходных: овсянка с молоком и бананом',items:{oats:120,milk:1000,banana:600},how:'В Сб и Вс каждому: 30 г овсянки, 250 мл молока и 150 г мякоти банана. Хлопья сварить в молоке по упаковке, добавить банан. Можно разделить между основными приёмами по аппетиту. Это еда на день, а не обязательный четвёртый приём.'});
  if(tier===0||tier===1) {e[0].items.apple=1000;e[0].how='По 100 г яблок каждому в Пн–Пт. Это дополнение к овощам, а не полный дневной объём фруктов и овощей.';e[1].items.juice=500;e[1].title='Сок Пн / Пт';e[1].how='В Пн и Пт по 125 мл каждому; открытую упаковку хранить по этикетке. Если срок меньше, выпить в два соседних дня.';e[2].items.bar=2;e[2].title='Сырки во вторник';e[2].how='По 1 сырку 40 г каждому во вторник. В четверг отдельная сладость не предусмотрена.';}
  if(tier===2) {e[0].items.apple=1200;e[0].how='По 200 г яблок каждому в Пн, Вт и Чт. В Ср и Пт яблоки заменены ягодным йогуртом.';e.push({title:'Ягодный йогурт',items:{berries:600,yogurt:500},how:'В Ср и Пт вместо яблок: каждому по 150 г ягод и 125 г йогурта.'});e[2].items.bar=2;e[2].how='Во вторник по 1 сырку каждому. В четверг — орехи вместо сырка.';e.push({title:'Орехи к перекусу',items:{nuts:100},how:'Чт и Сб: по 25 г каждому, не дополнительная обязательная еда.'});}
  if(tier===1)e[1].how+=' При покупке 1 л неиспользованные 500 мл сразу заморозьте порциями для следующей недели; не храните открытую упаковку неделю дольше срока на этикетке.';
- return e;
+ return tier===1&&week>=1&&!legacy?e.filter(x=>!x.title.startsWith('Перекус выходных:')):e;
 }
 export function calculate(tier=1,grainStock={},legacy=false) {
  const inventory=Object.fromEntries(Object.values(ingredients).map(i=>[i.id,i.stock]));
@@ -89,8 +94,8 @@ export function calculate(tier=1,grainStock={},legacy=false) {
    for(const id of ['rice','bulgur','couscous'])if(id in grainStock)inventory[id]=Math.max(0,Number(grainStock[id])||0);
   }
   const used={},alloc={}; const add=(id,q,label)=>{used[id]=(used[id]||0)+q;(alloc[id]??=[]).push([label,q]);};
-  weeks[w].ids.forEach((id,j)=>Object.entries(recipeFor(id,tier,legacy).items).forEach(([key,q])=>add(key,q,`${slots[j][0]} ${slots[j][1]} · ${recipeFor(id,tier,legacy).title}`)));
-  extras(tier,w).forEach(e=>Object.entries(e.items).forEach(([id,q])=>add(id,q,e.title)));
+  mealEntries(w,tier,legacy).forEach(({id,slot})=>Object.entries(recipeFor(id,tier,legacy).items).forEach(([key,q])=>add(key,q,`${slots[slot][0]} ${slots[slot][1]} · ${recipeFor(id,tier,legacy).title}`)));
+  extras(tier,w,legacy).forEach(e=>Object.entries(e.items).forEach(([id,q])=>add(id,q,e.title)));
 const rows=Object.entries(used).map(([id,q])=>{const i=latest?currentIngredient(id):ingredients[id],opening=inventory[id]||0;if(i.base&&(!latest||id==='spices'))return {id,used:q,opening:null,purchase:0,cost:0,closing:null,alloc:alloc[id],pack:i.pack,unitPrice:i.price};const count=Math.max(0,Math.ceil(Math.max(0,q-opening)/i.pack-1e-9)),purchase=count*i.pack,cost=Math.round(count*i.price*100)/100;inventory[id]=opening+purchase-q;return{id,used:q,opening,purchase,cost,closing:inventory[id],alloc:alloc[id],pack:i.pack,unitPrice:i.price};});
   const food=rows.reduce((s,r)=>s+r.cost,0),delivery=tier===1?0:[0,200,400][tier],base=w===0?(tier===0?600:800):0,bufferRate=tier===1?.05:.1,buffer=Math.ceil((food+base)*bufferRate),total=food+delivery+base+buffer;
   result.push({rows,food,delivery,base,bufferRate,buffer,total,remaining:{...inventory},isActual:tier===1&&!legacy&&w===0});
