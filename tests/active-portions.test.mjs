@@ -1,9 +1,12 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import '../plan-source/recipes.mjs';
-import {recipeFor,recipes,weeks,calculate,calories,extras,ingredients} from '../plan-source/model.mjs';
+import {recipeFor as currentRecipeFor,recipes,weeks,calculate as currentCalculate,calories,extras,ingredients} from '../plan-source/model.mjs';
 import {mixedMinceIds,porkInsteadOfTurkeyIds} from '../plan-source/active-plan.mjs';
-test('active plan keeps full dinner and next-day lunch portions without double counting',()=>{
+const recipeFor=id=>currentRecipeFor(id,1,true);
+const calculate=()=>currentCalculate(1,{},true);
+// Preserve the previously published 06.09 plan as a regression snapshot.
+test('archived 06.09 plan keeps full dinner and next-day lunch portions without double counting',()=>{
  for(let w=0;w<4;w++) {
   const needs={};
   for(let slot=0;slot<11;slot++) {

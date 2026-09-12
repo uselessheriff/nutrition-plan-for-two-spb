@@ -1,4 +1,5 @@
 import {activeRecipe, portionPolicy, portionLabel} from './active-plan.mjs';
+import {revisedRecipe, latestStock, currentPriceOverrides, weekFiveActual} from './revision-september.mjs';
 export {portionPolicy, portionLabel};
 // Quantities are raw/edible weights unless a counted unit is explicitly shown.
 // Prices below are planning assumptions, never historical spending.
@@ -46,7 +47,7 @@ export function R(id,title,time,protein,items,steps,note='',salt=2) {
  const r={id,title,time,protein,items:full,steps,note};recipes.push(r);return r;
 }
 export const S = 'Ингредиенты и все граммовки рассчитаны на 2 порции. Делите белок поровну; указанные калории — половина общего блюда, не дневная норма.';
-export function recipeFor(id,tier=1) {
+export function recipeFor(id,tier=1,legacy=false) {
  const r=recipes.find(x=>x.id===id); if(!r) throw Error('Unknown recipe '+id);
  const copy={...r,items:{...r.items},steps:[...r.steps]};
  if(tier===0 && ['w1cutlet','w2meatballs'].includes(id)) {delete copy.items.mince;copy.items.mixedmince=400;copy.title=copy.title.replace('Говяжьи','Домашние');copy.protein='Смешанный фарш';copy.steps=copy.steps.map(s=>s.replace('400 г фарша','400 г смешанного фарша (свинина + говядина)'));}
@@ -57,9 +58,10 @@ export function recipeFor(id,tier=1) {
  if(tier===0 && id==='w3shrimp') {delete copy.items.shrimp;copy.items.egg=4;copy.items.cheese=60;copy.title='Салат с яйцом, сыром и кускусом';copy.protein='Яйца';copy.note='Эконом-вариант: креветки заменены яйцом и сыром, кускус остаётся 100 г на двоих. Креветочная версия доступна в бюджетах 25 и 30 тысяч.';copy.steps=['Ровно 100 г сухого кускуса залейте 120–150 мл кипятка по упаковке, накройте на 5 минут и разрыхлите вилкой.','4 яйца сварите вкрутую за 10 минут. Нарежьте 60 г сыра, 200 г огурцов, 2 помидора и 150 г перца.','Смешайте 100 г йогурта, 20 мл лимонного сока, 20 г масла, соль и специи.','Каждому положите половину кускуса (из 50 г сухого), 2 яйца, 30 г сыра и половину овощей и соуса.'];}
  if(tier===2 && ['w2pork','w4pork'].includes(id)) {copy.items.beef=copy.items.pork;delete copy.items.pork;copy.title=copy.title.replace('Свинина','Говядина');copy.steps=copy.steps.map(s=>s.replace('свинину','говядину').replace('свинины','говядины').replace('45–60 минут','75–90 минут'));copy.time=110;}
  if(tier===2 && id==='w4fish') {copy.items.salmon=copy.items.fish;delete copy.items.fish;copy.title=copy.title.replace('Горбуша','Лосось');}
- return tier===1?activeRecipe(copy):{...copy,portions:2};
+ return tier===1?(legacy?activeRecipe(copy):revisedRecipe(activeRecipe(copy))):{...copy,portions:2};
 }
-export function calories(r){return Math.round(Object.entries(r.items).reduce((s,[id,q])=>s+ingredients[id].kcal*q,0)/(r.portions||2));}
+export function currentIngredient(id){return {...ingredients[id],...currentPriceOverrides[id]};}
+export function calories(r){return Math.round(Object.entries(r.items).reduce((s,[id,q])=>s+(r.revised?currentIngredient(id):ingredients[id]).kcal*q,0)/(r.portions||2));}
 export const weeks=[
  {label:'7–13 сентября',date:'2026-09-07',theme:'Сначала остатки',ids:['w1chicken','w1eggplant','w1tortilla','w1pasta','w1cutlet','w1oats','w1salad','w1bolognese','w1syrniki','w1toast','w1pork']},
  {label:'14–20 сентября',date:'2026-09-14',theme:'Тунец и домашняя классика',ids:['w2turkey','w2liver','w2tuna','w2pork','w2pizza','w2millet','w2salad','w2meatballs','w2eggs','w2pita','w2chicken']},
@@ -75,17 +77,24 @@ export function extras(tier,week) {
  if(tier===1)e[1].how+=' При покупке 1 л неиспользованные 500 мл сразу заморозьте порциями для следующей недели; не храните открытую упаковку неделю дольше срока на этикетке.';
  return e;
 }
-export function calculate(tier=1,grainStock={}) {
+export function calculate(tier=1,grainStock={},legacy=false) {
  const inventory=Object.fromEntries(Object.values(ingredients).map(i=>[i.id,i.stock]));
  for(const id of ['rice','bulgur','couscous']) inventory[id]=Math.max(0,Number(grainStock[id])||0);
  const result=[];
  for(let w=0;w<4;w++) {
+  const latest=tier===1&&!legacy&&w>=1;
+  if(latest&&w===1){
+   for(const id of Object.keys(inventory))inventory[id]=latestStock[id]||0;
+   inventory.spinach=0; // Reported stock remains visible, but suitability is unconfirmed.
+   for(const id of ['rice','bulgur','couscous'])if(id in grainStock)inventory[id]=Math.max(0,Number(grainStock[id])||0);
+  }
   const used={},alloc={}; const add=(id,q,label)=>{used[id]=(used[id]||0)+q;(alloc[id]??=[]).push([label,q]);};
-  weeks[w].ids.forEach((id,j)=>Object.entries(recipeFor(id,tier).items).forEach(([key,q])=>add(key,q,`${slots[j][0]} ${slots[j][1]} · ${recipeFor(id,tier).title}`)));
+  weeks[w].ids.forEach((id,j)=>Object.entries(recipeFor(id,tier,legacy).items).forEach(([key,q])=>add(key,q,`${slots[j][0]} ${slots[j][1]} · ${recipeFor(id,tier,legacy).title}`)));
   extras(tier,w).forEach(e=>Object.entries(e.items).forEach(([id,q])=>add(id,q,e.title)));
-const rows=Object.entries(used).map(([id,q])=>{const i=ingredients[id],opening=inventory[id]||0;if(i.base)return {id,used:q,opening:null,purchase:0,cost:0,closing:null,alloc:alloc[id]};const count=Math.max(0,Math.ceil(Math.max(0,q-opening)/i.pack-1e-9)),purchase=count*i.pack,cost=count*i.price;inventory[id]=opening+purchase-q;return{id,used:q,opening,purchase,cost,closing:inventory[id],alloc:alloc[id]};});
+const rows=Object.entries(used).map(([id,q])=>{const i=latest?currentIngredient(id):ingredients[id],opening=inventory[id]||0;if(i.base&&(!latest||id==='spices'))return {id,used:q,opening:null,purchase:0,cost:0,closing:null,alloc:alloc[id],pack:i.pack,unitPrice:i.price};const count=Math.max(0,Math.ceil(Math.max(0,q-opening)/i.pack-1e-9)),purchase=count*i.pack,cost=Math.round(count*i.price*100)/100;inventory[id]=opening+purchase-q;return{id,used:q,opening,purchase,cost,closing:inventory[id],alloc:alloc[id],pack:i.pack,unitPrice:i.price};});
   const food=rows.reduce((s,r)=>s+r.cost,0),delivery=tier===1?0:[0,200,400][tier],base=w===0?(tier===0?600:800):0,bufferRate=tier===1?.05:.1,buffer=Math.ceil((food+base)*bufferRate),total=food+delivery+base+buffer;
-  result.push({rows,food,delivery,base,bufferRate,buffer,total,remaining:{...inventory}});
+  result.push({rows,food,delivery,base,bufferRate,buffer,total,remaining:{...inventory},isActual:tier===1&&!legacy&&w===0});
+  if(tier===1&&!legacy&&w===0)Object.assign(result[0],{originalPlanTotal:total,food:weekFiveActual,base:0,buffer:0,total:weekFiveActual});
  }
- return {weeks:result,total:result.reduce((s,w)=>s+w.total,0),food:result.reduce((s,w)=>s+w.food,0)};
+ return {weeks:result,total:Math.round(result.reduce((s,w)=>s+w.total,0)*100)/100,food:Math.round(result.reduce((s,w)=>s+w.food,0)*100)/100,confirmed:tier===1&&!legacy?weekFiveActual:0,remainingTotal:tier===1&&!legacy?result.slice(1).reduce((s,w)=>s+w.total,0):null};
 }

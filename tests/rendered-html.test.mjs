@@ -7,7 +7,7 @@ import "../plan-source/recipes.mjs";
 import { calculate, weeks, recipeFor } from "../plan-source/model.mjs";
 const read=(name)=>readFile(new URL("../"+name,import.meta.url),"utf8");
 async function moduleFrom(name){const compiled=ts.transpileModule(await read(name),{compilerOptions:{target:ts.ScriptTarget.ES2022,module:ts.ModuleKind.ES2022}}).outputText;return import("data:text/javascript;base64,"+Buffer.from(compiled).toString("base64"));}
-test("renders four useful sections with weeks 1–8 and week 5 selected",async()=>{
+test("renders four useful sections with weeks 1–8 and week 6 selected",async()=>{
  const {default:worker}=await import(new URL("../dist/server/index.js",import.meta.url));
  const response=await worker.fetch(new Request("http://localhost/",{headers:{accept:"text/html"}}),{ASSETS:{fetch:async()=>new Response("Not found",{status:404})}},{waitUntil(){},passThroughOnException(){}});
  assert.equal(response.status,200);
@@ -15,13 +15,13 @@ test("renders four useful sections with weeks 1–8 and week 5 selected",async()
  for(const id of ["archive","purchases","stock","expenses"])assert(html.includes('page-tab-'+id));
  for(let n=1;n<=8;n++)assert(html.includes('archive-week-tab-'+n));
  assert.match(html,/aria-pressed="true"[^>]*|Неделя 5/);
- assert(html.includes("Сначала остатки"));
+ assert(html.includes("Тунец и домашняя классика"));
  for(const removed of ["Новые 4 недели","Пример журнала","Выгода продуктов и ценовые сигналы","База рецептов","Выберите месячный лимит"])assert(!html.includes(removed),removed);
 });
 test("generates all 44 new native recipes from the same fixed-25k shopping source",async()=>{
  const data=await moduleFrom("app/future-plan-data.ts");
  assert.deepEqual(data.futureMenuWeeks.map(w=>w.number),[5,6,7,8]);
- assert.equal(data.futurePlanTotal,24693);
+ assert.equal(data.futurePlanTotal,calculate(1).total);assert.equal(data.futureConfirmedTotal,3331.3);assert.equal(data.futureRemainingTotal,18130);
  assert.deepEqual(data.futureWeekTotals,calculate(1).weeks.map(w=>w.total));
  assert.equal(data.futureMenuWeeks.flatMap(w=>w.meals).length,44);
  for(let i=0;i<4;i++)for(let j=0;j<11;j++){
@@ -43,7 +43,7 @@ test("keeps historical accounting separate from future weeks and never invents c
  assert.match(page,/const menuWeeks=\[\.\.\.historicalWeeks,\.\.\.futureMenuWeeks\]/);
  assert.match(page,/const confirmedPurchases=\[\.\.\.expenses,/);
  assert.doesNotMatch(page,/confirmedTotal\s*\/\s*menuWeeks.length/);
- assert(page.includes('isHistorical?"unconfirmed":"planned"'));
+ assert(page.includes('weekNumber<=5?"unconfirmed":"planned"'));
  assert(page.includes('history?.outcome'));
  assert.match(page,/event\.origin!==window\.location\.origin/);
  assert.match(page,/event\.source!==frame\.current\?\.contentWindow/);

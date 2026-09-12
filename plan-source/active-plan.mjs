@@ -4,7 +4,7 @@ export const threePortionIds = ['w1chicken','w1eggplant','w1tortilla','w1pasta',
 export const mixedMinceIds = ['w1cutlet','w2meatballs','w3cutlet','w4cabbage','w4cutlet'];
 export const porkInsteadOfTurkeyIds = ['w2turkey','w3turkey','w4turkey'];
 export const portionPolicy = 'Пн–Чт и Вс: 3 порции — две на ужин, одна на обед следующего дня. Пт: 2 порции; субботний обед отдельный. Если в будущем в пятницу готовим 4, две оставшиеся заменяют субботний обед на двоих.';
-export function portionLabel(r) { return r.portions===3 ? '3 порции · 2 на ужин + 1 на обед завтра' : '2 порции'; }
+export function portionLabel(r) { return r.portionText || (r.portions===3 ? '3 порции · 2 на ужин + 1 на обед завтра' : '2 порции'); }
 export function activeRecipe(r) {
  const p=r.portions=threePortionIds.includes(r.id)?3:2;
  if(r.id==='w1pork') {delete r.items.bulgur;Object.assign(r.items,{potato:500,milk:100,butter:15});r.title='Свиные отбивные с пюре и салатом из пекинской капусты';r.time=40;}
