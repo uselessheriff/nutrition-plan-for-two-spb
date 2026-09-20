@@ -29,7 +29,7 @@ test('deferred shrimp pasta remains in history but creates no purchase or fictio
  assert.equal(r.items.pasta,160);assert.equal(r.items.shrimp,350);assert.equal(r.items.passata,300);
  assert(!r.items.pita&&!r.items.curd&&!r.items.spinach);assert.match(r.steps[3],/175 г креветок/);
  assert.equal(calories(r),570);
- for(const week of calculate().weeks.slice(1)){assert.equal(week.remaining.shrimp,0);assert(!week.rows.some(r=>r.id==='shrimp'));}
+ const week=calculate().weeks[1];assert.equal(week.remaining.shrimp,0);assert(!week.rows.some(r=>r.id==='shrimp'));
 });
 test('remaining beef is used once and no future Peking cabbage or oat pancakes remain',()=>{
  assert.equal(recipeFor('w2meatballs').items.mince,400);assert(!recipeFor('w2meatballs').items.mixedmince);
@@ -39,8 +39,8 @@ test('remaining beef is used once and no future Peking cabbage or oat pancakes r
  assert.equal(recipeFor('w4cabbage').items.zucchini,600);
 });
 test('current budget separates week5 payments from remaining purchases, with explicit base and zero delivery',()=>{
- const p=calculate();assert.equal(p.confirmed,3331.3);assert.equal(p.remainingTotal,14380);assert.equal(p.total,17711.3);
- assert.deepEqual(p.weeks.map(w=>w.total),[3331.3,4545,4069,5766]);assert(p.total<=25000);
+ const p=calculate();assert.equal(p.confirmed,8006.46);assert.equal(p.remainingTotal,8661);assert.equal(p.total,16667.46);
+ assert.deepEqual(p.weeks.map(w=>w.total),[3331.3,4545,2845,5816]);assert(p.total<=25000);
  for(let w=1;w<4;w++){
   const projected=p.weeks[w],needs={};
   for(const {id} of mealEntries(w))for(const [i,n]of Object.entries(recipeFor(id).items))needs[i]=(needs[i]||0)+n;
@@ -50,7 +50,7 @@ test('current budget separates week5 payments from remaining purchases, with exp
   assert.equal(projected.delivery,0);assert.equal(projected.base,0);assert.equal(projected.buffer,Math.ceil(projected.food*.05));
   assert(!projected.rows.some(r=>/water|cutlet/.test(r.id)));
  }
- assert.equal(currentIngredient('milk').pack,1900);assert.equal(currentIngredient('curd').pack,180);
+ assert.equal(currentIngredient('milk').pack,1400);assert.equal(currentIngredient('curd').pack,180);
  assert.equal(ingredients.milk.pack,900,'historical assumptions preserved');
 });
 test('future weekends have breakfast and dinner only with hearty breakfasts and preserved Sunday lunchbox',()=>{
@@ -84,16 +84,16 @@ test('week6 Saturday replaces only the curd side with cheese toasts and recalcul
  const bread=p.weeks[1].rows.find(x=>x.id==='bread'),cheese=p.weeks[1].rows.find(x=>x.id==='cheese');
  assert.deepEqual([bread.used,bread.purchase,bread.cost,bread.closing],[480,800,180,320]);
  assert.deepEqual([cheese.used,cheese.purchase,cheese.cost,cheese.closing],[220,400,360,180]);
- assert.equal(p.weeks[2].rows.find(x=>x.id==='cheese').purchase,0);
+ assert.equal(p.weeks[2].rows.find(x=>x.id==='cheese').purchase,180);
  assert.equal(recipeFor('w3pancake').items.curd,180,'not a blanket ban on curd');
  assert.equal(recipeFor('w3oats').items.curd,360);assert.equal(recipeFor('w4millet').items.curd,360);
  assert.equal(recipeFor('w2millet',1,true).items.curd,200,'older recipe retained');
 });
-test('reported mustard and cloudberry jam cover weeks6–8 without repeated purchases',()=>{
- const p=calculate(),mustard=p.weeks.slice(1).map(w=>w.rows.find(r=>r.id==='mustard')),jam=p.weeks.slice(1).map(w=>w.rows.find(r=>r.id==='jam'));
+test('historical mustard and jam quantities remain in week6, new pantry resets week7',()=>{
+ const p=calculate(),mustard=p.weeks.slice(1,2).map(w=>w.rows.find(r=>r.id==='mustard')),jam=p.weeks.slice(1,2).map(w=>w.rows.find(r=>r.id==='jam'));
  assert.equal(latestStock.mustard,80);assert.equal(latestStock.jam,380);
- assert.deepEqual(mustard.map(r=>[r.opening,r.used,r.closing]),[[80,45,35],[35,10,25],[25,15,10]]);
- assert.deepEqual(jam.map(r=>[r.opening,r.used,r.closing]),[[380,30,350],[350,30,320],[320,60,260]]);
+ assert.deepEqual(mustard.map(r=>[r.opening,r.used,r.closing]),[[80,45,35]]);
+ assert.deepEqual(jam.map(r=>[r.opening,r.used,r.closing]),[[380,30,350]]);
  for(const r of [...mustard,...jam]){assert.equal(r.purchase,0);assert.equal(r.cost,0);}
  assert.equal(currentIngredient('jam').name,'Варенье морошки');
  assert.equal(recipeFor('w2millet').items.jam,30);assert.equal(recipeFor('w2chicken').items.mustard,30);

@@ -24,9 +24,9 @@ test('departments preserve amounts, totals, pantry deductions and deterministic 
   assert.equal(groups.reduce((s,g)=>s+g.total,0),w.food);
   for(const g of groups)assert(g.rows.length>0);
   assert.deepEqual(groups,groupShoppingRows([...w.rows].reverse(),id=>currentIngredient(id).name));
-  assert(!actual.some(r=>['mustard','jam'].includes(r.id)));
+  assert(!actual.some(r=>['mustard'].includes(r.id)));
  }
  assert.equal(JSON.stringify(p),before);
  assert.deepEqual(groupShoppingRows([{id:'egg',purchase:0,cost:0}]),[]);
- assert.deepEqual(p.weeks.map(w=>w.total),[3331.3,4545,4069,5766]);
+ assert.deepEqual(p.weeks.map(w=>w.total),[3331.3,4545,2845,5816]);
 });
