@@ -13,12 +13,12 @@ test('closing snapshot resets week6 rather than carrying consumed or spoiled wee
  assert.equal(row('rice').opening,300);assert.equal(row('bulgur').opening,180);
  assert.equal(row('chicken').used,600);assert.equal(row('chicken').opening,150);assert.equal(row('chicken').purchase,550);
  assert.equal(row('passata').used,900);assert.equal(row('passata').opening,400);assert.equal(row('passata').purchase,500);
- assert(!row('spinach'));assert.equal(calculate().weeks[3].rows.find(r=>r.id==='spinach').opening,0);
+ assert(!row('spinach'));assert(!calculate().weeks[3].rows.some(r=>r.id==='spinach'));
 });
 test('Monday has exactly two new portions for Anya; all other weekday lunch portions survive',()=>{
  for(let w=1;w<4;w++)for(let s=0;s<11;s++){
   const r=recipeFor(weeks[w].ids[s]);
-  assert.equal(r.portions,w===1&&s===0?2:[0,1,2,3,10].includes(s)?3:2);
+  assert.equal(r.portions,w===3&&s===7?4:w===1&&s===0?2:[0,1,2,3,10].includes(s)?3:2);
  }
  const r=recipeFor('w2turkey');assert.equal(r.items.pork,410);assert.equal(r.items.bulgur,140);
  assert.match(r.steps[3],/Ане на ужин понедельника/);assert.match(r.steps[3],/Обед понедельника у Ани и ужин парня/);
@@ -36,14 +36,14 @@ test('remaining beef is used once and no future Peking cabbage or oat pancakes r
  assert.match(recipeFor('w2meatballs').steps[0],/говяжьего фарша из морозилки/);
  for(const w of weeks.slice(1))for(const id of w.ids){const r=recipeFor(id);assert(!r.items.cabbage,id);assert.doesNotMatch(r.title+' '+r.steps.join(' '),/пекинск/);}
  const r=recipeFor('w3pancake');assert.equal(r.items.flour,120);assert(!r.items.oats);assert.match(r.title,/Банановые панкейки/);
- assert.equal(recipeFor('w4cabbage').items.zucchini,600);
+ assert.equal(recipeFor('w4cabbage').items.mince,450);assert(!recipeFor('w4cabbage').items.cabbage);
 });
 test('current budget separates week5 payments from remaining purchases, with explicit base and zero delivery',()=>{
- const p=calculate();assert.equal(p.confirmed,8006.46);assert.equal(p.remainingTotal,8661);assert.equal(p.total,16667.46);
- assert.deepEqual(p.weeks.map(w=>w.total),[3331.3,4545,2845,5816]);assert(p.total<=25000);
+ const p=calculate();assert.equal(p.confirmed,10653.02);assert.equal(p.remainingTotal,5942.5);assert.equal(p.total,16595.52);
+ assert.deepEqual(p.weeks.map(w=>w.total),[3331.3,4545,2845,5942.5]);assert(p.total<=25000);
  for(let w=1;w<4;w++){
   const projected=p.weeks[w],needs={};
-  for(const {id} of mealEntries(w))for(const [i,n]of Object.entries(recipeFor(id).items))needs[i]=(needs[i]||0)+n;
+  for(const {id} of mealEntries(w).filter(({id})=>!recipeFor(id).carryoverFrom))for(const [i,n]of Object.entries(recipeFor(id).items))needs[i]=(needs[i]||0)+n;
   for(const e of extras(1,w))for(const [i,n]of Object.entries(e.items))needs[i]=(needs[i]||0)+n;
   assert.deepEqual(Object.fromEntries(projected.rows.map(r=>[r.id,r.used])),needs);
   for(const r of projected.rows)if(r.opening!==null){assert.equal(r.opening+r.purchase-r.used,r.closing);assert(r.closing>=0);assert.equal(r.cost,r.purchase/r.pack*r.unitPrice);}
@@ -61,9 +61,9 @@ test('future weekends have breakfast and dinner only with hearty breakfasts and 
   for(const {id,slot}of entries){
    assert(!deferredWeekendLunches.includes(id));
    const r=recipeFor(id);
-   if([5,8].includes(slot)){assert.equal(r.portions,2);assert(calories(r)>=650&&calories(r)<=900);assert.match(r.portionText,/плотный завтрак/);}
+   if([5,8].includes(slot)){assert.equal(r.portions,2);assert(calories(r)>=650&&calories(r)<=900);assert.match(r.portionText,/плотный завтрак|из субботнего пирога/);}
    if(slot===10)assert.equal(r.portions,3);
-   if([4,7].includes(slot))assert.equal(r.portions,2);
+   if([4,7].includes(slot))assert.equal(r.portions,w===3&&slot===7?4:2);
   }
   assert.equal(extras(1,w).length,3);assert(!extras(1,w).some(e=>/выходных/.test(e.title)));
   assert.equal(mealEntries(w,1,true).length,11,'archived schedule still available');
@@ -86,7 +86,7 @@ test('week6 Saturday replaces only the curd side with cheese toasts and recalcul
  assert.deepEqual([cheese.used,cheese.purchase,cheese.cost,cheese.closing],[220,400,360,180]);
  assert.equal(p.weeks[2].rows.find(x=>x.id==='cheese').purchase,180);
  assert.equal(recipeFor('w3pancake').items.curd,180,'not a blanket ban on curd');
- assert.equal(recipeFor('w3oats').items.curd,360);assert.equal(recipeFor('w4millet').items.curd,360);
+ assert.equal(recipeFor('w3oats').items.curd,360);assert.equal(recipeFor('w4millet').carryoverFrom,'w4turkey');
  assert.equal(recipeFor('w2millet',1,true).items.curd,200,'older recipe retained');
 });
 test('historical mustard and jam quantities remain in week6, new pantry resets week7',()=>{

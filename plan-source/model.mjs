@@ -2,6 +2,7 @@ import {activeRecipe, portionPolicy, portionLabel} from './active-plan.mjs';
 import {revisedRecipe, latestStock, currentPriceOverrides, weekFiveActual} from './revision-september.mjs';
 import {heartyBreakfast, weekendPolicy} from './weekend-plan.mjs';
 import {weekSevenRecipe,weekSevenStock,weekSevenUnknown,weekSevenPrices,cycleConfirmed} from './week-seven.mjs';
+import {weekEightRecipe,weekEightStock,weekEightUnknown,weekEightPrices,confirmedThroughSeven} from './week-eight.mjs';
 export {portionPolicy, portionLabel};
 // Quantities are raw/edible weights unless a counted unit is explicitly shown.
 // Prices below are planning assumptions, never historical spending.
@@ -29,6 +30,8 @@ rows.porkmince=['Свиной фарш','г',400,200,2.4,0];
 rows.mixedmince=['Фарш свинина + говядина','г',400,200,2.3,0];
 rows.sauerkraut=['Квашеная капуста без свободного рассола','г',400,120,.2,0];
 rows.wholepepper=['Болгарский перец, целиком','шт.',1,45,40,0];
+rows.puffdough=['Тесто слоёное дрожжевое','г',500,200,3.6,0];
+rows.creamcheese=['Сыр творожный сливочный для пирога','г',140,180,2.5,0];
 // Updated from the household's price memory. Rounded FUTURE estimates, not edits to receipts.
 rows.egg[3]=130; rows.yogurt[3]=90; rows.cheese[3]=190; rows.feta[3]=170;
 rows.milk[3]=100; rows.pasta[3]=90; rows.rice[3]=140; rows.bulgur[3]=110;
@@ -62,10 +65,10 @@ export function recipeFor(id,tier=1,legacy=false) {
  if(tier===0 && id==='w3shrimp') {delete copy.items.shrimp;copy.items.egg=4;copy.items.cheese=60;copy.title='Салат с яйцом, сыром и кускусом';copy.protein='Яйца';copy.note='Эконом-вариант: креветки заменены яйцом и сыром, кускус остаётся 100 г на двоих. Креветочная версия доступна в бюджетах 25 и 30 тысяч.';copy.steps=['Ровно 100 г сухого кускуса залейте 120–150 мл кипятка по упаковке, накройте на 5 минут и разрыхлите вилкой.','4 яйца сварите вкрутую за 10 минут. Нарежьте 60 г сыра, 200 г огурцов, 2 помидора и 150 г перца.','Смешайте 100 г йогурта, 20 мл лимонного сока, 20 г масла, соль и специи.','Каждому положите половину кускуса (из 50 г сухого), 2 яйца, 30 г сыра и половину овощей и соуса.'];}
  if(tier===2 && ['w2pork','w4pork'].includes(id)) {copy.items.beef=copy.items.pork;delete copy.items.pork;copy.title=copy.title.replace('Свинина','Говядина');copy.steps=copy.steps.map(s=>s.replace('свинину','говядину').replace('свинины','говядины').replace('45–60 минут','75–90 минут'));copy.time=110;}
  if(tier===2 && id==='w4fish') {copy.items.salmon=copy.items.fish;delete copy.items.fish;copy.title=copy.title.replace('Горбуша','Лосось');}
- return tier===1?(legacy?activeRecipe(copy):weekSevenRecipe(heartyBreakfast(revisedRecipe(activeRecipe(copy))))):{...copy,portions:2};
+ return tier===1?(legacy?activeRecipe(copy):weekEightRecipe(weekSevenRecipe(heartyBreakfast(revisedRecipe(activeRecipe(copy)))))):{...copy,portions:2};
 }
-export function currentIngredient(id,week=2){return {...ingredients[id],...currentPriceOverrides[id],...(week>=2?weekSevenPrices[id]:{})};}
-export function calories(r){return Math.round(Object.entries(r.items).reduce((s,[id,q])=>s+(r.revised?currentIngredient(id):ingredients[id]).kcal*q,0)/(r.portions||2));}
+export function currentIngredient(id,week=3){return {...ingredients[id],...currentPriceOverrides[id],...(week>=2?weekSevenPrices[id]:{}),...(week>=3?weekEightPrices[id]:{})};}
+export function calories(r){return Math.round(Object.entries(r.items).reduce((s,[id,q])=>s+(r.revised?currentIngredient(id,r.pricingWeek??2):ingredients[id]).kcal*q,0)/(r.portions||2));}
 export const weeks=[
  {label:'7–13 сентября',date:'2026-09-07',theme:'Сначала остатки',ids:['w1chicken','w1eggplant','w1tortilla','w1pasta','w1cutlet','w1oats','w1salad','w1bolognese','w1syrniki','w1toast','w1pork']},
  {label:'14–20 сентября',date:'2026-09-14',theme:'Тунец и домашняя классика',ids:['w2turkey','w2liver','w2tuna','w2pork','w2pizza','w2millet','w2salad','w2meatballs','w2eggs','w2pita','w2chicken']},
@@ -76,7 +79,7 @@ export const slots=[['Пн','Ужин',0],['Вт','Ужин',1],['Ср','Ужи�
 export function mealEntries(week,tier=1,legacy=false) {
  return weeks[week].ids.map((id,slot)=>({id,slot})).filter(({slot})=>tier!==1||legacy||week===0||![6,9].includes(slot));
 }
-export function weekTheme(week){return week===2?'Остатки в дело · умеренные порции':week===3?'Красная рыба, тефтели и сырники · черновик':weeks[week].theme;}
+export function weekTheme(week){return week===2?'Остатки в дело · архив плана':week===3?'Сырники и большой рыбный пирог':weeks[week].theme;}
 export function extras(tier,week,legacy=false) {
  const e=[{title:'Фрукты Пн–Пт',items:{apple:2000},how:'По 200 г яблок каждому в Пн–Пт, например после ужина. Фрукты в самих рецептах посчитаны отдельно.'},{title:'Сок Пн / Ср / Пт',items:{juice:1000},how:'Пн и Ср: по 150 мл каждому; Пт: по 200 мл. Не вместо воды.'},{title:'Сырки Вт / Чт',items:{bar:4},how:'По 1 сырку 40 г каждому во Вт и Чт. При оставшейся домашней выпечке замените сырок порцией выпечки по её составу.'}];
  e.push({title:'Перекус выходных: овсянка с молоком и бананом',items:{oats:120,milk:1000,banana:600},how:'В Сб и Вс каждому: 30 г овсянки, 250 мл молока и 150 г мякоти банана. Хлопья сварить в молоке по упаковке, добавить банан. Можно разделить между основными приёмами по аппетиту. Это еда на день, а не обязательный четвёртый приём.'});
@@ -97,16 +100,19 @@ export function calculate(tier=1,grainStock={},legacy=false) {
   }
   if(latest&&w===2){
    for(const id of Object.keys(inventory))inventory[id]=weekSevenStock[id]||0;
+  }
+  if(latest&&w===3){
+   for(const id of Object.keys(inventory))inventory[id]=weekEightStock[id]||0;
    for(const id of ['rice','bulgur','couscous'])if(id in grainStock)inventory[id]=Math.max(0,Number(grainStock[id])||0);
   }
   const used={},alloc={}; const add=(id,q,label)=>{used[id]=(used[id]||0)+q;(alloc[id]??=[]).push([label,q]);};
-  mealEntries(w,tier,legacy).forEach(({id,slot})=>Object.entries(recipeFor(id,tier,legacy).items).forEach(([key,q])=>add(key,q,`${slots[slot][0]} ${slots[slot][1]} · ${recipeFor(id,tier,legacy).title}`)));
+  mealEntries(w,tier,legacy).forEach(({id,slot})=>{const recipe=recipeFor(id,tier,legacy);if(!recipe.carryoverFrom)Object.entries(recipe.items).forEach(([key,q])=>add(key,q,`${slots[slot][0]} ${slots[slot][1]} · ${recipe.title}`));});
   extras(tier,w,legacy).forEach(e=>Object.entries(e.items).forEach(([id,q])=>add(id,q,e.title)));
-const rows=Object.entries(used).map(([id,q])=>{const i=latest?currentIngredient(id,w):ingredients[id],opening=inventory[id]||0;if((i.base&&(!latest||id==='spices'))||(latest&&w>=2&&weekSevenUnknown.includes(id)))return {id,used:q,opening:null,purchase:0,cost:0,closing:null,alloc:alloc[id],pack:i.pack,unitPrice:i.price};const count=Math.max(0,Math.ceil(Math.max(0,q-opening)/i.pack-1e-9)),purchase=count*i.pack,cost=Math.round(count*i.price*100)/100;inventory[id]=opening+purchase-q;return{id,used:q,opening,purchase,cost,closing:inventory[id],alloc:alloc[id],pack:i.pack,unitPrice:i.price};});
+const rows=Object.entries(used).map(([id,q])=>{const i=latest?currentIngredient(id,w):ingredients[id],opening=inventory[id]||0;if((i.base&&(!latest||id==='spices'))||(latest&&w>=2&&(w===3?weekEightUnknown:weekSevenUnknown).includes(id)))return {id,used:q,opening:null,purchase:0,cost:0,closing:null,alloc:alloc[id],pack:i.pack,unitPrice:i.price};const count=Math.max(0,Math.ceil(Math.max(0,q-opening)/i.pack-1e-9)),purchase=count*i.pack,cost=Math.round(count*i.price*100)/100;inventory[id]=opening+purchase-q;return{id,used:q,opening,purchase,cost,closing:inventory[id],alloc:alloc[id],pack:i.pack,unitPrice:i.price};});
   const food=rows.reduce((s,r)=>s+r.cost,0),delivery=tier===1?0:[0,200,400][tier],base=w===0?(tier===0?600:800):0,bufferRate=tier===1?.05:.1,buffer=Math.ceil((food+base)*bufferRate),total=food+delivery+base+buffer;
   result.push({rows,food,delivery,base,bufferRate,buffer,total,remaining:{...inventory},isActual:tier===1&&!legacy&&w===0});
   if(tier===1&&!legacy&&w===0)Object.assign(result[0],{originalPlanTotal:total,food:weekFiveActual,base:0,buffer:0,total:weekFiveActual});
  }
- const current=tier===1&&!legacy,remainingTotal=current?Math.round(result.slice(2).reduce((s,w)=>s+w.total,0)*100)/100:null;
- return {weeks:result,total:current?Math.round((cycleConfirmed+remainingTotal)*100)/100:Math.round(result.reduce((s,w)=>s+w.total,0)*100)/100,food:Math.round(result.reduce((s,w)=>s+w.food,0)*100)/100,confirmed:current?cycleConfirmed:0,remainingTotal};
+ const current=tier===1&&!legacy,remainingTotal=current?Math.round(result.slice(3).reduce((s,w)=>s+w.total,0)*100)/100:null;
+ return {weeks:result,total:current?Math.round((confirmedThroughSeven+remainingTotal)*100)/100:Math.round(result.reduce((s,w)=>s+w.total,0)*100)/100,food:Math.round(result.reduce((s,w)=>s+w.food,0)*100)/100,confirmed:current?confirmedThroughSeven:0,remainingTotal};
 }

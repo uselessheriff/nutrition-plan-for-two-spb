@@ -43,7 +43,7 @@ const legacy='{"entries":[{"name":"old","amount":100}]}';const h2=harness({'pete
 console.log('PASS: 44 recipes, 132 variants, 12 weekly menus, budgets, package rounding, inventory conservation, first-week pantry, modal rendering, forms, XSS escaping, legacy preservation.');
 console.log(JSON.stringify(tiers.map((t,i)=>({limit:t.cap,total:calculate(i).total,weeks:calculate(i).weeks.map(w=>w.total)}))));
 assert.equal((h.node('shopping-weeks').innerHTML.match(/class="shopping-week surface"/g)||[]).length,4);
-for(let index=2;index<4;index++){
+for(let index=3;index<4;index++){
  const rendered=h.node('shopping-weeks').innerHTML.split('data-shopping-week="'+index+'"')[1].split('</details></div></details>')[0];
  assert(rendered.includes('Что купить на неделю '+(index+5)));
  assert(rendered.indexOf('class="buy-list"')<rendered.indexOf('Подробный расчёт'));
@@ -51,19 +51,19 @@ for(let index=2;index<4;index++){
  assert.equal((rendered.match(/data-buy-product=/g)||[]).length,expected.length);
  for(const row of expected)assert(rendered.includes('data-buy-product="'+row.id+'"'));
 }
-h.node('shopping-weeks').events.toggle({target:{dataset:{shoppingWeek:'2'},open:true}});
+h.node('shopping-weeks').events.toggle({target:{dataset:{shoppingWeek:'3'},open:true}});
 vm.runInContext('renderShopping()',h.context);
-assert.match(h.node('shopping-weeks').innerHTML,/data-shopping-week="2" open/);
-vm.runInContext('download=(name,data,type)=>{globalThis.exported={name,data,type}};downloadShopping(2)',h.context);
-assert.equal(vm.runInContext('exported.name',h.context),'zakupka-nedelya-7-25000.csv');
+assert.match(h.node('shopping-weeks').innerHTML,/data-shopping-week="3" open/);
+vm.runInContext('download=(name,data,type)=>{globalThis.exported={name,data,type}};downloadShopping(3)',h.context);
+assert.equal(vm.runInContext('exported.name',h.context),'zakupka-nedelya-8-25000.csv');
 assert(!html.includes('id="budget-switch"'));
 assert(!html.includes('id="journal"'));
 assert(!html.includes('id="price-analysis"'));
-console.log('PASS: 4 weekly purchase disclosures, purchase-only lists, fixed 25k, CSV week 7, hidden methodology removed');
+console.log('PASS: 4 weekly purchase disclosures, purchase-only lists, fixed 25k, CSV week 8, hidden methodology removed');
 
 // Primary mobile rows show purchase deficit, not the total recipe requirement.
 const mobile=harness();
-for(let index=2;index<4;index++){
+for(let index=3;index<4;index++){
  const list=mobile.node('shopping-weeks').innerHTML.split('data-shopping-week="'+index+'"')[1].split('<div class="shopping-actions">')[0];
  assert.match(list,/<span>Продукт<\/span><span>Купить<\/span><span>Цена<\/span>/);
  for(const row of calculate(1).weeks[index].rows.filter(r=>r.purchase>0)){
@@ -79,14 +79,14 @@ for(let index=2;index<4;index++){
 }
 const fillet=calculate(1,{},true).weeks[0].rows.find(r=>r.id==='chicken');
 assert.equal(fillet.used,1140);assert.equal(fillet.opening,760);assert.equal(fillet.purchase,400);
-assert(mobile.node('stock-notes').innerHTML.includes('60 г/пакетик'));
-const known=harness({'petersburg-ration-september-2026-v2':JSON.stringify({grains:{rice:640},grainSnapshot:'2026-09-20',entries:[]})});
-assert(!known.node('shopping-weeks').innerHTML.split('data-shopping-week="2"')[1].split('<div class="shopping-actions">')[0].includes('data-buy-product="rice"'));
+assert(mobile.node('stock-notes').innerHTML.includes('60 г по вашему правилу'));
+const known=harness({'petersburg-ration-september-2026-v2':JSON.stringify({grains:{rice:640},grainSnapshot:'2026-09-27',entries:[]})});
+assert(!known.node('shopping-weeks').innerHTML.split('data-shopping-week="3"')[1].split('<div class="shopping-actions">')[0].includes('data-buy-product="rice"'));
 const css=await readFile(new URL('style.css',import.meta.url),'utf8');
 const oldGrains=harness({'petersburg-ration-september-2026-v2':JSON.stringify({grains:{rice:640},entries:[]})});
 assert.equal(vm.runInContext('saved.previousGrains.rice',oldGrains.context),640);
-assert.equal(vm.runInContext('plan().weeks[2].rows.find(r=>r.id==="rice").opening',oldGrains.context),300);
-assert.equal(vm.runInContext('plan().weeks[2].rows.find(r=>r.id==="rice").opening',known.context),640);
+assert.equal(vm.runInContext('plan().weeks[3].rows.find(r=>r.id==="rice").opening',oldGrains.context),120);
+assert.equal(vm.runInContext('plan().weeks[3].rows.find(r=>r.id==="rice").opening',known.context),640);
 assert(mobile.node('shopping-weeks').innerHTML.split('data-shopping-week="0"')[1].includes('Не повторять закупку'));
 assert.equal(vm.runInContext('seed.filter(x=>x.period==="w0").reduce((s,x)=>s+x.amount,0).toFixed(2)',mobile.context),'3331.30');
 assert(css.includes('grid-template-columns:minmax(0,1.4fr) minmax(0,.8fr) minmax(0,.8fr)'));
@@ -95,7 +95,7 @@ assert(!css.includes('.buy-list li > div:last-child'));
 console.log('PASS: product-buy-price reading order, pantry-adjusted buy quantities, exact row prices, grain warnings and responsive CSS guardrails');
 
 // Department groups preserve every net purchase once, including downloadable lists.
-for(let week=2;week<4;week++){
+for(let week=3;week<4;week++){
  const groups=vm.runInContext(`groupShoppingRows(plan().weeks[${week}].rows,id=>currentIngredient(id).name)`,mobile.context);
  const markup=mobile.node('shopping-weeks').innerHTML.split('data-shopping-week="'+week+'"')[1].split('<div class="shopping-actions">')[0];
  assert.equal((markup.match(/data-buy-department=/g)||[]).length,groups.length);

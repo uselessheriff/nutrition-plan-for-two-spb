@@ -9,7 +9,7 @@ test('new pantry resets week7, including semolina and both pasta lots',()=>{
  for(const id of ['chicken','pork','pasta','rice','buckwheat','semolina','egg','broccoli','mushrooms','passata','butter','carrot','flour'])assert.equal(row(id).purchase,0,id);
  assert.equal(row('semolina').closing,330);assert.equal(row('pasta').closing,680);
  assert.equal(row('pork').used,1000);assert.equal(row('chicken').used,550);
- assert.equal(p.weeks[3].rows.find(r=>r.id==='pasta').opening,680);
+ assert.equal(p.weeks[3].rows.find(r=>r.id==='pasta').opening,750,'new week8 report supersedes projected carryover');
  assert.equal(row('jam').opening,null,'jam present but total weight unmeasured');
 });
 test('seven moderate dinner batches and unchanged hearty breakfasts',()=>{
@@ -22,7 +22,7 @@ test('seven moderate dinner batches and unchanged hearty breakfasts',()=>{
 test('current known payments are counted once without adding past-week forecast',()=>{
  const p=calculate();assert.equal(cycleConfirmed,3331.30+4175.16+500);
  assert.equal(additionalConfirmed.length,2);assert.equal(additionalConfirmed[0].period,'unassigned');
- assert.equal(p.total,cycleConfirmed+p.weeks[2].total+p.weeks[3].total);assert(p.total<25000);
+ assert.equal(p.total,Math.round((cycleConfirmed+2646.56+p.weeks[3].total)*100)/100);assert(p.total<25000);
  assert.equal(p.weeks[1].total,4545,'previous forecast preserved, not added to payments');
  for(const w of p.weeks.slice(2))for(const r of w.rows)if(r.opening!==null){assert.equal(r.opening+r.purchase-r.used,r.closing);assert(r.closing>=0);}
 });

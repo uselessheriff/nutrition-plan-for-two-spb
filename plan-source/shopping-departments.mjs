@@ -6,8 +6,8 @@ export const shoppingDepartments = [
  {id:'canned',label:'Консервы, соусы и варенье',products:['sauerkraut','tuna','pickles','marinated','passata','jam','mustard','lemon']},
  {id:'drinks',label:'Соки и напитки',products:['juice']},
  {id:'meat-fish',label:'Мясо, птица и рыба',products:['chicken','pork','beef','mince','turkey','liver','fish','salmon','porkmince','mixedmince']},
- {id:'dairy',label:'Молочные продукты, сыр и яйца',products:['egg','yogurt','cheese','feta','butter','curd','milk','sourcream','bar']},
- {id:'frozen',label:'Заморозка и тесто',products:['broccoli','shrimp','berries','dough']},
+ {id:'dairy',label:'Молочные продукты, сыр и яйца',products:['egg','yogurt','cheese','feta','butter','curd','milk','sourcream','bar','creamcheese']},
+ {id:'frozen',label:'Заморозка и тесто',products:['broccoli','shrimp','berries','dough','puffdough']},
  {id:'other',label:'Остальное',products:[]}
 ];
 export function shoppingDepartment(id){
