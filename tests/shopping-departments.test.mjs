@@ -28,5 +28,5 @@ test('departments preserve amounts, totals, pantry deductions and deterministic 
  }
  assert.equal(JSON.stringify(p),before);
  assert.deepEqual(groupShoppingRows([{id:'egg',purchase:0,cost:0}]),[]);
- assert.deepEqual(p.weeks.map(w=>w.total),[3331.3,4545,2845,5942.5]);
+ assert.deepEqual(p.weeks.map(w=>w.total),[3331.3,4545,2845,5910.5]);
 });

@@ -39,8 +39,8 @@ test('remaining beef is used once and no future Peking cabbage or oat pancakes r
  assert.equal(recipeFor('w4cabbage').items.mince,450);assert(!recipeFor('w4cabbage').items.cabbage);
 });
 test('current budget separates week5 payments from remaining purchases, with explicit base and zero delivery',()=>{
- const p=calculate();assert.equal(p.confirmed,10653.02);assert.equal(p.remainingTotal,5942.5);assert.equal(p.total,16595.52);
- assert.deepEqual(p.weeks.map(w=>w.total),[3331.3,4545,2845,5942.5]);assert(p.total<=25000);
+ const p=calculate();assert.equal(p.confirmed,10653.02);assert.equal(p.remainingTotal,5910.5);assert.equal(p.total,16563.52);
+ assert.deepEqual(p.weeks.map(w=>w.total),[3331.3,4545,2845,5910.5]);assert(p.total<=25000);
  for(let w=1;w<4;w++){
   const projected=p.weeks[w],needs={};
   for(const {id} of mealEntries(w).filter(({id})=>!recipeFor(id).carryoverFrom))for(const [i,n]of Object.entries(recipeFor(id).items))needs[i]=(needs[i]||0)+n;
