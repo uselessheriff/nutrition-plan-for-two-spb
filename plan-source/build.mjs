@@ -1,36 +1,54 @@
 import {readFile,writeFile} from 'node:fs/promises';
 const here=new URL('./',import.meta.url);
-const read=n=>readFile(new URL(n,here),'utf8');
-const active=(await read('active-plan.mjs')).replace(/^export /gm,'');
-const revision=(await read('revision-september.mjs')).replace(/^export /gm,'');
-const weekend=(await read('weekend-plan.mjs')).replace(/^export /gm,'');
-const seven=(await read('week-seven.mjs')).replace(/^export /gm,'');
-const eight=(await read('week-eight.mjs')).replace(/^export /gm,'');
-const departments=(await read('shopping-departments.mjs')).replace(/^export /gm,'');
+const read=name=>readFile(new URL(name,here),'utf8');
+const sources=['active-plan.mjs','revision-september.mjs','weekend-plan.mjs','week-seven.mjs','week-eight.mjs','october-plan.mjs','shopping-departments.mjs'];
+const parts=await Promise.all(sources.map(async name=>(await read(name)).replace(/^export /gm,'')));
 const model=(await read('model.mjs')).replace(/^import .*;\r?\n/gm,'').replace(/^export \{.*\};\r?\n/gm,'').replace(/^export /gm,'');
 const recipes=(await read('recipes.mjs')).replace(/^import .*;\r?\n/gm,'');
-const script=active+'\n'+revision+'\n'+weekend+'\n'+seven+'\n'+eight+'\n'+departments+'\n'+model+'\n'+recipes+'\n'+await read('app.js');
-new Function(script); // Reject broken inline JS before creating a public artifact.
+const script=[...parts,model,recipes,await read('app.js')].join('\n');
+new Function(script);
 const html=(await read('template.html')).replace('/* STYLE */',await read('style.css')).replace('/* APP */',()=>script);
 if(html.includes('/* APP */')||html.includes('/* STYLE */'))throw Error('Unresolved template');
 await writeFile(new URL('../public/nutrition-plan.html',here),html,'utf8');
 console.log('Built standalone nutrition-plan.html ('+Buffer.byteLength(html)+' bytes)');
+
 import './recipes.mjs';
-import {weeks,slots,calculate,recipeFor,calories,ingredients,extras,S,portionPolicy,portionLabel,currentIngredient} from './model.mjs';
-import {weekFiveActual,weekFiveMealUpdates,weekFivePurchases} from './revision-september.mjs';
-import {mealEntries,weekTheme} from './model.mjs';
+import {weeks,slots,calculate,recipeFor,calories,ingredients,extras,S,portionPolicy,portionLabel,currentIngredient,mealEntries,weekTheme} from './model.mjs';
+import {weekFiveMealUpdates,weekFivePurchases} from './revision-september.mjs';
 import {weekendPolicy} from './weekend-plan.mjs';
 import {groupShoppingRows} from './shopping-departments.mjs';
 import {weekSevenNotes} from './week-seven.mjs';
-import {weekEightNotes,confirmedThroughSeven,weekSevenPurchases,weekSevenExtras} from './week-eight.mjs';
+import {weekEightNotes,weekSevenPurchases,weekSevenExtras} from './week-eight.mjs';
+import {octoberNotes,confirmedThroughEight,weekEightPurchases,weekEightExtras} from './october-plan.mjs';
 const projection=calculate(1);
-const quantity=(id,n)=>n+' '+ingredients[id].unit;
+const quantity=(id,n,week)=>n+' '+currentIngredient(id,week).unit;
+const notesFor=index=>index>=4?[
+ ...(index===4?octoberNotes:[]),
+ 'Покупайте скоропортящиеся продукты и фрукты на текущую неделю. Пн–Чт и Вс: 3 умеренные порции; Пт: 2. В выходные только плотный завтрак и ужин.',
+ 'Обед Ани охладите в течение двух часов после готовки. Цены — прогноз, не факт покупки.'
+]:[
+ ...(index===2?weekSevenNotes:index===3?weekEightNotes:[]),
+ index===0?'Исходный план недели 5 сохранён в архиве; изменения по факту см. в карточках.':weekendPolicy,
+ index===1?'В понедельник недели 6 отдельный перенос пюре с эскалопом; не считать его новой покупкой.':portionPolicy
+];
+const pastShopping=index=>index===0?weekFivePurchases:index===2?[...weekSevenPurchases,...weekSevenExtras]:index===3?[...weekEightPurchases,...weekEightExtras]:[];
 const futureMenuWeeks=weeks.map((week,index)=>({
- number:index+5,title:weekTheme(index),focus:week.label+' · бюджет 25 000 ₽ на цикл · план, не факт',
+ number:index+5,title:weekTheme(index),focus:week.label+' · бюджет 25 000 ₽ на новый цикл · план, не факт',
  variety:[...new Set(mealEntries(index).map(({id})=>recipeFor(id,1).protein))],
- prep:[...(index===2?weekSevenNotes:index===3?weekEightNotes:[]),index===0?'Исходный план недели 5 сохранён для истории; фактические замены и пропуски отмечены в карточках. Не повторять старую закупку.':'Разделите продукты по рецептам; поздние порции заморозьте.',index===0?portionPolicy:index===3?weekendPolicy+' Исключение недели 8: субботний пирог на 4 порции, 2 на ужин и 2 на воскресный завтрак.':weekendPolicy,index===1?'Понедельник: обед Ане и ужин парню — пюре с эскалопом из воскресенья. Новую свинину с грибами готовим только на 2 порции: Ане на ужин Пн и обед Вт.':index===0?'Список остатков для следующей недели отдельно подтверждён после всей готовки.':'По плану обед понедельника — порция из воскресенья; её фактическое наличие нужно подтвердить. При отсутствии понадобится отдельно согласованная замена.','Пекинская капуста исключена из будущих блюд. Простые салаты к сытным ужинам не обязательны; салаты с рыбой и морепродуктами — отдельные блюда.','Молоко, хлеб и пригодные молочные остатки для более поздних недель сразу разделите и заморозьте, если это разрешено упаковкой; не храните вскрытую упаковку неделями в холодильнике. Если заморозка не подходит или срок истёк, остаток не вычитается и требуется допокупка.','Обеденную порцию уберите в неглубокий контейнер в холодильник в течение 2 часов, храните при 4 °C или ниже. Горячую часть разогрейте до 74 °C; салат и заправку храните отдельно.'],
- meals:mealEntries(index).map(({id,slot})=>{const r=recipeFor(id,1);return {day:slots[slot][0],type:slots[slot][1],title:r.title,batch:portionLabel(r)+' · ≈ '+calories(r)+' ккал / порцию',recipe:{time:r.time+' мин',portions:r.portions+' порции',ingredients:Object.entries(r.items).map(([id,q])=>(r.revised?currentIngredient(id,r.pricingWeek??2):ingredients[id]).name+' — '+quantity(id,q)),steps:r.steps,note:(index===0?'Архивный план, не фактическая рецептура замены. ':'')+(r.note||S)+' Масса круп и пасты — сухая, мяса — без костей. Калории — на одну порцию, не дневная норма. Обеденную порцию уберите в холодильник в течение 2 часов; храните при 4 °C или ниже и съешьте на следующий день. Горячую часть разогрейте до 74 °C.'}};}),
- shopping:index===1||index===2?[]:index===0?weekFivePurchases.map(r=>({category:'Куплено',name:r.name,quantity:r.quantity,price:r.amount})):groupShoppingRows(projection.weeks[index].rows,id=>currentIngredient(id).name).flatMap(group=>group.rows.map(r=>({category:group.label,name:currentIngredient(r.id).name,quantity:quantity(r.id,r.purchase),price:r.cost}))),
+ prep:notesFor(index),
+ meals:mealEntries(index).map(({id,slot})=>{
+  const r=recipeFor(id,1);
+  return {day:slots[slot][0],type:slots[slot][1],title:r.title,batch:portionLabel(r)+' · ≈ '+calories(r)+' ккал / порцию',recipe:{time:r.time+' мин',portions:r.portions+' порции',ingredients:Object.entries(r.items).map(([item,q])=>currentIngredient(item,index).name+' — '+quantity(item,q,index)),steps:r.steps,note:(index===0?'Архивный план, не фактическая рецептура замены. ':'')+(r.note||S)+' Крупы и паста сухие, мясо без костей. Калории — на одну порцию, не дневная норма.'}};
+ }),
+ shopping:index===1?[]:index<=3?pastShopping(index).map(r=>({category:'Куплено',name:r.name,quantity:r.quantity||'количество не сообщено',price:r.amount})):groupShoppingRows(projection.weeks[index].rows,id=>currentIngredient(id,index).name).flatMap(group=>group.rows.filter(r=>r.purchase>0).map(r=>({category:group.label,name:currentIngredient(r.id,index).name,quantity:quantity(r.id,r.purchase,index),price:r.cost})))
 }));
-const futureExtras=weeks.map((_,i)=>extras(1,i).map(e=>({title:e.title,how:e.how,quantity:Object.entries(e.items).map(([id,q])=>ingredients[id].name+' '+quantity(id,q)).join('; ')})));
-await writeFile(new URL('../app/future-plan-data.ts',here),'// Generated by plan-source/build.mjs. Do not edit manually.\nimport type { Week } from "./plan-data";\nimport type { MealOutcome, MealPreference } from "./meal-history";\nexport const futureMenuWeeks: Week[] = '+JSON.stringify(futureMenuWeeks,null,2)+';\nexport const futureExtras = '+JSON.stringify(futureExtras,null,2)+';\nexport const futureWeekTotals = '+JSON.stringify(projection.weeks.map(w=>w.total))+';\nexport const futurePlanTotal = '+projection.total+';\nexport const futureConfirmedTotal = '+confirmedThroughSeven+';\nexport const futureRemainingTotal = '+projection.remainingTotal+';\nexport const futureWeekFiveOutcomes: Record<number,{outcome:MealOutcome;preference:MealPreference;note:string}> = '+JSON.stringify(weekFiveMealUpdates)+';\n','utf8');
+const futureExtras=weeks.map((_,i)=>extras(1,i).map(e=>({title:e.title,how:e.how,quantity:Object.entries(e.items).map(([id,q])=>currentIngredient(id,i).name+' '+quantity(id,q,i)).join('; ')})));
+const generated='// Generated by plan-source/build.mjs. Do not edit manually.\nimport type { Week } from "./plan-data";\nimport type { MealOutcome, MealPreference } from "./meal-history";\n'+
+ 'export const futureMenuWeeks: Week[] = '+JSON.stringify(futureMenuWeeks,null,2)+';\n'+
+ 'export const futureExtras = '+JSON.stringify(futureExtras,null,2)+';\n'+
+ 'export const futureWeekTotals = '+JSON.stringify(projection.weeks.map(w=>w.total))+';\n'+
+ 'export const futurePlanTotal = '+projection.total+';\n'+
+ 'export const futureConfirmedTotal = '+confirmedThroughEight+';\n'+
+ 'export const futureRemainingTotal = '+projection.remainingTotal+';\n'+
+ 'export const futureWeekFiveOutcomes: Record<number,{outcome:MealOutcome;preference:MealPreference;note:string}> = '+JSON.stringify(weekFiveMealUpdates)+';\n';
+await writeFile(new URL('../app/future-plan-data.ts',here),generated,'utf8');

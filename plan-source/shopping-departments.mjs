@@ -1,12 +1,12 @@
 // Store departments are presentation metadata only: never change recipe needs or payments.
 export const shoppingDepartments = [
- {id:'produce',label:'Овощи, фрукты и зелень',products:['eggplant','carrot','tomato','cucumber','spinach','potato','onion','cabbage','pepper','wholepepper','zucchini','mushrooms','garlic','apple','banana']},
+ {id:'produce',label:'Овощи, фрукты и зелень',products:['eggplant','carrot','tomato','cucumber','spinach','potato','onion','cabbage','pepper','wholepepper','zucchini','mushrooms','garlic','apple','banana','mandarin','pear']},
  {id:'bakery',label:'Хлеб и лаваш',products:['bread','pita']},
  {id:'grocery',label:'Крупы, макароны и бакалея',products:['oats','couscous','rice','bulgur','semolina','millet','pasta','buckwheat','nuts','oil','flour','sugar','salt','spices']},
- {id:'canned',label:'Консервы, соусы и варенье',products:['sauerkraut','tuna','pickles','marinated','passata','jam','mustard','lemon']},
+ {id:'canned',label:'Консервы, соусы и варенье',products:['sauerkraut','tuna','pickles','marinated','passata','jam','mustard','lemon','beans']},
  {id:'drinks',label:'Соки и напитки',products:['juice']},
- {id:'meat-fish',label:'Мясо, птица и рыба',products:['chicken','pork','beef','mince','turkey','liver','fish','salmon','porkmince','mixedmince']},
- {id:'dairy',label:'Молочные продукты, сыр и яйца',products:['egg','yogurt','cheese','feta','butter','curd','milk','sourcream','bar','creamcheese']},
+ {id:'meat-fish',label:'Мясо, птица и рыба',products:['chicken','pork','beef','mince','turkey','liver','fish','salmon','porkmince','mixedmince','ham','porkbones']},
+ {id:'dairy',label:'Молочные продукты, сыр и яйца',products:['egg','yogurt','cheese','feta','butter','curd','curd23','milk','sourcream','bar','creamcheese']},
  {id:'frozen',label:'Заморозка и тесто',products:['broccoli','shrimp','berries','dough','puffdough']},
  {id:'other',label:'Остальное',products:[]}
 ];

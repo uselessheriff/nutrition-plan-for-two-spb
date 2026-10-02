@@ -143,11 +143,11 @@ function PlanFrame({view}:{view:"shopping"|"stock"|"expenses"}) {
   window.addEventListener("message",receive);
   return ()=>window.removeEventListener("message",receive);
  },[]);
- return <iframe ref={frame} className="workspace-frame" style={{height}} src={`./nutrition-plan.html?embed=1&view=${view}`} title={view==="shopping"?"Закупки недель 5–8":view==="stock"?"Остатки продуктов":"Записать расходы"} />;
+ return <iframe ref={frame} className="workspace-frame" style={{height}} src={`./nutrition-plan.html?embed=1&view=${view}`} title={view==="shopping"?"Закупки недель 5–12":view==="stock"?"Остатки продуктов":"Записать расходы"} />;
 }
 export default function Home(){
  const [activePage,setActivePage]=useState<PageId>("archive");
- const [weekNumber,setWeekNumber]=useState(8);
+ const [weekNumber,setWeekNumber]=useState(9);
  const [selected,setSelected]=useState<Meal|null>(null);
  const [recipeTrigger,setRecipeTrigger]=useState<HTMLButtonElement|null>(null);
  const closeButton=useRef<HTMLButtonElement>(null);
@@ -169,16 +169,18 @@ export default function Home(){
   return ()=>{document.body.classList.remove("modal-open");document.removeEventListener("keydown",keyboard);recipeTrigger?.focus();};
  },[selected,recipeTrigger]);
  function showPage(page:PageId){setActivePage(page);setSelected(null);window.scrollTo({top:0,behavior:"smooth"});}
+ function weekTab(week:Week){
+  const weekRange=PLAN_WEEK_RANGES.find(r=>r.number===week.number)!;
+  const state=calendar?.weeks.find(r=>r.number===week.number)?.temporalStatus;
+  return <button id={`archive-week-tab-${week.number}`} type="button" aria-pressed={weekNumber===week.number} className={`${weekNumber===week.number?"active":""} ${week.number<=4?"archived-tab":""}`} key={week.number} onClick={()=>setWeekNumber(week.number)}><span>Неделя {week.number}<small>{formatPlanWeekRange(weekRange).replace(" 2026","")}</small><small>{state==="current"?"Сейчас по Москве":week.number<=4?"Архив":state==="past"?"Прошла · факт не подтверждён":"План"}</small></span></button>;
+ }
  return <>
  <header className="topbar"><div className="shell topbar-inner"><button className="brand" onClick={()=>showPage("archive")}><span className="brand-mark">ПР</span><span>Петербургский рацион</span></button><span className="location">На двоих · 25 000 ₽ / 4 недели</span></div><div className="page-tabs-shell"><div className="shell page-tabs" role="tablist" aria-label="Разделы сайта">{pageTabs.map(tab=><button key={tab.id} id={`page-tab-${tab.id}`} role="tab" aria-selected={activePage===tab.id} aria-controls={`page-${tab.id}`} className={activePage===tab.id?"active":""} onClick={()=>showPage(tab.id)}>{tab.label}</button>)}</div></div></header>
  <main className="compact-workspace">
  {activePage==="archive"&&<section id="page-archive" className="section shell page-panel" role="tabpanel" aria-labelledby="page-tab-archive">
- <div className="section-heading"><div><span className="eyebrow">Меню и архив · недели 1–8</span><h1>Что готовим</h1></div><p>{calendar?`${calendar.russianDate} · ${calendar.moscowTime} МСК`:"Сверяем дату по Москве…"}{calendar?.activePlanWeek&&<><br/><button className="text-button" onClick={()=>setWeekNumber(calendar.activePlanWeek!)}>Открыть текущую неделю {calendar.activePlanWeek}</button></>}</p></div>
- <div className="tabs all-weeks" aria-label="Недели меню">{menuWeeks.map(week=>{
- const weekRange=PLAN_WEEK_RANGES.find(r=>r.number===week.number)!;
- const state=calendar?.weeks.find(r=>r.number===week.number)?.temporalStatus;
- return <button id={`archive-week-tab-${week.number}`} type="button" aria-pressed={weekNumber===week.number} className={`${weekNumber===week.number?"active":""} ${week.number<=4?"archived-tab":""}`} key={week.number} onClick={()=>setWeekNumber(week.number)}><span>Неделя {week.number}<small>{formatPlanWeekRange(weekRange).replace(" 2026","")}</small><small>{state==="current"?"Сейчас по Москве":week.number<=4?"Архив":state==="past"?"Прошла · факт не подтверждён":"План"}</small></span></button>;
- })}</div>
+ <div className="section-heading"><div><span className="eyebrow">Меню и архив · недели 1–12</span><h1>Что готовим</h1></div><p>{calendar?`${calendar.russianDate} · ${calendar.moscowTime} МСК`:"Сверяем дату по Москве…"}{calendar?.activePlanWeek&&<><br/><button className="text-button" onClick={()=>setWeekNumber(calendar.activePlanWeek!)}>Открыть текущую неделю {calendar.activePlanWeek}</button></>}</p></div>
+ <div className="tabs all-weeks" aria-label="Недели 9–12">{menuWeeks.slice(8).map(weekTab)}</div>
+ <details className="archive-weeks" open={weekNumber<=8}><summary>Архив недель 1–8</summary><div className="tabs all-weeks" aria-label="Архив недель 1–8">{menuWeeks.slice(0,8).map(weekTab)}</div></details>
  <div className="week-head"><div><span>{String(weekNumber).padStart(2,"0")}</span><div><h2>{current.title}</h2><p>{formatPlanWeekRange(range)} · {isHistorical?"архив":temporal==="past"?"прошедшее меню, готовка не подтверждена":"запланировано"}</p></div></div><button className="secondary" onClick={()=>showPage(isHistorical?"expenses":"purchases")}>{isHistorical?"Расходы":"Что купить"}</button></div>
  {weekNumber>=6&&<p className="muted">Выходные: плотный завтрак и ужин, без обеда. Воскресный ужин — на 3 порции, с обедом Ане на понедельник.</p>}
  <div className="meal-list">{current.meals.map((meal,index)=>{
@@ -190,7 +192,13 @@ export default function Home(){
  </section>}
  {activePage==="purchases"&&<section id="page-purchases" className="page-panel" role="tabpanel" aria-labelledby="page-tab-purchases"><PlanFrame view="shopping"/></section>}
  {activePage==="stock"&&<section id="page-stock" className="page-panel" role="tabpanel" aria-labelledby="page-tab-stock"><PlanFrame view="stock"/></section>}
- {activePage==="expenses"&&<section id="page-expenses" className="page-panel" role="tabpanel" aria-labelledby="page-tab-expenses"><div className="shell section"><div className="section-heading"><div><span className="eyebrow">Расходы</span><h1>План отдельно от покупок</h1></div></div><div className="expense-period-cards"><article className="panel"><h2>Недели 5–8 · учтено + план</h2><strong className="finance-total">{money(futurePlanTotal)}</strong><p>Лимит {money(budget)}. Передано покупок на {money(futureConfirmedTotal)}: неделя 5 — 3 331,30 ₽, чек 12.09 — 4 175,16 ₽ без назначения неделе, допокупка 19.09 — 500 ₽; неделя 7 — 2 646,56 ₽ (чек и допокупки). Полнота расходов не подтверждена. Закупка недели 8: {money(futureRemainingTotal)} с резервом 5%, после вычета подтверждённых остатков. База показана конкретными покупками, без отдельного резерва 800 ₽. Без доставки и плановой покупки воды.</p><div className="compact-totals">{futureWeekTotals.slice(3).map((n,i)=><span key={i}>Неделя {i+8} · план<strong>{money(n)}</strong></span>)}</div></article><article className="panel"><h2>Недели 1–4 · факт</h2><strong className="finance-total">{money(confirmedTotal)}</strong><p>10 августа — 6 сентября. Только учтённые покупки; новые недели сюда не добавляются.</p><div className="compact-totals">{historicalTotals.map((n,i)=><span key={i}>Неделя {i+1}<strong>{money(n)}</strong></span>)}</div><details className="expenses"><summary>Показать прошлые покупки</summary><div className="receipt-history">{confirmedPurchases.map((item,i)=><div key={i}><span>{item.name}<small>{item.source}</small></span><strong>{money(item.amount)}</strong></div>)}</div></details></article></div></div><PlanFrame view="expenses"/></section>}
+ {activePage==="expenses"&&<section id="page-expenses" className="page-panel" role="tabpanel" aria-labelledby="page-tab-expenses">
+  <div className="shell section"><div className="section-heading"><div><span className="eyebrow">Расходы</span><h1>План отдельно от покупок</h1></div></div>
+   <div className="expense-period-cards"><article className="panel"><h2>Недели 9–12 · прогноз</h2><strong className="finance-total">{money(futurePlanTotal)}</strong><p>Лимит {money(budget)} на четыре недели. Это корзины после вычета подтверждённых остатков с резервом цен 5%; чеков за новые недели пока нет. Вода и доставка не запланированы. Фрукты покупаем еженедельно, без яблок.</p><div className="compact-totals">{futureWeekTotals.slice(4).map((n,i)=><span key={i}>Неделя {i+9} · план<strong>{money(n)}</strong></span>)}</div></article>
+   <article className="panel"><h2>Недели 5–8 · сообщённые покупки</h2><strong className="finance-total">{money(futureConfirmedTotal)}</strong><p>Неделя 8: чек 27.09 — 5 103,62 ₽; дополнительные покупки — 970 ₽, всего 6 073,62 ₽. До неё было сообщено 10 653,02 ₽. Полнота расходов за цикл не подтверждена; прежние прогнозы не превращены в факт.</p><details className="expenses"><summary>Подробности в журнале расходов</summary><p>Покупки и недели разнесены по чекам и сообщениям. Воду 120 ₽ учли только в прошлом факте, в будущих корзинах её нет.</p></details></article>
+   <article className="panel"><h2>Недели 1–4 · факт</h2><strong className="finance-total">{money(confirmedTotal)}</strong><p>10 августа — 6 сентября. Только учтённые покупки; новые недели сюда не добавляются.</p><div className="compact-totals">{historicalTotals.map((n,i)=><span key={i}>Неделя {i+1}<strong>{money(n)}</strong></span>)}</div><details className="expenses"><summary>Показать прошлые покупки</summary><div className="receipt-history">{confirmedPurchases.map((item,i)=><div key={i}><span>{item.name}<small>{item.source}</small></span><strong>{money(item.amount)}</strong></div>)}</div></details></article></div>
+  </div><PlanFrame view="expenses"/>
+ </section>}
  </main>
  <footer><div className="shell">Петербургский рацион · Санкт-Петербург · порции указаны в рецептах · калории и будущие цены приблизительные</div></footer>
  {selected&&<div className="backdrop"><button className="backdrop-dismiss" tabIndex={-1} aria-label="Закрыть рецепт" onClick={()=>setSelected(null)}/><section className="recipe" role="dialog" aria-modal="true" aria-labelledby="recipe-title"><div className="recipe-head"><div><span>Неделя {weekNumber} · {selected.day} · {selected.type}</span><h2 id="recipe-title">{selected.title}</h2></div><button ref={closeButton} type="button" aria-label="Закрыть рецепт" onClick={()=>setSelected(null)}>×</button></div><div className="recipe-meta"><span>{selected.recipe.time}</span><span>{selected.batch}</span></div><div className="recipe-body"><div><h3>Ингредиенты на {selected.recipe.portions}</h3><ul>{selected.recipe.ingredients.map((s,i)=><li key={i}>{s}</li>)}</ul></div><div><h3>Пошаговое приготовление</h3><ol>{selected.recipe.steps.map((s,i)=><li key={i}>{s}</li>)}</ol></div></div>{selected.recipe.note&&<p className="recipe-note">{selected.recipe.note}</p>}</section></div>}

@@ -3,6 +3,9 @@
 .all-weeks {display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px}
 .all-weeks button {min-width:0;width:100%;text-align:left}
 .all-weeks button small {font-size:.875rem}
+.archive-weeks {margin:10px 0 18px;border:1px solid #dce5dc;border-radius:12px;padding:10px 12px;background:#fafbf8}
+.archive-weeks > summary {cursor:pointer;font-weight:700;color:#365c47}
+.archive-weeks .all-weeks {margin-top:12px}
 .compact-workspace .week-head {gap:20px;flex-wrap:wrap}
 .text-button {border:0;background:none;color:#215a3e;text-decoration:underline;padding:7px 0;cursor:pointer;font:inherit}
 .expense-period-cards {display:grid;grid-template-columns:1fr 1fr;gap:20px}

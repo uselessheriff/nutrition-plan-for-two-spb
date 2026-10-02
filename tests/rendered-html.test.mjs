@@ -7,30 +7,37 @@ import "../plan-source/recipes.mjs";
 import { calculate, weeks, recipeFor, mealEntries, slots } from "../plan-source/model.mjs";
 const read=(name)=>readFile(new URL("../"+name,import.meta.url),"utf8");
 async function moduleFrom(name){const compiled=ts.transpileModule(await read(name),{compilerOptions:{target:ts.ScriptTarget.ES2022,module:ts.ModuleKind.ES2022}}).outputText;return import("data:text/javascript;base64,"+Buffer.from(compiled).toString("base64"));}
-test("renders four useful sections with weeks 1–8 and week 8 selected",async()=>{
+test("renders four useful sections with weeks 1–12 and week 9 selected",async()=>{
  const {default:worker}=await import(new URL("../dist/server/index.js",import.meta.url));
  const response=await worker.fetch(new Request("http://localhost/",{headers:{accept:"text/html"}}),{ASSETS:{fetch:async()=>new Response("Not found",{status:404})}},{waitUntil(){},passThroughOnException(){}});
  assert.equal(response.status,200);
  const html=await response.text();
  for(const id of ["archive","purchases","stock","expenses"])assert(html.includes('page-tab-'+id));
- for(let n=1;n<=8;n++)assert(html.includes('archive-week-tab-'+n));
- assert.match(html,/aria-pressed="true"[^>]*|Неделя 5/);
- assert(html.includes("Сырники и большой рыбный пирог"));
+ for(let n=1;n<=12;n++)assert(html.includes('archive-week-tab-'+n));
+ assert.match(html,/aria-pressed="true"[^>]*|Неделя 9/);
+ assert(html.includes("Остатки недели 8, сырники и мандарины"));
  for(const removed of ["Новые 4 недели","Пример журнала","Выгода продуктов и ценовые сигналы","База рецептов","Выберите месячный лимит"])assert(!html.includes(removed),removed);
 });
-test("generates archived week5 and nine meals per future week from the same fixed-25k shopping source",async()=>{
+test("generates archived weeks 5–8 and planned weeks 9–12 from the same fixed-25k source",async()=>{
  const data=await moduleFrom("app/future-plan-data.ts");
- assert.deepEqual(data.futureMenuWeeks.map(w=>w.number),[5,6,7,8]);
- assert.equal(data.futurePlanTotal,calculate(1).total);assert.equal(data.futureConfirmedTotal,10653.02);assert.equal(data.futureRemainingTotal,calculate(1).remainingTotal);
+ assert.deepEqual(data.futureMenuWeeks.map(w=>w.number),[5,6,7,8,9,10,11,12]);
+ assert.equal(data.futurePlanTotal,calculate(1).total);assert.equal(data.futureConfirmedTotal,16726.64);assert.equal(data.futureRemainingTotal,calculate(1).remainingTotal);
+ assert(data.futurePlanTotal<=25000);
  assert.deepEqual(data.futureWeekTotals,calculate(1).weeks.map(w=>w.total));
- assert.equal(data.futureMenuWeeks.flatMap(w=>w.meals).length,38);
- for(let i=0;i<4;i++)for(let j=0;j<mealEntries(i).length;j++){
+ assert.equal(data.futureMenuWeeks.flatMap(w=>w.meals).length,74);
+ for(let i=0;i<8;i++)for(let j=0;j<mealEntries(i).length;j++){
   const meal=data.futureMenuWeeks[i].meals[j],recipe=recipeFor(mealEntries(i)[j].id,1);
   assert.equal(meal.day,slots[mealEntries(i)[j].slot][0]);assert.equal(meal.type,slots[mealEntries(i)[j].slot][1]);assert.equal(meal.title,recipe.title);assert.deepEqual(meal.recipe.steps,recipe.steps);
   assert.equal(meal.recipe.ingredients.length,Object.keys(recipe.items).length);
   assert.equal(meal.recipe.portions,recipe.portions+' порции');
   assert.match(meal.batch,new RegExp(recipe.portions+' порции.*ккал'));
  }
+ for(const week of data.futureMenuWeeks.slice(4)){
+  assert.equal(week.meals.length,9);
+  assert.equal(week.meals.filter(m=>m.type==='Завтрак').length,2);
+  assert(!week.shopping.some(item=>/яблок/iu.test(item.name)));
+ }
+ assert.deepEqual(calculate(1).weeks[4].rows.find(r=>r.id==='pork').opening,400);
 });
 test("keeps historical accounting separate from future weeks and never invents cooked status",async()=>{
  const data=await moduleFrom("app/plan-data.ts");

@@ -3,10 +3,11 @@ import {revisedRecipe, latestStock, currentPriceOverrides, weekFiveActual} from 
 import {heartyBreakfast, weekendPolicy} from './weekend-plan.mjs';
 import {weekSevenRecipe,weekSevenStock,weekSevenUnknown,weekSevenPrices,cycleConfirmed} from './week-seven.mjs';
 import {weekEightRecipe,weekEightStock,weekEightUnknown,weekEightPrices,confirmedThroughSeven} from './week-eight.mjs';
+import {octoberRecipe,octoberStock,octoberUnknown,octoberPrices,confirmedThroughEight,weekEightReportedTotal} from './october-plan.mjs';
 export {portionPolicy, portionLabel};
 // Quantities are raw/edible weights unless a counted unit is explicitly shown.
 // Prices below are planning assumptions, never historical spending.
-export const period = '07.09–04.10.2026';
+export const period = '05.10–01.11.2026';
 export const reviewDate = '06.09.2026';
 export const tiers = [
   {name:'До 20 000 ₽',cap:20000,copy:'Самовывоз; смешанный фарш, свинина вместо индейки и два блюда из одной упаковки печени. Салат с яйцом вместо креветок. Сок и сырки остаются, но реже.'},
@@ -32,6 +33,12 @@ rows.sauerkraut=['Квашеная капуста без свободного р
 rows.wholepepper=['Болгарский перец, целиком','шт.',1,45,40,0];
 rows.puffdough=['Тесто слоёное дрожжевое','г',500,200,3.6,0];
 rows.creamcheese=['Сыр творожный сливочный для пирога','г',140,180,2.5,0];
+rows.curd23=['Продукт творожный для сырников 23%','г',500,129.99,2.6,0];
+rows.mandarin=['Мандарины, вес с кожурой','г',1000,240,.4,0];
+rows.pear=['Груши, мякоть','г',1000,230,.57,0];
+rows.ham=['Ветчина','г',300,230,1.5,0];
+rows.beans=['Белая фасоль консервированная, масса банки','г',400,100,1.1,0];
+rows.porkbones=['Кости копчёных рёбер, не мясо','г',400,0,0,0];
 // Updated from the household's price memory. Rounded FUTURE estimates, not edits to receipts.
 rows.egg[3]=130; rows.yogurt[3]=90; rows.cheese[3]=190; rows.feta[3]=170;
 rows.milk[3]=100; rows.pasta[3]=90; rows.rice[3]=140; rows.bulgur[3]=110;
@@ -55,6 +62,7 @@ export function R(id,title,time,protein,items,steps,note='',salt=2) {
 }
 export const S = 'Ингредиенты и все граммовки рассчитаны на 2 порции. Делите белок поровну; указанные калории — половина общего блюда, не дневная норма.';
 export function recipeFor(id,tier=1,legacy=false) {
+ const october=octoberRecipe(id);if(october)return {...october,items:{...october.items},steps:[...october.steps]};
  const r=recipes.find(x=>x.id===id); if(!r) throw Error('Unknown recipe '+id);
  const copy={...r,items:{...r.items},steps:[...r.steps]};
  if(tier===0 && ['w1cutlet','w2meatballs'].includes(id)) {delete copy.items.mince;copy.items.mixedmince=400;copy.title=copy.title.replace('Говяжьи','Домашние');copy.protein='Смешанный фарш';copy.steps=copy.steps.map(s=>s.replace('400 г фарша','400 г смешанного фарша (свинина + говядина)'));}
@@ -67,13 +75,17 @@ export function recipeFor(id,tier=1,legacy=false) {
  if(tier===2 && id==='w4fish') {copy.items.salmon=copy.items.fish;delete copy.items.fish;copy.title=copy.title.replace('Горбуша','Лосось');}
  return tier===1?(legacy?activeRecipe(copy):weekEightRecipe(weekSevenRecipe(heartyBreakfast(revisedRecipe(activeRecipe(copy)))))):{...copy,portions:2};
 }
-export function currentIngredient(id,week=3){return {...ingredients[id],...currentPriceOverrides[id],...(week>=2?weekSevenPrices[id]:{}),...(week>=3?weekEightPrices[id]:{})};}
+export function currentIngredient(id,week=3){return {...ingredients[id],...currentPriceOverrides[id],...(week>=2?weekSevenPrices[id]:{}),...(week>=3?weekEightPrices[id]:{}),...(week>=4?octoberPrices[id]:{})};}
 export function calories(r){return Math.round(Object.entries(r.items).reduce((s,[id,q])=>s+(r.revised?currentIngredient(id,r.pricingWeek??2):ingredients[id]).kcal*q,0)/(r.portions||2));}
 export const weeks=[
  {label:'7–13 сентября',date:'2026-09-07',theme:'Сначала остатки',ids:['w1chicken','w1eggplant','w1tortilla','w1pasta','w1cutlet','w1oats','w1salad','w1bolognese','w1syrniki','w1toast','w1pork']},
  {label:'14–20 сентября',date:'2026-09-14',theme:'Тунец и домашняя классика',ids:['w2turkey','w2liver','w2tuna','w2pork','w2pizza','w2millet','w2salad','w2meatballs','w2eggs','w2pita','w2chicken']},
  {label:'21–27 сентября',date:'2026-09-21',theme:'Креветки без горы кускуса',ids:['w3chicken','w3pork','w3pasta','w3turkey','w3frittata','w3pancake','w3shrimp','w3cutlet','w3oats','w3toast','w3pilaf']},
- {label:'28 сентября – 4 октября',date:'2026-09-28',theme:'Рыба, ленивые голубцы и запеканка',ids:['w4chicken','w4fish','w4pork','w4cabbage','w4pasta','w4curd','w4salad','w4turkey','w4millet','w4pita','w4cutlet']}
+ {label:'28 сентября – 4 октября',date:'2026-09-28',theme:'Рыба, ленивые голубцы и запеканка',ids:['w4chicken','w4fish','w4pork','w4cabbage','w4pasta','w4curd','w4salad','w4turkey','w4millet','w4pita','w4cutlet']},
+ {label:'5–11 октября',date:'2026-10-05',theme:'Остатки недели 8, сырники и мандарины',ids:['o9mon','o9tue','o9wed','o9thu','o9fri','o9satB',null,'o9satD','o9sunB',null,'o9sunD']},
+ {label:'12–18 октября',date:'2026-10-12',theme:'Банановые панкейки и домашняя классика',ids:['o10mon','o10tue','o10wed','o10thu','o10fri','o10satB',null,'o10satD','o10sunB',null,'o10sunD']},
+ {label:'19–25 октября',date:'2026-10-19',theme:'Сырники, красная рыба и умеренные порции',ids:['o11mon','o11tue','o11wed','o11thu','o11fri','o11satB',null,'o11satD','o11sunB',null,'o11sunD']},
+ {label:'26 октября – 1 ноября',date:'2026-10-26',theme:'Горячие ужины и плотные завтраки выходных',ids:['o12mon','o12tue','o12wed','o12thu','o12fri','o12satB',null,'o12satD','o12sunB',null,'o12sunD']}
 ];
 export const slots=[['Пн','Ужин',0],['Вт','Ужин',1],['Ср','Ужин',2],['Чт','Ужин',3],['Пт','Ужин',4],['Сб','Завтрак',5],['Сб','Обед',5],['Сб','Ужин',5],['Вс','Завтрак',6],['Вс','Обед',6],['Вс','Ужин',6]];
 export function mealEntries(week,tier=1,legacy=false) {
@@ -81,6 +93,10 @@ export function mealEntries(week,tier=1,legacy=false) {
 }
 export function weekTheme(week){return week===2?'Остатки в дело · архив плана':week===3?'Сырники и большой рыбный пирог':weeks[week].theme;}
 export function extras(tier,week,legacy=false) {
+ if(tier===1&&!legacy&&week>=4)return [
+  {title:'Свежие фрукты на неделю',items:{mandarin:1500,banana:500,pear:700},how:'Мандарины, бананы и груши распределите на 7 дней вдвоём; покупайте каждую неделю свежие. В рецептах завтраков фрукты посчитаны дополнительно. Яблок в октябрьской закупке нет.'},
+  {title:'Сок и сырки по желанию',items:{juice:1000,bar:2},how:'До 1 л сока на неделю и по 1 сырку каждому. Это приятное дополнение, не обязательная норма; невыпитый сок не нужно допивать через срок хранения.'}
+ ];
  const e=[{title:'Фрукты Пн–Пт',items:{apple:2000},how:'По 200 г яблок каждому в Пн–Пт, например после ужина. Фрукты в самих рецептах посчитаны отдельно.'},{title:'Сок Пн / Ср / Пт',items:{juice:1000},how:'Пн и Ср: по 150 мл каждому; Пт: по 200 мл. Не вместо воды.'},{title:'Сырки Вт / Чт',items:{bar:4},how:'По 1 сырку 40 г каждому во Вт и Чт. При оставшейся домашней выпечке замените сырок порцией выпечки по её составу.'}];
  e.push({title:'Перекус выходных: овсянка с молоком и бананом',items:{oats:120,milk:1000,banana:600},how:'В Сб и Вс каждому: 30 г овсянки, 250 мл молока и 150 г мякоти банана. Хлопья сварить в молоке по упаковке, добавить банан. Можно разделить между основными приёмами по аппетиту. Это еда на день, а не обязательный четвёртый приём.'});
  if(tier===0||tier===1) {e[0].items.apple=1000;e[0].how='По 100 г яблок каждому в Пн–Пт. Это дополнение к овощам, а не полный дневной объём фруктов и овощей.';e[1].items.juice=500;e[1].title='Сок Пн / Пт';e[1].how='В Пн и Пт по 125 мл каждому; открытую упаковку хранить по этикетке. Если срок меньше, выпить в два соседних дня.';e[2].items.bar=2;e[2].title='Сырки во вторник';e[2].how='По 1 сырку 40 г каждому во вторник. В четверг отдельная сладость не предусмотрена.';}
@@ -92,7 +108,7 @@ export function calculate(tier=1,grainStock={},legacy=false) {
  const inventory=Object.fromEntries(Object.values(ingredients).map(i=>[i.id,i.stock]));
  for(const id of ['rice','bulgur','couscous']) inventory[id]=Math.max(0,Number(grainStock[id])||0);
  const result=[];
- for(let w=0;w<4;w++) {
+ for(let w=0;w<(tier===1&&!legacy?8:4);w++) {
   const latest=tier===1&&!legacy&&w>=1;
   if(latest&&w===1){
    for(const id of Object.keys(inventory))inventory[id]=latestStock[id]||0;
@@ -105,14 +121,17 @@ export function calculate(tier=1,grainStock={},legacy=false) {
    for(const id of Object.keys(inventory))inventory[id]=weekEightStock[id]||0;
    for(const id of ['rice','bulgur','couscous'])if(id in grainStock)inventory[id]=Math.max(0,Number(grainStock[id])||0);
   }
+  if(latest&&w===4){for(const id of Object.keys(inventory))inventory[id]=octoberStock[id]||0;for(const id of ['bulgur','couscous'])if(id in grainStock)inventory[id]=Math.max(0,Number(grainStock[id])||0);}
+  if(latest&&w>4){for(const id of ['mushrooms','tomato','pepper','zucchini','mandarin','pear','banana','milk','yogurt','curd','curd23','sourcream','bread'])inventory[id]=0;}
   const used={},alloc={}; const add=(id,q,label)=>{used[id]=(used[id]||0)+q;(alloc[id]??=[]).push([label,q]);};
   mealEntries(w,tier,legacy).forEach(({id,slot})=>{const recipe=recipeFor(id,tier,legacy);if(!recipe.carryoverFrom)Object.entries(recipe.items).forEach(([key,q])=>add(key,q,`${slots[slot][0]} ${slots[slot][1]} · ${recipe.title}`));});
   extras(tier,w,legacy).forEach(e=>Object.entries(e.items).forEach(([id,q])=>add(id,q,e.title)));
-const rows=Object.entries(used).map(([id,q])=>{const i=latest?currentIngredient(id,w):ingredients[id],opening=inventory[id]||0;if((i.base&&(!latest||id==='spices'))||(latest&&w>=2&&(w===3?weekEightUnknown:weekSevenUnknown).includes(id)))return {id,used:q,opening:null,purchase:0,cost:0,closing:null,alloc:alloc[id],pack:i.pack,unitPrice:i.price};const count=Math.max(0,Math.ceil(Math.max(0,q-opening)/i.pack-1e-9)),purchase=count*i.pack,cost=Math.round(count*i.price*100)/100;inventory[id]=opening+purchase-q;return{id,used:q,opening,purchase,cost,closing:inventory[id],alloc:alloc[id],pack:i.pack,unitPrice:i.price};});
+const rows=Object.entries(used).map(([id,q])=>{const i=latest?currentIngredient(id,w):ingredients[id],opening=inventory[id]||0;if((i.base&&(!latest||id==='spices'))||(latest&&w>=2&&(w>=4?octoberUnknown:w===3?weekEightUnknown:weekSevenUnknown).includes(id)))return {id,used:q,opening:null,purchase:0,cost:0,closing:null,alloc:alloc[id],pack:i.pack,unitPrice:i.price};const count=Math.max(0,Math.ceil(Math.max(0,q-opening)/i.pack-1e-9)),purchase=count*i.pack,cost=Math.round(count*i.price*100)/100;inventory[id]=opening+purchase-q;return{id,used:q,opening,purchase,cost,closing:inventory[id],alloc:alloc[id],pack:i.pack,unitPrice:i.price};});
   const food=rows.reduce((s,r)=>s+r.cost,0),delivery=tier===1?0:[0,200,400][tier],base=w===0?(tier===0?600:800):0,bufferRate=tier===1?.05:.1,buffer=Math.ceil((food+base)*bufferRate),total=food+delivery+base+buffer;
   result.push({rows,food,delivery,base,bufferRate,buffer,total,remaining:{...inventory},isActual:tier===1&&!legacy&&w===0});
   if(tier===1&&!legacy&&w===0)Object.assign(result[0],{originalPlanTotal:total,food:weekFiveActual,base:0,buffer:0,total:weekFiveActual});
+  if(tier===1&&!legacy&&w===3)Object.assign(result[3],{originalPlanTotal:total,food:weekEightReportedTotal,base:0,buffer:0,total:weekEightReportedTotal,isActual:true});
  }
- const current=tier===1&&!legacy,remainingTotal=current?Math.round(result.slice(3).reduce((s,w)=>s+w.total,0)*100)/100:null;
- return {weeks:result,total:current?Math.round((confirmedThroughSeven+remainingTotal)*100)/100:Math.round(result.reduce((s,w)=>s+w.total,0)*100)/100,food:Math.round(result.reduce((s,w)=>s+w.food,0)*100)/100,confirmed:current?confirmedThroughSeven:0,remainingTotal};
+ const current=tier===1&&!legacy,remainingTotal=current?Math.round(result.slice(4).reduce((s,w)=>s+w.total,0)*100)/100:null;
+ return {weeks:result,total:current?remainingTotal:Math.round(result.reduce((s,w)=>s+w.total,0)*100)/100,food:Math.round(result.reduce((s,w)=>s+w.food,0)*100)/100,confirmed:current?confirmedThroughEight:0,remainingTotal};
 }
