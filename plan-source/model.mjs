@@ -37,8 +37,10 @@ rows.curd23=['Продукт творожный для сырников 23%','г
 rows.mandarin=['Мандарины, вес с кожурой','г',1000,240,.4,0];
 rows.pear=['Груши, мякоть','г',1000,230,.57,0];
 rows.ham=['Ветчина','г',300,230,1.5,0];
+rows.bacon=['Бекон копчёный в нарезке','г',200,179.99,5.31,0];
 rows.beans=['Белая фасоль консервированная, масса банки','г',400,100,1.1,0];
 rows.porkbones=['Кости копчёных рёбер, не мясо','г',400,0,0,0];
+rows.peas=['Горох колотый сухой','г',800,79.99,3.1,0];
 // Updated from the household's price memory. Rounded FUTURE estimates, not edits to receipts.
 rows.egg[3]=130; rows.yogurt[3]=90; rows.cheese[3]=190; rows.feta[3]=170;
 rows.milk[3]=100; rows.pasta[3]=90; rows.rice[3]=140; rows.bulgur[3]=110;

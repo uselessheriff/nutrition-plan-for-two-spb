@@ -38,7 +38,7 @@ const futureMenuWeeks=weeks.map((week,index)=>({
  prep:notesFor(index),
  meals:mealEntries(index).map(({id,slot})=>{
   const r=recipeFor(id,1);
-  return {day:slots[slot][0],type:slots[slot][1],title:r.title,batch:portionLabel(r)+' · ≈ '+calories(r)+' ккал / порцию',recipe:{time:r.time+' мин',portions:r.portions+' порции',ingredients:Object.entries(r.items).map(([item,q])=>currentIngredient(item,index).name+' — '+quantity(item,q,index)),steps:r.steps,note:(index===0?'Архивный план, не фактическая рецептура замены. ':'')+(r.note||S)+' Крупы и паста сухие, мясо без костей. Калории — на одну порцию, не дневная норма.'}};
+  return {day:slots[slot][0],type:slots[slot][1],title:r.title,batch:(r.newInPlan?'Новый вариант · ':'')+portionLabel(r)+' · ≈ '+calories(r)+' ккал / порцию',recipe:{time:r.time+' мин',portions:r.portions+' порции',ingredients:Object.entries(r.items).map(([item,q])=>currentIngredient(item,index).name+' — '+quantity(item,q,index)),steps:r.steps,note:(index===0?'Архивный план, не фактическая рецептура замены. ':'')+(r.note||S)+' Крупы и паста сухие, мясо без костей. Калории — на одну порцию, не дневная норма.'}};
  }),
  shopping:index===1?[]:index<=3?pastShopping(index).map(r=>({category:'Куплено',name:r.name,quantity:r.quantity||'количество не сообщено',price:r.amount})):groupShoppingRows(projection.weeks[index].rows,id=>currentIngredient(id,index).name).flatMap(group=>group.rows.filter(r=>r.purchase>0).map(r=>({category:group.label,name:currentIngredient(r.id,index).name,quantity:quantity(r.id,r.purchase,index),price:r.cost})))
 }));

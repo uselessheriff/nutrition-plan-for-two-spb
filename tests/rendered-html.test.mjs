@@ -37,7 +37,24 @@ test("generates archived weeks 5–8 and planned weeks 9–12 from the same fixe
   assert.equal(week.meals.filter(m=>m.type==='Завтрак').length,2);
   assert(!week.shopping.some(item=>/яблок/iu.test(item.name)));
  }
+ const friday=data.futureMenuWeeks[4].meals.find(meal=>meal.day==='Пт');
+ assert.match(friday.title,/беконом и шампиньонами/iu);
+ assert(!friday.recipe.ingredients.some(line=>/тунц|тунец/iu.test(line)));
+ assert(!calculate(1).weeks[4].rows.some(row=>row.id==='tuna'&&row.purchase>0));
+ assert.equal(calculate(1).weeks[4].rows.find(row=>row.id==='bacon').purchase,200);
  assert.deepEqual(calculate(1).weeks[4].rows.find(r=>r.id==='pork').opening,400);
+ const novel=data.futureMenuWeeks.slice(5).flatMap(w=>w.meals).filter(m=>m.batch.includes('Новый вариант'));
+ assert.equal(novel.length,15);
+ assert.equal(data.futureMenuWeeks.slice(5).flatMap(w=>w.meals).length,27);
+ const soup=data.futureMenuWeeks[5].meals.find(m=>m.title.includes('Гороховый суп'));
+ assert.equal(soup.day,'Пн');
+ assert.equal(soup.recipe.portions,'3 порции');
+ assert(soup.recipe.ingredients.some(line=>line.includes('Кости копчёных рёбер')&&line.includes('400 г')));
+ assert(soup.recipe.ingredients.some(line=>line.includes('Горох колотый')&&line.includes('120 г')));
+ assert.equal(calculate(1).weeks[5].rows.find(r=>r.id==='porkbones').purchase,0);
+ assert.equal(calculate(1).weeks[5].rows.find(r=>r.id==='peas').purchase,800);
+ assert(data.futureMenuWeeks[5].shopping.some(x=>x.name.includes('Горох колотый')&&x.quantity.includes('800 г')));
+ assert(data.futureMenuWeeks[5].shopping.some(x=>x.name.includes('Фетакса')&&x.quantity.includes('200 г')));
 });
 test("keeps historical accounting separate from future weeks and never invents cooked status",async()=>{
  const data=await moduleFrom("app/plan-data.ts");
