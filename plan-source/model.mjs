@@ -4,6 +4,7 @@ import {heartyBreakfast, weekendPolicy} from './weekend-plan.mjs';
 import {weekSevenRecipe,weekSevenStock,weekSevenUnknown,weekSevenPrices,cycleConfirmed} from './week-seven.mjs';
 import {weekEightRecipe,weekEightStock,weekEightUnknown,weekEightPrices,confirmedThroughSeven} from './week-eight.mjs';
 import {octoberRecipe,octoberStock,octoberUnknown,octoberPrices,confirmedThroughEight,weekEightReportedTotal} from './october-plan.mjs';
+import {weekTenRecipe,weekTenStock,weekTenUnknown,weekTenPrices,weekNineReportedTotal} from './week-ten.mjs';
 export {portionPolicy, portionLabel};
 // Quantities are raw/edible weights unless a counted unit is explicitly shown.
 // Prices below are planning assumptions, never historical spending.
@@ -16,6 +17,7 @@ export const tiers = [
 ];
 // name, unit, purchase increment, price per increment, kcal per unit, initial stock
 const rows = {
+ readycutlets:['Котлеты замороженные (2 шт. по 100 г)','г',200,160,2.4,0],
  egg:['Яйца','шт.',10,140,72,13], yogurt:['Йогурт греческий','г',250,100,.73,500], cheese:['Твёрдый сыр','г',200,220,3.5,170], feta:['Фетакса / фета','г',200,240,2.6,200],
  pickles:['Малосольные огурцы','г',400,160,.15,800], marinated:['Маринованные шампиньоны','г',300,180,.3,300], jam:['Варенье морошки','г',300,250,2.6,900],
  eggplant:['Баклажан средний','шт.',1,90,75,3], carrot:['Морковь','г',100,8,.35,100], tomato:['Помидор, условно 200 г','шт.',1,40,40,4], cucumber:['Свежие огурцы','г',100,16,.15,600], spinach:['Шпинат, условно 100 г','уп.',1,130,23,1],
@@ -64,7 +66,7 @@ export function R(id,title,time,protein,items,steps,note='',salt=2) {
 }
 export const S = 'Ингредиенты и все граммовки рассчитаны на 2 порции. Делите белок поровну; указанные калории — половина общего блюда, не дневная норма.';
 export function recipeFor(id,tier=1,legacy=false) {
- const october=octoberRecipe(id);if(october)return {...october,items:{...october.items},steps:[...october.steps]};
+ const october=octoberRecipe(id);if(october){const current=weekTenRecipe(october);return {...current,items:{...current.items},steps:[...current.steps]};}
  const r=recipes.find(x=>x.id===id); if(!r) throw Error('Unknown recipe '+id);
  const copy={...r,items:{...r.items},steps:[...r.steps]};
  if(tier===0 && ['w1cutlet','w2meatballs'].includes(id)) {delete copy.items.mince;copy.items.mixedmince=400;copy.title=copy.title.replace('Говяжьи','Домашние');copy.protein='Смешанный фарш';copy.steps=copy.steps.map(s=>s.replace('400 г фарша','400 г смешанного фарша (свинина + говядина)'));}
@@ -77,7 +79,7 @@ export function recipeFor(id,tier=1,legacy=false) {
  if(tier===2 && id==='w4fish') {copy.items.salmon=copy.items.fish;delete copy.items.fish;copy.title=copy.title.replace('Горбуша','Лосось');}
  return tier===1?(legacy?activeRecipe(copy):weekEightRecipe(weekSevenRecipe(heartyBreakfast(revisedRecipe(activeRecipe(copy)))))):{...copy,portions:2};
 }
-export function currentIngredient(id,week=3){return {...ingredients[id],...currentPriceOverrides[id],...(week>=2?weekSevenPrices[id]:{}),...(week>=3?weekEightPrices[id]:{}),...(week>=4?octoberPrices[id]:{})};}
+export function currentIngredient(id,week=3){return {...ingredients[id],...currentPriceOverrides[id],...(week>=2?weekSevenPrices[id]:{}),...(week>=3?weekEightPrices[id]:{}),...(week>=4?octoberPrices[id]:{}),...(week>=5?weekTenPrices[id]:{})};}
 export function calories(r){return Math.round(Object.entries(r.items).reduce((s,[id,q])=>s+(r.revised?currentIngredient(id,r.pricingWeek??2):ingredients[id]).kcal*q,0)/(r.portions||2));}
 export const weeks=[
  {label:'7–13 сентября',date:'2026-09-07',theme:'Сначала остатки',ids:['w1chicken','w1eggplant','w1tortilla','w1pasta','w1cutlet','w1oats','w1salad','w1bolognese','w1syrniki','w1toast','w1pork']},
@@ -85,7 +87,7 @@ export const weeks=[
  {label:'21–27 сентября',date:'2026-09-21',theme:'Креветки без горы кускуса',ids:['w3chicken','w3pork','w3pasta','w3turkey','w3frittata','w3pancake','w3shrimp','w3cutlet','w3oats','w3toast','w3pilaf']},
  {label:'28 сентября – 4 октября',date:'2026-09-28',theme:'Рыба, ленивые голубцы и запеканка',ids:['w4chicken','w4fish','w4pork','w4cabbage','w4pasta','w4curd','w4salad','w4turkey','w4millet','w4pita','w4cutlet']},
  {label:'5–11 октября',date:'2026-10-05',theme:'Остатки недели 8, сырники и мандарины',ids:['o9mon','o9tue','o9wed','o9thu','o9fri','o9satB',null,'o9satD','o9sunB',null,'o9sunD']},
- {label:'12–18 октября',date:'2026-10-12',theme:'Банановые панкейки и домашняя классика',ids:['o10mon','o10tue','o10wed','o10thu','o10fri','o10satB',null,'o10satD','o10sunB',null,'o10sunD']},
+ {label:'12–18 октября',date:'2026-10-12',theme:'Домашний гороховый суп, блины и свежие остатки',ids:['o10mon','o10tue','o10wed','o10thu','o10fri','o10satB',null,'o10satD','o10sunB',null,'o10sunD']},
  {label:'19–25 октября',date:'2026-10-19',theme:'Сырники, красная рыба и умеренные порции',ids:['o11mon','o11tue','o11wed','o11thu','o11fri','o11satB',null,'o11satD','o11sunB',null,'o11sunD']},
  {label:'26 октября – 1 ноября',date:'2026-10-26',theme:'Горячие ужины и плотные завтраки выходных',ids:['o12mon','o12tue','o12wed','o12thu','o12fri','o12satB',null,'o12satD','o12sunB',null,'o12sunD']}
 ];
@@ -121,19 +123,21 @@ export function calculate(tier=1,grainStock={},legacy=false) {
   }
   if(latest&&w===3){
    for(const id of Object.keys(inventory))inventory[id]=weekEightStock[id]||0;
-   for(const id of ['rice','bulgur','couscous'])if(id in grainStock)inventory[id]=Math.max(0,Number(grainStock[id])||0);
   }
-  if(latest&&w===4){for(const id of Object.keys(inventory))inventory[id]=octoberStock[id]||0;for(const id of ['bulgur','couscous'])if(id in grainStock)inventory[id]=Math.max(0,Number(grainStock[id])||0);}
+  if(latest&&w===4){for(const id of Object.keys(inventory))inventory[id]=octoberStock[id]||0;}
   if(latest&&w>4){for(const id of ['mushrooms','tomato','pepper','zucchini','mandarin','pear','banana','milk','yogurt','curd','curd23','sourcream','bread'])inventory[id]=0;}
+  if(latest&&w>5)inventory.pickles=0; // An opened jar is not assumed usable a week later without its label.
+  if(latest&&w===5){for(const id of Object.keys(inventory))inventory[id]=weekTenStock[id]||0;for(const id of ['rice','bulgur','couscous'])if(id in grainStock)inventory[id]=Math.max(0,Number(grainStock[id])||0);}
   const used={},alloc={}; const add=(id,q,label)=>{used[id]=(used[id]||0)+q;(alloc[id]??=[]).push([label,q]);};
   mealEntries(w,tier,legacy).forEach(({id,slot})=>{const recipe=recipeFor(id,tier,legacy);if(!recipe.carryoverFrom)Object.entries(recipe.items).forEach(([key,q])=>add(key,q,`${slots[slot][0]} ${slots[slot][1]} · ${recipe.title}`));});
   extras(tier,w,legacy).forEach(e=>Object.entries(e.items).forEach(([id,q])=>add(id,q,e.title)));
-const rows=Object.entries(used).map(([id,q])=>{const i=latest?currentIngredient(id,w):ingredients[id],opening=inventory[id]||0;if((i.base&&(!latest||id==='spices'))||(latest&&w>=2&&(w>=4?octoberUnknown:w===3?weekEightUnknown:weekSevenUnknown).includes(id)))return {id,used:q,opening:null,purchase:0,cost:0,closing:null,alloc:alloc[id],pack:i.pack,unitPrice:i.price};const count=Math.max(0,Math.ceil(Math.max(0,q-opening)/i.pack-1e-9)),purchase=count*i.pack,cost=Math.round(count*i.price*100)/100;inventory[id]=opening+purchase-q;return{id,used:q,opening,purchase,cost,closing:inventory[id],alloc:alloc[id],pack:i.pack,unitPrice:i.price};});
-  const food=rows.reduce((s,r)=>s+r.cost,0),delivery=tier===1?0:[0,200,400][tier],base=w===0?(tier===0?600:800):0,bufferRate=tier===1?.05:.1,buffer=Math.ceil((food+base)*bufferRate),total=food+delivery+base+buffer;
+const rows=Object.entries(used).map(([id,q])=>{const i=latest?currentIngredient(id,w):ingredients[id],opening=inventory[id]||0;if(latest&&w===5&&id==='spices')return {id,used:q,opening:null,purchase:20,cost:60,closing:null,alloc:alloc[id],pack:20,unitPrice:60,manual:true};if((i.base&&(!latest||id==='spices'))||(latest&&w>=2&&(w>=5?weekTenUnknown:w===4?octoberUnknown:w===3?weekEightUnknown:weekSevenUnknown).includes(id)))return {id,used:q,opening:null,purchase:0,cost:0,closing:null,alloc:alloc[id],pack:i.pack,unitPrice:i.price};const count=Math.max(0,Math.ceil(Math.max(0,q-opening)/i.pack-1e-9)),purchase=count*i.pack,cost=Math.round(count*i.price*100)/100;inventory[id]=opening+purchase-q;return{id,used:q,opening,purchase,cost,closing:inventory[id],alloc:alloc[id],pack:i.pack,unitPrice:i.price};});
+  const food=Math.round(rows.reduce((s,r)=>s+r.cost,0)*100)/100,delivery=tier===1?0:[0,200,400][tier],base=w===0?(tier===0?600:800):0,bufferRate=tier===1?.05:.1,buffer=Math.ceil((food+base)*bufferRate),total=Math.round((food+delivery+base+buffer)*100)/100;
   result.push({rows,food,delivery,base,bufferRate,buffer,total,remaining:{...inventory},isActual:tier===1&&!legacy&&w===0});
   if(tier===1&&!legacy&&w===0)Object.assign(result[0],{originalPlanTotal:total,food:weekFiveActual,base:0,buffer:0,total:weekFiveActual});
   if(tier===1&&!legacy&&w===3)Object.assign(result[3],{originalPlanTotal:total,food:weekEightReportedTotal,base:0,buffer:0,total:weekEightReportedTotal,isActual:true});
+  if(tier===1&&!legacy&&w===4)Object.assign(result[4],{originalPlanTotal:total,food:weekNineReportedTotal,base:0,buffer:0,total:weekNineReportedTotal,isActual:true});
  }
- const current=tier===1&&!legacy,remainingTotal=current?Math.round(result.slice(4).reduce((s,w)=>s+w.total,0)*100)/100:null;
- return {weeks:result,total:current?remainingTotal:Math.round(result.reduce((s,w)=>s+w.total,0)*100)/100,food:Math.round(result.reduce((s,w)=>s+w.food,0)*100)/100,confirmed:current?confirmedThroughEight:0,remainingTotal};
+ const current=tier===1&&!legacy,remainingTotal=current?Math.round(result.slice(5).reduce((s,w)=>s+w.total,0)*100)/100:null;
+ return {weeks:result,total:current?Math.round((weekNineReportedTotal+remainingTotal)*100)/100:Math.round(result.reduce((s,w)=>s+w.total,0)*100)/100,food:Math.round(result.reduce((s,w)=>s+w.food,0)*100)/100,confirmed:current?confirmedThroughEight:0,currentCycleConfirmed:current?weekNineReportedTotal:0,remainingTotal};
 }
