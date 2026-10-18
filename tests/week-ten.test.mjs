@@ -10,10 +10,10 @@ test('receipt, reported extras and future forecast remain distinct',()=>{
  assert.equal(weekNinePurchases.length,24);
  assert.equal(weekNineExtras.length,1);assert.equal(weekNineExtras[0].amount,600);
  assert(weekNinePurchases.every(r=>r.date==='03.10.2026'&&r.period==='w4'));
- assert.equal(p.weeks[4].total,weekNineReportedTotal);assert.equal(p.currentCycleConfirmed,3780.39);
+ assert.equal(p.weeks[4].total,weekNineReportedTotal);assert.equal(p.currentCycleConfirmed,8650.03);
  assert.equal(p.confirmed,16726.64);
- assert.equal(p.total,Math.round((3780.39+p.remainingTotal)*100)/100);
- assert(p.total<25000);assert(p.weeks.slice(5).every(w=>w.delivery===0&&!w.isActual));
+ assert.equal(p.total,Math.round((8650.03+p.remainingTotal)*100)/100);
+ assert(p.total<25000);assert(p.weeks[5].isActual);assert(p.weeks.slice(6).every(w=>!w.isActual));
 });
 test('new inventory replaces projected stock; quantities are conserved',()=>{
  const p=calculate(1),w=p.weeks[5];
@@ -31,7 +31,7 @@ test('new inventory replaces projected stock; quantities are conserved',()=>{
  assert.equal(w.rows.find(r=>r.id==='lemon').purchase,200);
  const revised=calculate(1,{couscous:10,bulgur:20,rice:250});
  assert.deepEqual(revised.weeks[4],p.weeks[4]);
- assert.equal(revised.weeks[5].rows.find(r=>r.id==='couscous').opening,10);
+ assert.deepEqual(revised.weeks[5],p.weeks[5]);assert.equal(revised.weeks[6].remaining.couscous,10);
 });
 test('week10 has nine slots, intended portions, requested soup and bounded poultry',()=>{
  const entries=mealEntries(5);assert.equal(entries.length,9);

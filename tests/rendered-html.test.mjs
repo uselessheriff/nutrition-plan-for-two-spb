@@ -7,15 +7,15 @@ import "../plan-source/recipes.mjs";
 import { calculate, weeks, recipeFor, mealEntries, slots } from "../plan-source/model.mjs";
 const read=(name)=>readFile(new URL("../"+name,import.meta.url),"utf8");
 async function moduleFrom(name){const compiled=ts.transpileModule(await read(name),{compilerOptions:{target:ts.ScriptTarget.ES2022,module:ts.ModuleKind.ES2022}}).outputText;return import("data:text/javascript;base64,"+Buffer.from(compiled).toString("base64"));}
-test("renders four useful sections with weeks 1–12 and week 10 selected",async()=>{
+test("renders four useful sections with weeks 1–12 and week 11 selected",async()=>{
  const {default:worker}=await import(new URL("../dist/server/index.js",import.meta.url));
  const response=await worker.fetch(new Request("http://localhost/",{headers:{accept:"text/html"}}),{ASSETS:{fetch:async()=>new Response("Not found",{status:404})}},{waitUntil(){},passThroughOnException(){}});
  assert.equal(response.status,200);
  const html=await response.text();
  for(const id of ["archive","purchases","stock","expenses"])assert(html.includes('page-tab-'+id));
  for(let n=1;n<=12;n++)assert(html.includes('archive-week-tab-'+n));
- assert.match(html,/id="archive-week-tab-10"[^>]*aria-pressed="true"/);
- assert(html.includes("Домашний гороховый суп, блины и свежие остатки"));
+ assert.match(html,/id="archive-week-tab-11"[^>]*aria-pressed="true"/);
+ assert(html.includes("Сырники, красная рыба и умеренные порции"));
  for(const removed of ["Новые 4 недели","Пример журнала","Выгода продуктов и ценовые сигналы","База рецептов","Выберите месячный лимит"])assert(!html.includes(removed),removed);
 });
 test("generates archived weeks 5–8 and planned weeks 9–12 from the same fixed-25k source",async()=>{
