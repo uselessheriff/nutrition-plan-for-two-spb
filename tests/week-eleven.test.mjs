@@ -20,7 +20,7 @@ test('week11 pantry replaces forecast, purchases use only deficits and package r
  for(const r of w.rows){if(r.opening===null)continue;assert.equal(r.opening,weekElevenStock[r.id]||0,r.id);assert.equal(r.opening+r.purchase-r.used,r.closing,r.id);assert(r.closing>=0,r.id);}
  for(const id of ['pork','rice','bulgur','broccoli','flour','milk','semolina','sugar'])assert.equal(w.rows.find(r=>r.id===id).purchase,0,id);
  const curd=w.rows.find(r=>r.id==='curd');assert.equal(curd.used,750);assert.equal(curd.opening,200);assert.equal(curd.purchase,600);
- assert.equal(w.remaining.peas,690);assert.equal(w.remaining.pasta,230);assert.equal(w.remaining.couscous,180);
+ assert.equal(w.remaining.peas,690);assert.equal(w.remaining.pasta,50);assert.equal(w.remaining.couscous,180);
  assert.equal(w.remaining.bulgur,0);assert.equal(w.remaining.rice,90);
  assert.equal(w.rows.find(r=>r.id==='onion').purchase,200);assert.equal(w.rows.find(r=>r.id==='egg').purchase,10);
  assert.equal(w.rows.find(r=>r.id==='butter').purchase,180);assert.equal(w.rows.find(r=>r.id==='mustard').purchase,140);
@@ -31,6 +31,19 @@ test('one delivery exception has an unknown fee, not zero or a known all-in tota
  const p=calculate();const w=p.weeks[6];
  assert.equal(w.delivery,null);assert(w.deliveryPending);assert.equal(w.completeTotal,null);assert(p.deliveryPending);
  assert.equal(w.total,Math.round((w.food+w.buffer)*100)/100);assert.equal(p.weeks[7].delivery,0);assert(!p.weeks[7].deliveryPending);
+});
+test('two requested replacements have matching recipe ingredients and net purchases',()=>{
+ const tue=recipeFor('o11tue'),sat=recipeFor('o11satD'),w=calculate().weeks[6];
+ assert.equal(tue.title,'Бефстроганов с пастой');assert.equal(tue.portions,3);assert.equal(tue.time,100);
+ assert.deepEqual(tue.items,{beef:400,pasta:180,onion:120,sourcream:150,flour:10,butter:10,oil:8,mustard:10,salt:3,spices:1});
+ assert(tue.steps.some(s=>s.includes('45–75 минут')));assert(tue.steps.some(s=>s.includes('Ани в среду')));
+ assert.equal(sat.title,'Красная рыба в духовке с картофелем и брокколи');assert.equal(sat.portions,2);
+ assert.deepEqual(sat.items,{fish:350,potato:300,broccoli:200,yogurt:80,lemon:10,oil:8,salt:2,spices:1});
+ assert(sat.steps.some(s=>s.includes('Соус подайте отдельно')));
+ const pasta=w.rows.find(r=>r.id==='pasta');assert.equal(pasta.opening,230);assert.equal(pasta.used,180);assert.equal(pasta.purchase,0);
+ assert.equal(w.rows.find(r=>r.id==='beef').purchase,400);assert(!w.rows.some(r=>r.id==='mince'&&r.purchase>0));
+ assert.equal(w.rows.find(r=>r.id==='lemon').purchase,200);assert.equal(w.rows.find(r=>r.id==='cheese').purchase,180);
+ assert.equal(w.rows.find(r=>r.id==='sourcream').purchase,360);
 });
 test('recipe quantities, no banned foods, frozen reserves and hearty breakfasts preserved',()=>{
  assert.equal(mealEntries(6).length,9);
