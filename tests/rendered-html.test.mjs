@@ -7,13 +7,13 @@ import "../plan-source/recipes.mjs";
 import { calculate, weeks, recipeFor, mealEntries, slots } from "../plan-source/model.mjs";
 const read=(name)=>readFile(new URL("../"+name,import.meta.url),"utf8");
 async function moduleFrom(name){const compiled=ts.transpileModule(await read(name),{compilerOptions:{target:ts.ScriptTarget.ES2022,module:ts.ModuleKind.ES2022}}).outputText;return import("data:text/javascript;base64,"+Buffer.from(compiled).toString("base64"));}
-test("renders four useful sections with weeks 1–12 and week 12 selected",async()=>{
+test("renders four useful sections with weeks 1–16 and week 12 selected",async()=>{
  const {default:worker}=await import(new URL("../dist/server/index.js",import.meta.url));
  const response=await worker.fetch(new Request("http://localhost/",{headers:{accept:"text/html"}}),{ASSETS:{fetch:async()=>new Response("Not found",{status:404})}},{waitUntil(){},passThroughOnException(){}});
  assert.equal(response.status,200);
  const html=await response.text();
  for(const id of ["archive","purchases","stock","expenses"])assert(html.includes('page-tab-'+id));
- for(let n=1;n<=12;n++)assert(html.includes('archive-week-tab-'+n));
+ for(let n=1;n<=16;n++)assert(html.includes('archive-week-tab-'+n));
  assert.match(html,/id="archive-week-tab-12"[^>]*aria-pressed="true"/);
  assert(html.includes("Запасы в дело · тефтели, горбуша и пицца"));
  for(const removed of ["Новые 4 недели","Пример журнала","Выгода продуктов и ценовые сигналы","База рецептов","Выберите месячный лимит"])assert(!html.includes(removed),removed);
@@ -64,7 +64,7 @@ test("keeps historical accounting separate from future weeks and never invents c
  assert.equal(Number(fourth.toFixed(2)),5075.51);
  assert.equal(Number((previous+fourth).toFixed(2)),20601.04);
  const page=await read("app/page.tsx");
- assert.match(page,/const menuWeeks=\[\.\.\.historicalWeeks,\.\.\.futureMenuWeeks\]/);
+ assert.match(page,/const menuWeeks=\[\.\.\.historicalWeeks,\.\.\.futureMenuWeeks,\.\.\.novemberMenuWeeks\]/);
  assert.match(page,/const confirmedPurchases=\[\.\.\.expenses,/);
  assert.doesNotMatch(page,/confirmedTotal\s*\/\s*menuWeeks.length/);
  assert(page.includes('weekNumber<=5?"unconfirmed":"planned"'));

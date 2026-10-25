@@ -11,7 +11,7 @@ const calendar = await import(`data:text/javascript;base64,${Buffer.from(compile
 
 const instant = (value) => new Date(value);
 
-test("maps Moscow Monday-to-Sunday boundaries to the twelve explicit plan weeks", () => {
+test("maps Moscow Monday-to-Sunday boundaries to the sixteen explicit plan weeks", () => {
   const cases = [
     ["2026-08-09T20:59:59.999Z", "before_plan", null],
     ["2026-08-09T21:00:00.000Z", "in_plan", 1],
@@ -32,7 +32,12 @@ test("maps Moscow Monday-to-Sunday boundaries to the twelve explicit plan weeks"
     ["2026-10-18T21:00:00.000Z", "in_plan", 11],
     ["2026-10-25T21:00:00.000Z", "in_plan", 12],
     ["2026-11-01T20:59:59.999Z", "in_plan", 12],
-    ["2026-11-01T21:00:00.000Z", "after_plan", null],
+    ["2026-11-01T21:00:00.000Z", "in_plan", 13],
+    ["2026-11-08T21:00:00.000Z", "in_plan", 14],
+    ["2026-11-15T21:00:00.000Z", "in_plan", 15],
+    ["2026-11-22T21:00:00.000Z", "in_plan", 16],
+    ["2026-11-29T20:59:59.999Z", "in_plan", 16],
+    ["2026-11-29T21:00:00.000Z", "after_plan", null],
   ];
 
   for (const [at, phase, activePlanWeek] of cases) {
@@ -47,12 +52,12 @@ test("keeps temporal statuses separate from the menu archive and purchase state"
   const sunday = calendar.getPlanCalendar(instant("2026-08-30T12:00:00.000Z"));
   assert.equal(sunday.moscowDateKey, "2026-08-30");
   assert.equal(sunday.activePlanWeek, 3);
-  assert.deepEqual(sunday.weeks.map((week) => week.temporalStatus), ["past", "past", "current", ...Array(9).fill("future")]);
+  assert.deepEqual(sunday.weeks.map((week) => week.temporalStatus), ["past", "past", "current", ...Array(13).fill("future")]);
 
   const monday = calendar.getPlanCalendar(instant("2026-08-30T21:00:00.000Z"));
   assert.equal(monday.moscowDateKey, "2026-08-31");
   assert.equal(monday.activePlanWeek, 4);
-  assert.deepEqual(monday.weeks.map((week) => week.temporalStatus), ["past", "past", "past", "current", ...Array(8).fill("future")]);
+  assert.deepEqual(monday.weeks.map((week) => week.temporalStatus), ["past", "past", "past", "current", ...Array(12).fill("future")]);
 });
 
 test("formats Russian Moscow date and time and reports the ISO week", () => {

@@ -1,6 +1,6 @@
 export const MOSCOW_TIME_ZONE = "Europe/Moscow" as const;
 
-export type PlanWeekNumber = 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10 | 11 | 12;
+export type PlanWeekNumber = 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10 | 11 | 12 | 13 | 14 | 15 | 16;
 export type PlanPhase = "before_plan" | "in_plan" | "after_plan";
 export type PlanWeekTemporalStatus = "past" | "current" | "future";
 export type ClockSource = "network" | "device";
@@ -36,6 +36,10 @@ export const PLAN_WEEK_RANGES: readonly PlanWeekRange[] = [
   { number: 10, start: "2026-10-12", end: "2026-10-18", basis: "repo_history_and_user_reports" },
   { number: 11, start: "2026-10-19", end: "2026-10-25", basis: "repo_history_and_user_reports" },
   { number: 12, start: "2026-10-26", end: "2026-11-01", basis: "repo_history_and_user_reports" },
+  { number: 13, start: "2026-11-02", end: "2026-11-08", basis: "repo_history_and_user_reports" },
+  { number: 14, start: "2026-11-09", end: "2026-11-15", basis: "repo_history_and_user_reports" },
+  { number: 15, start: "2026-11-16", end: "2026-11-22", basis: "repo_history_and_user_reports" },
+  { number: 16, start: "2026-11-23", end: "2026-11-29", basis: "repo_history_and_user_reports" },
 ];
 
 const DAY_MS = 86_400_000;
