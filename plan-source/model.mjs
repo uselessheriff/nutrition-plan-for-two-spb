@@ -6,6 +6,7 @@ import {weekEightRecipe,weekEightStock,weekEightUnknown,weekEightPrices,confirme
 import {octoberRecipe,octoberStock,octoberUnknown,octoberPrices,confirmedThroughEight,weekEightReportedTotal} from './october-plan.mjs';
 import {weekTenRecipe,weekTenStock,weekTenUnknown,weekTenPrices,weekNineReportedTotal} from './week-ten.mjs';
 import {weekElevenRecipe,weekElevenStock,weekElevenUnknown,weekElevenPrices,weekElevenDelivery,weekTenReportedTotal} from './week-eleven.mjs';
+import {weekTwelveRecipe,weekTwelveStock,weekTwelveUnknown,weekTwelvePrices,weekElevenReportedTotal} from './week-twelve.mjs';
 export {portionPolicy, portionLabel};
 // Quantities are raw/edible weights unless a counted unit is explicitly shown.
 // Prices below are planning assumptions, never historical spending.
@@ -67,7 +68,7 @@ export function R(id,title,time,protein,items,steps,note='',salt=2) {
 }
 export const S = 'Ингредиенты и все граммовки рассчитаны на 2 порции. Делите белок поровну; указанные калории — половина общего блюда, не дневная норма.';
 export function recipeFor(id,tier=1,legacy=false) {
- const october=octoberRecipe(id);if(october){const current=weekElevenRecipe(weekTenRecipe(october));return {...current,items:{...current.items},steps:[...current.steps]};}
+ const october=octoberRecipe(id);if(october){const current=weekTwelveRecipe(weekElevenRecipe(weekTenRecipe(october)));return {...current,items:{...current.items},steps:[...current.steps]};}
  const r=recipes.find(x=>x.id===id); if(!r) throw Error('Unknown recipe '+id);
  const copy={...r,items:{...r.items},steps:[...r.steps]};
  if(tier===0 && ['w1cutlet','w2meatballs'].includes(id)) {delete copy.items.mince;copy.items.mixedmince=400;copy.title=copy.title.replace('Говяжьи','Домашние');copy.protein='Смешанный фарш';copy.steps=copy.steps.map(s=>s.replace('400 г фарша','400 г смешанного фарша (свинина + говядина)'));}
@@ -80,7 +81,7 @@ export function recipeFor(id,tier=1,legacy=false) {
  if(tier===2 && id==='w4fish') {copy.items.salmon=copy.items.fish;delete copy.items.fish;copy.title=copy.title.replace('Горбуша','Лосось');}
  return tier===1?(legacy?activeRecipe(copy):weekEightRecipe(weekSevenRecipe(heartyBreakfast(revisedRecipe(activeRecipe(copy)))))):{...copy,portions:2};
 }
-export function currentIngredient(id,week=3){return {...ingredients[id],...currentPriceOverrides[id],...(week>=2?weekSevenPrices[id]:{}),...(week>=3?weekEightPrices[id]:{}),...(week>=4?octoberPrices[id]:{}),...(week>=5?weekTenPrices[id]:{}),...(week>=6?weekElevenPrices[id]:{})};}
+export function currentIngredient(id,week=3){return {...ingredients[id],...currentPriceOverrides[id],...(week>=2?weekSevenPrices[id]:{}),...(week>=3?weekEightPrices[id]:{}),...(week>=4?octoberPrices[id]:{}),...(week>=5?weekTenPrices[id]:{}),...(week>=6?weekElevenPrices[id]:{}),...(week>=7?weekTwelvePrices[id]:{})};}
 export function calories(r){return Math.round(Object.entries(r.items).reduce((s,[id,q])=>s+(r.revised?currentIngredient(id,r.pricingWeek??2):ingredients[id]).kcal*q,0)/(r.portions||2));}
 export const weeks=[
  {label:'7–13 сентября',date:'2026-09-07',theme:'Сначала остатки',ids:['w1chicken','w1eggplant','w1tortilla','w1pasta','w1cutlet','w1oats','w1salad','w1bolognese','w1syrniki','w1toast','w1pork']},
@@ -96,7 +97,7 @@ export const slots=[['Пн','Ужин',0],['Вт','Ужин',1],['Ср','Ужи�
 export function mealEntries(week,tier=1,legacy=false) {
  return weeks[week].ids.map((id,slot)=>({id,slot})).filter(({slot})=>tier!==1||legacy||week===0||![6,9].includes(slot));
 }
-export function weekTheme(week){return week===2?'Остатки в дело · архив плана':week===3?'Сырники и большой рыбный пирог':weeks[week].theme;}
+export function weekTheme(week){return week===7?'Запасы в дело · тефтели, горбуша и пицца':week===2?'Остатки в дело · архив плана':week===3?'Сырники и большой рыбный пирог':weeks[week].theme;}
 export function extras(tier,week,legacy=false) {
  if(tier===1&&!legacy&&week>=4)return [
   {title:'Свежие фрукты на неделю',items:{mandarin:1500,banana:500,pear:700},how:'Мандарины, бананы и груши распределите на 7 дней вдвоём; покупайте каждую неделю свежие. В рецептах завтраков фрукты посчитаны дополнительно. Яблок в октябрьской закупке нет.'},
@@ -129,19 +130,21 @@ export function calculate(tier=1,grainStock={},legacy=false) {
   if(latest&&w>4){for(const id of ['mushrooms','tomato','pepper','zucchini','mandarin','pear','banana','milk','yogurt','curd','curd23','sourcream','bread'])inventory[id]=0;}
   if(latest&&w>5)inventory.pickles=0; // An opened jar is not assumed usable a week later without its label.
   if(latest&&w===5){for(const id of Object.keys(inventory))inventory[id]=weekTenStock[id]||0;}
-  if(latest&&w===6){for(const id of Object.keys(inventory))inventory[id]=weekElevenStock[id]||0;for(const id of ['rice','bulgur','couscous'])if(id in grainStock)inventory[id]=Math.max(0,Number(grainStock[id])||0);}
+  if(latest&&w===6){for(const id of Object.keys(inventory))inventory[id]=weekElevenStock[id]||0;}
+  if(latest&&w===7){for(const id of Object.keys(inventory))inventory[id]=weekTwelveStock[id]||0;for(const id of ['rice','bulgur','couscous'])if(id in grainStock)inventory[id]=Math.max(0,Number(grainStock[id])||0);}
   const used={},alloc={}; const add=(id,q,label)=>{used[id]=(used[id]||0)+q;(alloc[id]??=[]).push([label,q]);};
   mealEntries(w,tier,legacy).forEach(({id,slot})=>{const recipe=recipeFor(id,tier,legacy);if(!recipe.carryoverFrom)Object.entries(recipe.items).forEach(([key,q])=>add(key,q,`${slots[slot][0]} ${slots[slot][1]} · ${recipe.title}`));});
   extras(tier,w,legacy).forEach(e=>Object.entries(e.items).forEach(([id,q])=>add(id,q,e.title)));
-const rows=Object.entries(used).map(([id,q])=>{const i=latest?currentIngredient(id,w):ingredients[id],opening=inventory[id]||0;if(latest&&w===5&&id==='spices')return {id,used:q,opening:null,purchase:20,cost:60,closing:null,alloc:alloc[id],pack:20,unitPrice:60,manual:true};if((i.base&&(!latest||id==='spices'))||(latest&&w>=2&&(w>=6?weekElevenUnknown:w===5?weekTenUnknown:w===4?octoberUnknown:w===3?weekEightUnknown:weekSevenUnknown).includes(id)))return {id,used:q,opening:null,purchase:0,cost:0,closing:null,alloc:alloc[id],pack:i.pack,unitPrice:i.price};const count=Math.max(0,Math.ceil(Math.max(0,q-opening)/i.pack-1e-9)),purchase=count*i.pack,cost=Math.round(count*i.price*100)/100;inventory[id]=opening+purchase-q;return{id,used:q,opening,purchase,cost,closing:inventory[id],alloc:alloc[id],pack:i.pack,unitPrice:i.price};});
+const rows=Object.entries(used).map(([id,q])=>{const i=latest?currentIngredient(id,w):ingredients[id],opening=inventory[id]||0;if(latest&&w===5&&id==='spices')return {id,used:q,opening:null,purchase:20,cost:60,closing:null,alloc:alloc[id],pack:20,unitPrice:60,manual:true};if((i.base&&(!latest||id==='spices'))||(latest&&w>=2&&(w>=7?weekTwelveUnknown:w===6?weekElevenUnknown:w===5?weekTenUnknown:w===4?octoberUnknown:w===3?weekEightUnknown:weekSevenUnknown).includes(id)))return {id,used:q,opening:null,purchase:0,cost:0,closing:null,alloc:alloc[id],pack:i.pack,unitPrice:i.price};const count=Math.max(0,Math.ceil(Math.max(0,q-opening)/i.pack-1e-9)),purchase=count*i.pack,cost=Math.round(count*i.price*100)/100;inventory[id]=opening+purchase-q;return{id,used:q,opening,purchase,cost,closing:inventory[id],alloc:alloc[id],pack:i.pack,unitPrice:i.price};});
   const food=Math.round(rows.reduce((s,r)=>s+r.cost,0)*100)/100,delivery=latest&&w===6?weekElevenDelivery.fee:tier===1?0:[0,200,400][tier],deliveryPending=latest&&w===6&&delivery===null,base=w===0?(tier===0?600:800):0,bufferRate=tier===1?.05:.1,buffer=Math.ceil((food+base)*bufferRate),total=Math.round((food+(delivery??0)+base+buffer)*100)/100;
   result.push({rows,food,delivery,deliveryPending,completeTotal:deliveryPending?null:total,base,bufferRate,buffer,total,remaining:{...inventory},isActual:tier===1&&!legacy&&w===0});
   if(tier===1&&!legacy&&w===0)Object.assign(result[0],{originalPlanTotal:total,food:weekFiveActual,base:0,buffer:0,total:weekFiveActual});
   if(tier===1&&!legacy&&w===3)Object.assign(result[3],{originalPlanTotal:total,food:weekEightReportedTotal,base:0,buffer:0,total:weekEightReportedTotal,isActual:true});
   if(tier===1&&!legacy&&w===4)Object.assign(result[4],{originalPlanTotal:total,food:weekNineReportedTotal,base:0,buffer:0,total:weekNineReportedTotal,isActual:true});
   if(tier===1&&!legacy&&w===5)Object.assign(result[5],{originalPlanTotal:total,food:weekTenReportedTotal,base:0,buffer:0,total:weekTenReportedTotal,completeTotal:weekTenReportedTotal,isActual:true});
-  if(result[w].isActual)result[w].completeTotal=result[w].total;
+  if(tier===1&&!legacy&&w===6)Object.assign(result[6],{originalPlanTotal:total,food:weekElevenReportedTotal,base:0,buffer:0,total:weekElevenReportedTotal,completeTotal:null,isActual:true});
+  if(result[w].isActual&&!result[w].deliveryPending)result[w].completeTotal=result[w].total;
  }
- const current=tier===1&&!legacy,remainingTotal=current?Math.round(result.slice(6).reduce((s,w)=>s+w.total,0)*100)/100:null,currentCycleConfirmed=current?Math.round((weekNineReportedTotal+weekTenReportedTotal)*100)/100:0;
+ const current=tier===1&&!legacy,remainingTotal=current?Math.round(result.slice(7).reduce((s,w)=>s+w.total,0)*100)/100:null,currentCycleConfirmed=current?Math.round((weekNineReportedTotal+weekTenReportedTotal+weekElevenReportedTotal)*100)/100:0;
  return {weeks:result,total:current?Math.round((currentCycleConfirmed+remainingTotal)*100)/100:Math.round(result.reduce((s,w)=>s+w.total,0)*100)/100,food:Math.round(result.reduce((s,w)=>s+w.food,0)*100)/100,confirmed:current?confirmedThroughEight:0,currentCycleConfirmed,remainingTotal,deliveryPending:current&&result[6].deliveryPending};
 }

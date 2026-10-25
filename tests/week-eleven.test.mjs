@@ -11,8 +11,8 @@ test('week10 receipt is 24 food rows plus three separate reported extras, once',
  assert(weekTenPurchases.every(r=>r.date==='10.10.2026'&&r.period==='w5'));
  assert.equal(Math.round(weekTenReceiptTotal*100)+93000,Math.round(weekTenReportedTotal*100));
  const p=calculate();assert.equal(p.weeks[5].total,4869.64);assert(p.weeks[5].isActual);
- assert.equal(p.weeks[4].total,3780.39);assert.equal(p.currentCycleConfirmed,8650.03);
- assert.equal(p.confirmed,16726.64);assert.equal(p.total,Math.round((8650.03+p.remainingTotal)*100)/100);
+ assert.equal(p.weeks[4].total,3780.39);assert.equal(p.currentCycleConfirmed,13563.48);
+ assert.equal(p.confirmed,16726.64);assert.equal(p.total,Math.round((13563.48+p.remainingTotal)*100)/100);
  assert(p.total<25000);
 });
 test('week11 pantry replaces forecast, purchases use only deficits and package rounding',()=>{
@@ -25,7 +25,7 @@ test('week11 pantry replaces forecast, purchases use only deficits and package r
  assert.equal(w.rows.find(r=>r.id==='onion').purchase,200);assert.equal(w.rows.find(r=>r.id==='egg').purchase,10);
  assert.equal(w.rows.find(r=>r.id==='butter').purchase,180);assert.equal(w.rows.find(r=>r.id==='mustard').purchase,140);
  const amended=calculate(1,{rice:10,bulgur:10,couscous:10});
- assert.deepEqual(amended.weeks.slice(0,6),p.weeks.slice(0,6));assert.equal(amended.weeks[6].rows.find(r=>r.id==='rice').opening,10);
+ assert.deepEqual(amended.weeks.slice(0,7),p.weeks.slice(0,7));assert.equal(amended.weeks[7].rows.find(r=>r.id==='rice').opening,10);
 });
 test('one delivery exception has an unknown fee, not zero or a known all-in total',()=>{
  const p=calculate();const w=p.weeks[6];

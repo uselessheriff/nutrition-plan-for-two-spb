@@ -51,7 +51,7 @@ html.embedded main {min-height:0}
 <section class="section standalone-budget"><h1>Недели 9–12 · 5 октября — 1 ноября</h1><div id="dashboard" class="chips"></div><button class="utility" id="print">Печать</button></section>
 <section class="section" id="menu"><div class="section-title"><div><h2>Меню и рецепты</h2><p>Нажмите на блюдо — откроется карточка с точным составом и шагами. Рецепты на странице не дублируются.</p></div></div><div id="week-tabs" class="week-tabs" aria-label="Неделя плана"></div><div id="week-heading"></div><div class="menu-layout"><div id="meal-list" class="meal-list"></div><aside class="surface side"><h3>Как пользоваться неделей</h3><p><strong>Пн–Чт и воскресенье — 3 умеренные порции:</strong> две на ужин, одна Ане на обед завтра. В пятницу — 2 порции; по выходным только плотный завтрак и ужин.</p><p>Мясо указано без костей, крупы и паста — сухие. Гарнир и соус уже включены в общий объём блюда. Остаток сырого мяса из новой упаковки порционно заморозьте в день покупки.</p><p>Перед закупкой проверьте сроки продуктов и планы на выходные. Остатки после будущих недель — прогноз, не подтверждённый факт.</p><div id="week-prep"></div><h3>Фрукты и дополнения</h3><div id="extras"></div></aside></div><details class="surface details"><summary>Калории: что учтено, а что неизвестно</summary><p>Калории приблизительны; проверяйте упаковки фарша, сыра, йогурта и продукта для сырников 23%. На карточке указана одна порция, не суточная норма. Порцию активной девушки автоматически не уменьшаем.</p><p>Цель девушки — поддерживать вес и энергию; парня — постепенно снизить вес. Рабочий обед парня около 1 300 ккал; без остальных приёмов, перекусов и напитков нельзя делать вывод о дневном дефиците. При голоде или снижении энергии порции и покупки корректируйте по факту.</p></details></section>
 <section class="section" id="shopping"><div class="section-title"><div><h1>Закупки по неделям</h1><p>5 октября — 1 ноября · откройте нужную неделю: сначала продукт, сколько купить и цена.</p></div></div><div id="shopping-budget" class="chips"></div><div id="shopping-weeks"></div></section>
-<section class="section" id="stock"><div class="section-title"><div><h2>Остатки перед неделей 11</h2><p>Новый список сообщён 18.10 перед неделей 19–25 октября. Прежние прогнозные остатки заменены этим списком, а не прибавлены к нему.</p></div></div><div class="surface padded"><div id="stock-list" class="stock-grid"></div><ul id="stock-notes"></ul><form id="grain-form" class="grain-form"><h3>Уточнить вес пакетиков</h3><p>По вашему правилу: пакетики в среднем по 60 г. Рис 4 пакетика = 240 г, булгур 4 = 240 г, кускус 3 = 180 г. Если взвесите точнее, внесите общий вес здесь. Старые вводы не применяются автоматически.</p><div class="form-grid"><label>Рис, 4 пакетика · всего г<input name="rice" type="number" min="0" max="5000" step="1" placeholder="240"></label><label>Булгур, 4 пакетика · всего г<input name="bulgur" type="number" min="0" max="5000" step="1" placeholder="240"></label><label>Кускус, 3 пакетика · всего г<input name="couscous" type="number" min="0" max="2000" step="1" placeholder="180"></label></div><button class="primary" type="submit">Пересчитать закупки</button><span id="grain-status" role="status"></span></form></div></section>
+<section class="section" id="stock"><div class="section-title"><div><h2>Остатки перед неделей 12</h2><p>Новый список сообщён 25.10 перед неделей 26 октября — 1 ноября. Прежние прогнозные остатки заменены этим списком, а не прибавлены к нему.</p></div></div><div class="surface padded"><div id="stock-list" class="stock-grid"></div><ul id="stock-notes"></ul><form id="grain-form" class="grain-form"><h3>Уточнить вес пакетиков</h3><p>По вашему правилу: пакетики в среднем по 60 г. Рис 1 пакетик ≈60 г, кускус 3 ≈180 г. Булгур: 1 пакетик 60 г по вашему новому сообщению. Вес риса и кускуса ориентировочный, сверьте упаковки. Если взвесите точнее, внесите общий вес здесь. Старые вводы не применяются автоматически.</p><div class="form-grid"><label>Рис, 1 пакетик · всего г<input name="rice" type="number" min="0" max="5000" step="1" placeholder="60"></label><label>Булгур, 1 пакетик · всего г<input name="bulgur" type="number" min="0" max="5000" step="1" placeholder="60"></label><label>Кускус, 3 пакетика · всего г<input name="couscous" type="number" min="0" max="2000" step="1" placeholder="180"></label></div><button class="primary" type="submit">Пересчитать закупки</button><span id="grain-status" role="status"></span></form></div></section>
 <section class="section" id="expenses"><div class="section-title"><div><h2>Фактические расходы</h2><p>План не становится расходом автоматически. Только покупки, которые вы сообщили или внесли.</p></div><button class="utility" id="export-journal" type="button">Выгрузить записи JSON</button></div><div class="surface padded"><label>Период <select id="expense-period"><option value="review">Неделя 4 · архив</option><option value="unassigned">Чек 12.09 · неделя меню не назначена</option><option value="w0">Неделя 5 · 07–13 сентября</option><option value="w1">Неделя 6 · 14–20 сентября</option><option value="w2" selected>Неделя 7 · 21–27 сентября</option><option value="w3">Неделя 8 · 28 сентября – 4 октября</option></select></label><div id="expense-summary" class="chips" aria-live="polite"></div><div id="expense-list"></div><form id="expense-form" class="expense-form"><label>Покупка<input name="name" required maxlength="140" placeholder="Например: чек Ленты, продукты"></label><label>Сумма, ₽<input name="amount" type="number" required min="0.01" max="100000" step="0.01" inputmode="decimal"></label><label>Дата покупки<input name="date" type="date" required></label><button class="primary" type="submit">Добавить расход</button></form><p id="expense-status" role="status"></p><small>Записи формы и введённые веса сохраняются только в этом браузере на этом устройстве и адресе сайта. Они не синхронизируются между телефоном, компьютером и второй ссылкой. Выгрузите JSON и пришлите в чат для переноса в постоянный журнал. Старые записи браузера не удалены.</small><div id="legacy-note"></div></div></section>
 </main>
 <dialog id="recipe-dialog" aria-labelledby="recipe-title"><div class="dialog-head"><div><p class="eyebrow" id="recipe-eyebrow"></p><h2 id="recipe-title"></h2></div><button type="button" class="close" id="recipe-close" aria-label="Закрыть карточку рецепта">×</button></div><div class="dialog-body"><div id="recipe-meta" class="chips"></div><div class="recipe-grid"><section><h3 id="recipe-ingredients-title">Ингредиенты</h3><ul id="recipe-ingredients" class="ingredient-list"></ul></section><section><h3>Пошаговое приготовление</h3><ol id="recipe-steps" class="recipe-steps"></ol></section></div><p id="recipe-note" class="notice"></p><p class="muted">Калории учитывают масло и соусы. Соль в составе — максимум для рецепта; с солёным сыром или консервами уменьшайте по вкусу. Вода для варки указана в шагах и не включена в продуктовую корзину. Третья порция, если указана, уже включена в ингредиенты и закупки. Обеденную порцию уберите в холодильник в течение 2 часов, храните при 4 °C или ниже; горячую часть разогрейте до 74 °C. <a href="https://www.fsis.usda.gov/food-safety/safe-food-handling-and-preparation/food-safety-basics/leftovers-and-food-safety" target="_blank" rel="noopener noreferrer">Правила хранения</a>.</p></div></dialog>
@@ -989,6 +989,114 @@ function weekElevenRecipe(r){
  return next;
 }
 
+// Reported 25.10.2026. This stock REPLACES the projected carryover from week 11.
+// Couscous/rice use the previously confirmed ~60 g packet convention, not a new weighing.
+const weekTwelveStock={carrot:360,tomato:210,milk:500,passata:220,mixedmince:400,chicken:880,dough:500,fish:300,onion:530,bulgur:60,couscous:180,rice:60,oats:240,peas:680,semolina:280};
+const weekTwelveUnknown=['sugar','flour','spices','oil','butter','salt'];
+const weekTwelveReserves=[
+ ['Котлеты-полуфабрикаты','2 шт. в морозилке; масса неизвестна. Резерв, в обязательное меню и калории не включены.'],
+ ['Мука, сахар, специи','Есть, масса не указана. Муки на рецепты нужно 110 г; покупку не добавляем.'],
+ ['Растительное масло, сливочное масло, соль','Все три есть в достаточном количестве — подтверждено 25.10. На неделю нужно 72 г растительного масла, 25 г сливочного масла и 21 г соли. Массы запаса не сообщены; повторно не покупаем.'],
+ ['Бульгур и прочие запасы','60 г булгура остаются на следующую неделю. Не нужно доедать весь шкаф сразу.']
+];
+const weekTwelveNotes=[
+ 'Неделя 12: 26 октября — 1 ноября. Остатки от 25.10 заменяют все прежние расчётные остатки. Покупки и блюда прошлой недели не подтверждают, что всё было приготовлено или понравилось.',
+ 'Кускус: 3 пакетика ≈180 г; рис: 1 пакетик ≈60 г по ранее согласованным средним 60 г. Булгур 60 г указан точно. Если на упаковке другой вес, уточните его в форме остатков: это изменит дефицит и закупку.',
+ 'Все 400 г свиного фарша идут в понедельник; грудка 880 г — по 440 г во вторник и четверг; филе горбуши 300 г — в пятницу. Их повторно не покупаем. Размораживайте нужную порцию в холодильнике перед днём готовки.',
+ 'Помидоры 210 г и 120 г пассаты — в понедельник, оставшиеся 100 г пассаты — в четверг. Если открытая пассата не доживёт до четверга по этикетке, заморозьте эти 100 г сейчас пригодными. Морковь из дома используется в начале недели; докупить нужно только дефицит с округлением.',
+ 'Домашнее молоко: 100 мл во вторник, 300 мл на субботние оладьи, 100 мл на воскресную запеканку. Сроки проверьте 25.10: пригодные 400 мл для выходных при необходимости заморозьте сразу отдельными порциями, затем разморозьте в холодильнике. Не храните открытое молоко до выходных сверх срока.',
+ 'Пн–Чт и Вс: по 3 умеренные порции — 2 на ужин и 1 на следующий обед. Пт и Сб: по 2. В выходные только плотный завтрак и ужин. Ланч-бокс уже входит в состав блюда; повторно продукты не списываем.',
+ 'В среду гороховое пюре, не суп. Горох можно замочить во вторник вечером в холодильнике; время варки зависит от упаковки. В субботу используем 400 г домашнего дрожжевого теста, 100 г остаются замороженными.',
+ 'Самостоятельная закупка, новая доставка и вода не планируются. Доставку/сборку прошедшей недели 11 чек отдельно не показывает: сумма неизвестна, не ноль. Расходы за прошлый период могут быть неполными.'
+];
+const weekTwelvePrices={
+ mixedmince:{name:'Фарш свиной',pack:400,price:130.68,kcal:2.63},
+ dough:{name:'Тесто дрожжевое',pack:500,price:180},
+ rice:{name:'Рис сухой (домашний пакетик ≈60 г)'},
+ yogurt:{name:'Йогурт греческий 8%',pack:180,price:38.48,kcal:1.3},
+ sourcream:{pack:180,price:75.18},cheese:{pack:180,price:192.44},
+ curd:{name:'Творог 5%',pack:300,price:134.38},mushrooms:{pack:250,price:104.72},
+ egg:{pack:10,price:127.10},potato:{name:'Картофель, вес до очистки'},pepper:{name:'Сладкий перец, вес до удаления семян'}
+};
+const weekTwelvePriceNote='Цены — ориентиры, не сегодняшний ценник: яйца, йогурт 8%, сметана, сыр, творог и грибы — по чеку 18.10; для двух пачек творога взят больший чековый ценник 134,38 ₽. Остальные товары — прежние оценки по чекам и плану. Скидки и цены сервиса могут отличаться от магазина. Резерв 5% включён. Цену целой горбуши не выдаём за цену филе. Калории, включая йогурт 8%, оценочные: сверьте этикетку.';
+const weekElevenReceiptTotal=3413.45;
+const weekElevenReportedTotal=4913.45;
+const weekElevenPurchases=[
+ ['Бананы','0,94 кг',92.16],['Горбуша целая, с головой, непотрошеная','1,00 кг брутто, не масса филе',698.18],
+ ['Гуляш из говядины без кости','1,13 кг',504.84],['Йогурт греческий Эго 8%','3 × 180 г',115.44],
+ ['Картофель','0,85 кг',22.77],['Корнишоны по-берлински','банка 350 г, масса без рассола неизвестна',216.61],
+ ['Лук репчатый','1,30 кг',24.43],['Морковь','1,04 кг',12.10],['Пассата Пиканта с базиликом','2 × 220 г',229.14],
+ ['Сметана 20%','180 г',75.18],['Сыр полутвёрдый 45%','180 г',192.44],['Творог 5%, пачка 1','300 г',134.26],
+ ['Творог 5%, пачка 2','300 г',134.38],['Томаты розовые','1,66 кг',145.96],['Фарш свиной','400 г',130.68],
+ ['Филе куриное без кожи','0,89 кг',453.06],['Шампиньоны','250 г',104.72],['Яйца С0','10 шт.',127.10]
+].map(([name,quantity,amount])=>({period:'w6',name,quantity,amount,date:'18.10.2026',source:'чек продуктовой доставки; неделя 11'}));
+const weekElevenExtras=[{period:'w6',name:'Индейка, мандарины, молоко, лаваш, мёд и имбирь — докупки одной суммой',quantity:'количества и цены отдельных товаров не сообщены',amount:1500,date:'неделя 11, точные даты не сообщены',source:'со слов пользователя 25.10; отдельно от чека'}];
+
+const weekTwelveReplacements={
+ o12mon:{title:'Свиные тефтели в томатном соусе с кускусом',protein:'Свинина',time:40,items:{mixedmince:400,couscous:180,passata:120,tomato:210,carrot:110,onion:100,egg:1,oil:10,salt:3,spices:1},steps:[
+  'Разморозьте 400 г свиного фарша в холодильнике. 100 г лука мелко нарежьте, 110 г очищенной моркови натрите, 210 г домашних помидоров нарежьте кубиками.',
+  'Смешайте фарш, 1 яйцо, 40 г из подготовленного лука и 1 г соли. Сформуйте 9 небольших тефтелей. На 5 г масла обжарьте их по 2 минуты с двух сторон, переложите.',
+  'На оставшихся 5 г масла готовьте остальные 60 г лука и морковь 5 минут. Добавьте помидоры, 120 г пассаты, 100 мл воды, 1 г соли и 1 г специй. Верните тефтели, тушите под крышкой 18–22 минуты до 71 °C внутри. В конце снимите крышку и слегка загустите соус.',
+  '180 г сухого кускуса залейте кипятком в пропорции с упаковки (обычно около 180 мл), добавьте оставшийся 1 г соли, накройте на 5–7 минут и разрыхлите вилкой.',
+  'Разделите весь кускус и соус на 3 части, в каждую положите по 3 тефтели. Две порции — на ужин, третью быстро охладите для обеда во вторник.'
+ ],note:'Используем весь домашний фарш, кускус и помидоры. Ориентир готового выхода 380–450 г/порцию; это оценка, взвесьте готовое блюдо.'},
+ o12tue:{title:'Куриное жаркое с картофелем и морковью',protein:'Курица',time:45,items:{chicken:440,potato:450,carrot:150,onion:100,milk:100,flour:10,oil:10,salt:3,spices:1},steps:[
+  'Разморозьте 440 г грудки, нарежьте кубиками 2 см. Подготовьте 450 г картофеля (вес до очистки), 150 г моркови и 100 г лука; картофель и морковь нарежьте небольшими кусочками.',
+  'В глубокой сковороде на 10 г масла обжарьте курицу 4 минуты. Добавьте лук и морковь ещё на 5 минут.',
+  'Добавьте картофель, 250 мл горячей воды, 3 г соли и 1 г специй. Накройте, тушите на небольшом огне 18–22 минуты до мягкости картофеля.',
+  'Размешайте 10 г муки в 100 мл холодного молока без комков. Влейте, помешивая, и готовьте ещё 4–5 минут до густого соуса. Курица должна достигнуть 74 °C; если картофель ещё твёрдый, добавьте немного воды и продлите тушение.',
+  'Разделите всё блюдо на 3 равные порции, одну охладите и уберите для обеда в среду.'
+ ],note:'440 г грудки из домашних 880 г. Ориентир 350–430 г готовой еды/порцию. Картофель в корзине и рецепте взвешивают до очистки.'},
+ o12wed:{title:'Индейка в сметанном соусе с гороховым пюре',protein:'Индейка',time:80,items:{turkey:420,peas:180,carrot:100,onion:120,sourcream:100,oil:10,salt:3,spices:1},steps:[
+  '180 г колотого гороха промойте. По желанию замочите на ночь в холодильнике, затем воду слейте. Залейте 600 мл свежей воды и варите на слабом огне 45–75 минут до полного размягчения, время сверяйте с упаковкой; при необходимости подливайте кипяток.',
+  '420 г индейки нарежьте небольшими кусочками; 120 г лука измельчите, 100 г моркови натрите. На 10 г масла обжарьте индейку 5 минут, добавьте лук и морковь на 5 минут.',
+  'Добавьте 100 г сметаны, 60 мл воды, 2 г соли и 1 г специй. Тушите 12–18 минут до 74 °C внутри индейки. Соус должен оставаться густым.',
+  'Готовый горох разомните с оставшимся 1 г соли. Лишнюю воду выпарите, при необходимости разжижьте несколькими ложками горячей воды: нужна консистенция пюре, не супа.',
+  'Разделите гороховое пюре, всю индейку и соус на 3 равные порции. Одну быстро охладите для четверга.'
+ ],note:'Из 680 г домашнего гороха расходуем 180 г. Индейку докупаем: прошлые докупки не означают, что она осталась. Активная работа около 20 минут, общий срок зависит от гороха. Ориентир 350–430 г/порцию.'},
+ o12thu:{title:'Буррито с курицей, рисом и сыром',protein:'Курица',time:35,items:{pita:240,chicken:440,rice:60,pepper:150,cheese:60,passata:100,onion:60,oil:8,salt:3,spices:1},steps:[
+  'Сварите 60 г сухого риса по упаковке и разрыхлите. Разморозьте вторые 440 г грудки; нарежьте мелко, как и 150 г перца (вес до удаления семян) и 60 г лука.',
+  'На 8 г масла обжарьте курицу и лук 6 минут, добавьте перец ещё на 4 минуты. Вмешайте оставшиеся домашние 100 г пассаты, 3 г соли и 1 г специй. Готовьте 5–8 минут до густой начинки и 74 °C внутри курицы.',
+  '240 г лаваша разделите на 3 части по 80 г. На каждую выложите треть риса, куриной начинки и по 20 г сыра. Сверните плотными конвертами.',
+  'Подрумяньте на сухой сковороде по 2 минуты с обеих сторон. Два буррито съешьте, третий быстро охладите для пятничного обеда; при разогреве прогрейте середину до 74 °C.'
+ ],note:'Рис ≈60 г из домашнего пакетика, курица и пассата полностью из запаса. Лаваш покупаем: остатка в новом списке нет. Ориентир 330–400 г/буррито.'},
+ o12fri:{title:'Горбуша с картофельными дольками и огурцом',protein:'Красная рыба',time:45,items:{fish:300,potato:350,cucumber:200,yogurt:80,oil:8,salt:2,spices:1},steps:[
+  'Разморозьте 300 г филе горбуши в холодильнике, обсушите и удалите оставшиеся кости. Разделите на 2 куска по 150 г. Разогрейте духовку до 200 °C.',
+  '350 г картофеля (вес до очистки) нарежьте тонкими дольками, смешайте с 5 г масла и 1 г соли. Запекайте 25 минут, перевернув один раз.',
+  'Смажьте рыбу оставшимися 3 г масла, добавьте 0,5 г соли и 1 г специй. Поставьте рядом с картофелем, уменьшите нагрев до 180 °C, готовьте ещё 12–18 минут до 63 °C внутри. Выньте рыбу, если картофелю нужно больше времени.',
+  '200 г огурца нарежьте. 80 г греческого йогурта смешайте с оставшимися 0,5 г соли и подайте отдельно. Разделите рыбу, картофель, огурец и соус на 2 порции.'
+ ],note:'Все 300 г домашнего филе. Целую рыбу из чека не считаем чистым филе. Ориентир 380–430 г готовой еды/порцию; обед на субботу не запланирован.'},
+ o12satB:{title:'Овсяные оладьи с бананом и йогуртом',protein:'Плотный завтрак',time:35,items:{oats:120,flour:60,egg:2,milk:300,banana:300,yogurt:200,sugar:10,oil:10,salt:1},steps:[
+  '120 г овсяных хлопьев измельчите блендером в крупную муку. Смешайте с 60 г пшеничной муки, 2 яйцами, 300 мл молока, 10 г сахара и 1 г соли. Оставьте на 10–15 минут: тесто должно медленно стекать с ложки.',
+  'После набухания перемешайте тесто. Если хлопья впитали много жидкости и тесто не спадает с ложки, добавьте 1–2 столовые ложки воды. Первую небольшую оладью используйте, чтобы подобрать нагрев: она должна успевать пропекаться без горелой корочки.',
+  'Разогрейте антипригарную сковороду на среднем огне. Распределите 10 г масла на все партии. Выпекайте небольшие оладьи по 2–3 минуты с каждой стороны до готовой середины; при необходимости уменьшите огонь.',
+  'Очистите 300 г бананов (это вес с кожурой, съедобной мякоти примерно 200 г). Разделите все оладьи, банан и 200 г йогурта на 2 равных плотных завтрака.'
+ ],note:'Используем половину домашних хлопьев. Калории оценочные; бананы в корзине указаны с кожурой. Домашние 300 мл молока заранее сохраните до субботы согласно сроку или заморозьте пригодными.'},
+ o12satD:{title:'Белая пицца с грибами, перцем и сыром',protein:'Домашняя пицца',time:45,items:{dough:400,mushrooms:250,pepper:150,cheese:120,sourcream:80,onion:70,oil:6,salt:2,spices:1},steps:[
+  'Заранее разморозьте в холодильнике 400 г из домашних 500 г дрожжевого теста; оставшиеся 100 г сохраните замороженными. Разогрейте духовку с противнем до 220 °C.',
+  '250 г грибов нарежьте пластинками, 150 г перца (вес до удаления семян) — полосками, 70 г лука — полукольцами. Грибы обжарьте на сухой сковороде до выпаривания воды, затем с 6 г масла добавьте лук и перец на 4 минуты.',
+  'Раскатайте тесто на пергаменте примерно 30 × 35 см, толщиной 4–5 мм, наколите вилкой. Смажьте 80 г сметаны, распределите овощи, 120 г тёртого сыра, 2 г соли и 1 г специй.',
+  'Перенесите на горячий противень. Выпекайте 18–25 минут: дно и середина теста должны пропечься. Разрежьте на 4 равных куска, каждому по 2. Всю пиццу считаем 2 ужинами, без запланированного переноса.'
+ ],note:'Тесто из морозилки; соус — оставшиеся 80 г из покупной пачки сметаны 180 г; проверьте срок после вскрытия, при необходимости заморозьте эту порцию пригодной в среду. Ориентир 430–500 г готовой пиццы/порцию; более плотный субботний ужин, отдельный салат не требуется.'},
+ o12sunB:{title:'Творожная запеканка с грушей',protein:'Плотный завтрак',time:55,items:{curd:400,pear:350,semolina:55,egg:2,milk:100,sugar:20,butter:10,salt:1},steps:[
+  'Смешайте 55 г домашней манки и 100 мл молока, оставьте на 15 минут. Разогрейте духовку до 180 °C.',
+  '400 г творога 5% разомните с 2 яйцами, 20 г сахара и 1 г соли, добавьте набухшую манку. 350 г груш очистите от сердцевины, нарежьте и вмешайте.',
+  'Смажьте небольшую форму 10 г сливочного масла. Выложите массу слоем 3–4 см, выпекайте 30–40 минут до схватившейся середины, около 74 °C в центре.',
+  'Дайте постоять 10 минут и разделите всю запеканку на 2 плотных завтрака. Купленный творог сверх 400 г можно сразу заморозить пригодным отдельной порцией.'
+ ],note:'Домашняя манка и 100 мл молока. Покупка творога округлена до двух пачек по 300 г; 200 г остаются, не добавляйте их в рецепт автоматически.'},
+ o12sunD:{title:'Печёночные оладьи с картофельным пюре',protein:'Печень',time:40,items:{liver:450,egg:1,flour:40,carrot:120,onion:70,potato:420,butter:15,oil:10,salt:3,spices:1},steps:[
+  '420 г картофеля (вес до очистки) отварите в воде до мягкости, 15–20 минут. Сохраните 80–120 мл отвара, остальную воду слейте.',
+  '450 г куриной печени очистите от плёнок. Измельчите с 70 г лука, 1 яйцом и 40 г муки. 120 г моркови мелко натрите и вмешайте, добавьте 2 г соли и 1 г специй.',
+  'На среднем огне жарьте небольшие оладьи толщиной не более 1 см, расходуя 10 г масла на все партии: примерно по 3–4 минуты с каждой стороны, затем при необходимости под крышкой. В центре должно быть 74 °C; время само по себе не доказывает готовность.',
+  'Разомните картофель с 15 г сливочного масла, оставшимся 1 г соли и понемногу добавляйте горячий отвар до нужной консистенции. Молоко для этого пюре не требуется.',
+  'Всё пюре и оладьи разделите на 3 равные порции. Одну быстро охладите и сохраните для обеда в понедельник 2 ноября.'
+ ],note:'Печень докупаем, картофель взвешивают до очистки. Молоко полностью распределено по другим блюдам, здесь пюре на отваре. Ориентир 330–400 г готовой еды/порцию.'}
+};
+function weekTwelveRecipe(recipe){
+ const replacement=weekTwelveReplacements[recipe.id];
+ return replacement?{...recipe,...replacement,items:{...replacement.items},steps:[...replacement.steps],pricingWeek:7,revised:true,newInPlan:true}:recipe;
+}
+
 // Store departments are presentation metadata only: never change recipe needs or payments.
 const shoppingDepartments = [
  {id:'produce',label:'Овощи, фрукты и зелень',products:['eggplant','carrot','tomato','cucumber','spinach','potato','onion','cabbage','pepper','wholepepper','zucchini','mushrooms','garlic','apple','banana','mandarin','pear']},
@@ -1072,7 +1180,7 @@ function R(id,title,time,protein,items,steps,note='',salt=2) {
 }
 const S = 'Ингредиенты и все граммовки рассчитаны на 2 порции. Делите белок поровну; указанные калории — половина общего блюда, не дневная норма.';
 function recipeFor(id,tier=1,legacy=false) {
- const october=octoberRecipe(id);if(october){const current=weekElevenRecipe(weekTenRecipe(october));return {...current,items:{...current.items},steps:[...current.steps]};}
+ const october=octoberRecipe(id);if(october){const current=weekTwelveRecipe(weekElevenRecipe(weekTenRecipe(october)));return {...current,items:{...current.items},steps:[...current.steps]};}
  const r=recipes.find(x=>x.id===id); if(!r) throw Error('Unknown recipe '+id);
  const copy={...r,items:{...r.items},steps:[...r.steps]};
  if(tier===0 && ['w1cutlet','w2meatballs'].includes(id)) {delete copy.items.mince;copy.items.mixedmince=400;copy.title=copy.title.replace('Говяжьи','Домашние');copy.protein='Смешанный фарш';copy.steps=copy.steps.map(s=>s.replace('400 г фарша','400 г смешанного фарша (свинина + говядина)'));}
@@ -1085,7 +1193,7 @@ function recipeFor(id,tier=1,legacy=false) {
  if(tier===2 && id==='w4fish') {copy.items.salmon=copy.items.fish;delete copy.items.fish;copy.title=copy.title.replace('Горбуша','Лосось');}
  return tier===1?(legacy?activeRecipe(copy):weekEightRecipe(weekSevenRecipe(heartyBreakfast(revisedRecipe(activeRecipe(copy)))))):{...copy,portions:2};
 }
-function currentIngredient(id,week=3){return {...ingredients[id],...currentPriceOverrides[id],...(week>=2?weekSevenPrices[id]:{}),...(week>=3?weekEightPrices[id]:{}),...(week>=4?octoberPrices[id]:{}),...(week>=5?weekTenPrices[id]:{}),...(week>=6?weekElevenPrices[id]:{})};}
+function currentIngredient(id,week=3){return {...ingredients[id],...currentPriceOverrides[id],...(week>=2?weekSevenPrices[id]:{}),...(week>=3?weekEightPrices[id]:{}),...(week>=4?octoberPrices[id]:{}),...(week>=5?weekTenPrices[id]:{}),...(week>=6?weekElevenPrices[id]:{}),...(week>=7?weekTwelvePrices[id]:{})};}
 function calories(r){return Math.round(Object.entries(r.items).reduce((s,[id,q])=>s+(r.revised?currentIngredient(id,r.pricingWeek??2):ingredients[id]).kcal*q,0)/(r.portions||2));}
 const weeks=[
  {label:'7–13 сентября',date:'2026-09-07',theme:'Сначала остатки',ids:['w1chicken','w1eggplant','w1tortilla','w1pasta','w1cutlet','w1oats','w1salad','w1bolognese','w1syrniki','w1toast','w1pork']},
@@ -1101,7 +1209,7 @@ const slots=[['Пн','Ужин',0],['Вт','Ужин',1],['Ср','Ужин',2],[
 function mealEntries(week,tier=1,legacy=false) {
  return weeks[week].ids.map((id,slot)=>({id,slot})).filter(({slot})=>tier!==1||legacy||week===0||![6,9].includes(slot));
 }
-function weekTheme(week){return week===2?'Остатки в дело · архив плана':week===3?'Сырники и большой рыбный пирог':weeks[week].theme;}
+function weekTheme(week){return week===7?'Запасы в дело · тефтели, горбуша и пицца':week===2?'Остатки в дело · архив плана':week===3?'Сырники и большой рыбный пирог':weeks[week].theme;}
 function extras(tier,week,legacy=false) {
  if(tier===1&&!legacy&&week>=4)return [
   {title:'Свежие фрукты на неделю',items:{mandarin:1500,banana:500,pear:700},how:'Мандарины, бананы и груши распределите на 7 дней вдвоём; покупайте каждую неделю свежие. В рецептах завтраков фрукты посчитаны дополнительно. Яблок в октябрьской закупке нет.'},
@@ -1134,20 +1242,22 @@ function calculate(tier=1,grainStock={},legacy=false) {
   if(latest&&w>4){for(const id of ['mushrooms','tomato','pepper','zucchini','mandarin','pear','banana','milk','yogurt','curd','curd23','sourcream','bread'])inventory[id]=0;}
   if(latest&&w>5)inventory.pickles=0; // An opened jar is not assumed usable a week later without its label.
   if(latest&&w===5){for(const id of Object.keys(inventory))inventory[id]=weekTenStock[id]||0;}
-  if(latest&&w===6){for(const id of Object.keys(inventory))inventory[id]=weekElevenStock[id]||0;for(const id of ['rice','bulgur','couscous'])if(id in grainStock)inventory[id]=Math.max(0,Number(grainStock[id])||0);}
+  if(latest&&w===6){for(const id of Object.keys(inventory))inventory[id]=weekElevenStock[id]||0;}
+  if(latest&&w===7){for(const id of Object.keys(inventory))inventory[id]=weekTwelveStock[id]||0;for(const id of ['rice','bulgur','couscous'])if(id in grainStock)inventory[id]=Math.max(0,Number(grainStock[id])||0);}
   const used={},alloc={}; const add=(id,q,label)=>{used[id]=(used[id]||0)+q;(alloc[id]??=[]).push([label,q]);};
   mealEntries(w,tier,legacy).forEach(({id,slot})=>{const recipe=recipeFor(id,tier,legacy);if(!recipe.carryoverFrom)Object.entries(recipe.items).forEach(([key,q])=>add(key,q,`${slots[slot][0]} ${slots[slot][1]} · ${recipe.title}`));});
   extras(tier,w,legacy).forEach(e=>Object.entries(e.items).forEach(([id,q])=>add(id,q,e.title)));
-const rows=Object.entries(used).map(([id,q])=>{const i=latest?currentIngredient(id,w):ingredients[id],opening=inventory[id]||0;if(latest&&w===5&&id==='spices')return {id,used:q,opening:null,purchase:20,cost:60,closing:null,alloc:alloc[id],pack:20,unitPrice:60,manual:true};if((i.base&&(!latest||id==='spices'))||(latest&&w>=2&&(w>=6?weekElevenUnknown:w===5?weekTenUnknown:w===4?octoberUnknown:w===3?weekEightUnknown:weekSevenUnknown).includes(id)))return {id,used:q,opening:null,purchase:0,cost:0,closing:null,alloc:alloc[id],pack:i.pack,unitPrice:i.price};const count=Math.max(0,Math.ceil(Math.max(0,q-opening)/i.pack-1e-9)),purchase=count*i.pack,cost=Math.round(count*i.price*100)/100;inventory[id]=opening+purchase-q;return{id,used:q,opening,purchase,cost,closing:inventory[id],alloc:alloc[id],pack:i.pack,unitPrice:i.price};});
+const rows=Object.entries(used).map(([id,q])=>{const i=latest?currentIngredient(id,w):ingredients[id],opening=inventory[id]||0;if(latest&&w===5&&id==='spices')return {id,used:q,opening:null,purchase:20,cost:60,closing:null,alloc:alloc[id],pack:20,unitPrice:60,manual:true};if((i.base&&(!latest||id==='spices'))||(latest&&w>=2&&(w>=7?weekTwelveUnknown:w===6?weekElevenUnknown:w===5?weekTenUnknown:w===4?octoberUnknown:w===3?weekEightUnknown:weekSevenUnknown).includes(id)))return {id,used:q,opening:null,purchase:0,cost:0,closing:null,alloc:alloc[id],pack:i.pack,unitPrice:i.price};const count=Math.max(0,Math.ceil(Math.max(0,q-opening)/i.pack-1e-9)),purchase=count*i.pack,cost=Math.round(count*i.price*100)/100;inventory[id]=opening+purchase-q;return{id,used:q,opening,purchase,cost,closing:inventory[id],alloc:alloc[id],pack:i.pack,unitPrice:i.price};});
   const food=Math.round(rows.reduce((s,r)=>s+r.cost,0)*100)/100,delivery=latest&&w===6?weekElevenDelivery.fee:tier===1?0:[0,200,400][tier],deliveryPending=latest&&w===6&&delivery===null,base=w===0?(tier===0?600:800):0,bufferRate=tier===1?.05:.1,buffer=Math.ceil((food+base)*bufferRate),total=Math.round((food+(delivery??0)+base+buffer)*100)/100;
   result.push({rows,food,delivery,deliveryPending,completeTotal:deliveryPending?null:total,base,bufferRate,buffer,total,remaining:{...inventory},isActual:tier===1&&!legacy&&w===0});
   if(tier===1&&!legacy&&w===0)Object.assign(result[0],{originalPlanTotal:total,food:weekFiveActual,base:0,buffer:0,total:weekFiveActual});
   if(tier===1&&!legacy&&w===3)Object.assign(result[3],{originalPlanTotal:total,food:weekEightReportedTotal,base:0,buffer:0,total:weekEightReportedTotal,isActual:true});
   if(tier===1&&!legacy&&w===4)Object.assign(result[4],{originalPlanTotal:total,food:weekNineReportedTotal,base:0,buffer:0,total:weekNineReportedTotal,isActual:true});
   if(tier===1&&!legacy&&w===5)Object.assign(result[5],{originalPlanTotal:total,food:weekTenReportedTotal,base:0,buffer:0,total:weekTenReportedTotal,completeTotal:weekTenReportedTotal,isActual:true});
-  if(result[w].isActual)result[w].completeTotal=result[w].total;
+  if(tier===1&&!legacy&&w===6)Object.assign(result[6],{originalPlanTotal:total,food:weekElevenReportedTotal,base:0,buffer:0,total:weekElevenReportedTotal,completeTotal:null,isActual:true});
+  if(result[w].isActual&&!result[w].deliveryPending)result[w].completeTotal=result[w].total;
  }
- const current=tier===1&&!legacy,remainingTotal=current?Math.round(result.slice(6).reduce((s,w)=>s+w.total,0)*100)/100:null,currentCycleConfirmed=current?Math.round((weekNineReportedTotal+weekTenReportedTotal)*100)/100:0;
+ const current=tier===1&&!legacy,remainingTotal=current?Math.round(result.slice(7).reduce((s,w)=>s+w.total,0)*100)/100:null,currentCycleConfirmed=current?Math.round((weekNineReportedTotal+weekTenReportedTotal+weekElevenReportedTotal)*100)/100:0;
  return {weeks:result,total:current?Math.round((currentCycleConfirmed+remainingTotal)*100)/100:Math.round(result.reduce((s,w)=>s+w.total,0)*100)/100,food:Math.round(result.reduce((s,w)=>s+w.food,0)*100)/100,confirmed:current?confirmedThroughEight:0,currentCycleConfirmed,remainingTotal,deliveryPending:current&&result[6].deliveryPending};
 }
 
@@ -1422,16 +1532,16 @@ R('w4cutlet','Говяжьи котлеты с картофельными дол
 const $=id=>document.getElementById(id);
 const num=new Intl.NumberFormat('ru-RU',{maximumFractionDigits:2});
 const money=n=>num.format(n)+' ₽';
-const qty=(id,n,week=6)=>n===null?'Вес не подтверждён':num.format(n)+' '+currentIngredient(id,week).unit;
+const qty=(id,n,week=7)=>n===null?'Вес не подтверждён':num.format(n)+' '+currentIngredient(id,week).unit;
 const esc=s=>String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const activeTier=1;
-let activeWeek=6,lastTrigger=null;
-const expandedShopping=new Set([6]);
+let activeWeek=7,lastTrigger=null;
+const expandedShopping=new Set([7]);
 const view=typeof location==='undefined'?'all':new URLSearchParams(location.search).get('view')||'all';
 if(['shopping','stock','expenses'].includes(view))document.documentElement.dataset.view=view;
 if(typeof location!=='undefined'&&location.search.includes('embed=1'))document.documentElement.classList.add('embedded');
 const key='petersburg-ration-september-2026-v2'; // Preserve the existing local journal key.
-const snapshot='2026-10-18';
+const snapshot='2026-10-25';
 let saved={grains:{},entries:[],grainSnapshot:snapshot,previousGrains:{}},storageOK=true;
 try{
  const old=JSON.parse(localStorage.getItem(key)||'null');
@@ -1451,7 +1561,7 @@ function dateFor(w,index){const d=new Date(weeks[w].date+'T12:00:00');d.setDate(
 function renderDashboard(){const p=plan();$('dashboard').innerHTML=chip('Лимит на недели 9–12',money(25000))+chip('Учтено + прогноз без доставки',money(p.total))+chip('Доставка Н11','сумма уточняется');}
 function renderMenu(){
  $('week-tabs').innerHTML=[4,5,6,7,0,1,2,3].map(i=>`<button type="button" data-week="${i}" class="${activeWeek===i?'active':''}" aria-pressed="${activeWeek===i}">Неделя ${i+5} · ${esc(weeks[i].label)}</button>`).join('');
- $('week-heading').innerHTML=`<div class="week-heading"><h3>${esc(weekTheme(activeWeek))}</h3><span class="tag">${activeWeek<=5?'Архив плана · не факт':'Запланировано'}</span></div>`;
+ $('week-heading').innerHTML=`<div class="week-heading"><h3>${esc(weekTheme(activeWeek))}</h3><span class="tag">${activeWeek<=6?'Архив плана · не факт':'Запланировано'}</span></div>`;
  $('meal-list').innerHTML=mealEntries(activeWeek,activeTier).map(({id,slot:i})=>{
   const r=recipeFor(id,activeTier),cal=calories(r),update=activeWeek===0?weekFiveMealUpdates[i]:null;
   return `<button class="meal-card ${i>=5?'weekend':''}" type="button" data-recipe="${id}" aria-haspopup="dialog"><span class="meal-top"><span>${slots[i][0]} · ${dateFor(activeWeek,i)} · ${slots[i][1]}</span><span class="tag">${r.newInPlan?'Новый вариант':i>=5?'Гибкий план':esc(r.protein)}</span></span><span class="meal-title">${esc(r.title)}</span>${update?`<small>${esc(update.note)}</small>`:''}<span class="meal-footer">≈ ${cal} ккал / человеку · ${r.time} мин →</span><small>${esc(portionLabel(r))}${i<5&&activeWeek>=4?` · с рабочим обедом 1 300: ≈ ${cal+1300} ккал*`:''}</small></button>`;
@@ -1461,9 +1571,9 @@ function renderMenu(){
 }
 function historyShopping(index,week){
  if(index===1)return `<details class="shopping-week surface" data-shopping-week="1"><summary><span><strong>Неделя 6 · архив плана</strong><small>14–20 сентября · не повторять</small></span></summary><div class="shopping-week-content"><p>Прежний прогноз ${money(week.total)} не является фактом. Чек 12.09 и допокупка 19.09 сохранены в расходах отдельно.</p></div></details>`;
- const lists=index===0?weekFivePurchases:index===2?[...weekSevenPurchases,...weekSevenExtras]:index===4?[...weekNinePurchases,...weekNineExtras]:index===5?[...weekTenPurchases,...weekTenExtras]:[...weekEightPurchases,...weekEightExtras];
- const total=index===0?weekFiveActual:index===2?weekSevenActual:index===4?weekNineReportedTotal:index===5?weekTenReportedTotal:weekEightReportedTotal;
- const caption=index===5?'Чек 10.10 — 3 939,64 ₽; молоко 230 ₽, хлеб 240 ₽, вкусности 460 ₽ отдельно: всего 4 869,64 ₽. Все 24 строки чека съедобные. Готовка и полнота расходов не подтверждены.':index===4?'Чек от 03.10 — 3 180,39 ₽; отнесён вами к неделе 9. Дополнительные вкусности — 600 ₽ одной суммой. Все позиции чека съедобные; полнота расходов не подтверждена.':index===3?'Чек 27.09 — 5 103,62 ₽, дополнительные покупки — 970 ₽. Все позиции чека относятся к еде. Вода 120 ₽ включена только в прошедший факт, а не в будущую закупку. Полнота недели не подтверждена.':index===2?'Чек 20.09 и допокупки; полнота расходов не подтверждена.':'Исторические покупки, не список для повторной закупки.';
+ const lists=index===0?weekFivePurchases:index===2?[...weekSevenPurchases,...weekSevenExtras]:index===4?[...weekNinePurchases,...weekNineExtras]:index===6?[...weekElevenPurchases,...weekElevenExtras]:index===5?[...weekTenPurchases,...weekTenExtras]:[...weekEightPurchases,...weekEightExtras];
+ const total=index===0?weekFiveActual:index===2?weekSevenActual:index===4?weekNineReportedTotal:index===6?weekElevenReportedTotal:index===5?weekTenReportedTotal:weekEightReportedTotal;
+ const caption=index===6?'Чек 18.10 — 3 413,45 ₽, 18 продуктовых строк; докупки индейки, мандаринов, молока, лаваша, мёда и имбиря — 1 500 ₽ одной суммой. Всего 4 913,45 ₽. Доставка и сборка отдельными строками не указаны; сумма неизвестна. Это не повторный список покупок.':index===5?'Чек 10.10 — 3 939,64 ₽; молоко 230 ₽, хлеб 240 ₽, вкусности 460 ₽ отдельно: всего 4 869,64 ₽. Все 24 строки чека съедобные. Готовка и полнота расходов не подтверждены.':index===4?'Чек от 03.10 — 3 180,39 ₽; отнесён вами к неделе 9. Дополнительные вкусности — 600 ₽ одной суммой. Все позиции чека съедобные; полнота расходов не подтверждена.':index===3?'Чек 27.09 — 5 103,62 ₽, дополнительные покупки — 970 ₽. Все позиции чека относятся к еде. Вода 120 ₽ включена только в прошедший факт, а не в будущую закупку. Полнота недели не подтверждена.':index===2?'Чек 20.09 и допокупки; полнота расходов не подтверждена.':'Исторические покупки, не список для повторной закупки.';
  return `<details class="shopping-week surface" data-shopping-week="${index}"><summary><span><strong>Неделя ${index+5} · покупки</strong><small>${esc(weeks[index].label)} · архив</small></span><span class="week-price">${money(total)}<small>Сообщено</small></span></summary><div class="shopping-week-content"><p>${caption}</p><ul>${lists.map(x=>`<li>${esc(x.name)}${x.quantity?' · '+esc(x.quantity):''} — ${money(x.amount)}</li>`).join('')}</ul></div></details>`;
 }
 function shoppingWeek(index,week){
@@ -1476,14 +1586,14 @@ function shoppingWeek(index,week){
   <div class="shopping-week-content"><h3>Что купить на неделю ${index+5}</h3><p class="buy-explanation">По отделам магазина: продукт → купить после вычета домашнего запаса → прогноз цены. Для скоропортящихся остатков прошлых недель перенос не предполагается; пригодные замороженные мясные излишки учтены.</p>
   ${groups.map(group=>`<section class="buy-department" data-buy-department="${group.id}" aria-labelledby="department-${index}-${group.id}"><header class="department-heading"><h4 id="department-${index}-${group.id}">${esc(group.label)}</h4><span>${money(group.total)}</span></header><div class="buy-columns" aria-hidden="true"><span>Продукт</span><span>Купить</span><span>Цена</span></div><ul class="buy-list">${group.rows.map(r=>{const i=currentIngredient(r.id,index);return `<li data-buy-product="${r.id}"><div class="buy-product"><strong>${esc(i.name)}</strong></div><div class="buy-quantity"><span class="sr-only">Купить: </span><strong>${qty(r.id,r.purchase,index)}</strong></div><div class="buy-price"><span class="sr-only">Плановая цена: </span><strong>${money(r.cost)}</strong></div>${warning(r.id).trim()?`<p class="buy-hint">${esc(warning(r.id))}</p>`:''}</li>`}).join('')}</ul></section>`).join('')}
   <div class="shopping-actions"><button type="button" class="utility" data-download-week="${index}">Скачать список недели ${index+5}</button><span>Закупка: к началу недели ${esc(weeks[index].label)}</span></div>
-  <div class="chips">${chip('Продукты',money(week.food))}${week.deliveryPending?chip('Доставка и сборка','сумма неизвестна'):chip('Самостоятельная покупка','доставка 0 ₽')}${chip('Резерв цены 5%',money(week.buffer))}</div><p class="muted">${esc(index>=6?weekElevenPriceNote:index===5?weekTenPriceNote:octoberPriceNote)}</p>${index>=6?'<p class="muted"><a href="https://vkusvill.ru/goods/ogurtsy-dyadya-vanya-kornishony-po-frantsuzski-s-b-460-g-40567/" target="_blank" rel="noopener noreferrer">Масса огурчиков без рассола: карточка продавца</a></p>':''}
+  <div class="chips">${chip('Продукты',money(week.food))}${week.deliveryPending?chip('Доставка и сборка','сумма неизвестна'):chip('Самостоятельная покупка','доставка 0 ₽')}${chip('Резерв цены 5%',money(week.buffer))}</div><p class="muted">${esc(index===7?weekTwelvePriceNote:index===6?weekElevenPriceNote:index===5?weekTenPriceNote:octoberPriceNote)}</p>${index===6?'<p class="muted"><a href="https://vkusvill.ru/goods/ogurtsy-dyadya-vanya-kornishony-po-frantsuzski-s-b-460-g-40567/" target="_blank" rel="noopener noreferrer">Масса огурчиков без рассола: карточка продавца</a></p>':''}
   <details class="calculation-details"><summary>Подробный расчёт: фасовка, остатки и блюда</summary><div class="table-scroll"><table><caption class="sr-only">Расчёт недели ${index+5}</caption><thead><tr><th scope="col">Продукт</th><th scope="col">Купить</th><th scope="col">Цена</th><th scope="col">Нужно</th><th scope="col">Есть</th><th scope="col">Останется</th></tr></thead><tbody>${rows.map(r=>`<tr><td><strong>${esc(currentIngredient(r.id,index).name)}</strong><small>Фасовка: ${qty(r.id,r.pack,index)} · ${money(r.unitPrice)}.</small><details><summary>Куда идёт</summary><ul>${r.alloc.map(([name,n])=>`<li>${esc(name)}: ${qty(r.id,n,index)}</li>`).join('')}</ul></details></td><td>${r.purchase?qty(r.id,r.purchase,index):'Не нужно'}</td><td>${r.cost?money(r.cost):'—'}</td><td>${qty(r.id,r.used,index)}</td><td>${qty(r.id,r.opening,index)}</td><td>${qty(r.id,r.closing,index)}</td></tr>`).join('')}</tbody></table></div><h4>Расход домашней базы</h4><ul>${week.rows.filter(r=>r.opening===null&&r.purchase===0).map(r=>`<li>${esc(currentIngredient(r.id,index).name)}: ${qty(r.id,r.used,index)}</li>`).join('')}</ul><p class="muted">Остаток после недели — прогноз, не подтверждение фактического наличия.</p></details></div></details>`;
 }
-function renderShopping(){const p=plan();$('shopping-weeks').innerHTML=[6,7,5,4,3,2,1,0].map(index=>index<=5?historyShopping(index,p.weeks[index]):shoppingWeek(index,p.weeks[index])).join('');$('shopping-budget').innerHTML=chip('Лимит 9–12',money(25000))+chip('Учтено + прогноз без доставки',money(p.total))+chip('Доставка Н11','сумма уточняется')+chip('Сообщено за 9–10',money(p.currentCycleConfirmed))+chip('Прогноз 11–12 без доставки',money(p.remainingTotal));}
+function renderShopping(){const p=plan();$('shopping-weeks').innerHTML=[7,6,5,4,3,2,1,0].map(index=>index<=6?historyShopping(index,p.weeks[index]):shoppingWeek(index,p.weeks[index])).join('');$('shopping-budget').innerHTML=chip('Лимит 9–12',money(25000))+chip('Учтено + прогноз без доставки',money(p.total))+chip('Доставка Н11','сумма уточняется')+chip('Сообщено за 9–11',money(p.currentCycleConfirmed))+chip('Прогноз недели 12',money(p.remainingTotal));}
 function renderStock(){
- $('stock-list').innerHTML=Object.entries(weekElevenStock).map(([id,n])=>`<div class="stock-item">${esc(currentIngredient(id,6).name)}<strong>${qty(id,n,6)}</strong></div>`).join('')+weekElevenReserves.map(([name,value])=>`<div class="stock-item">${esc(name)}<strong>${esc(value)}</strong></div>`).join('');
- $('stock-notes').innerHTML=weekElevenNotes.map(s=>`<li>${esc(s)}</li>`).join('');
- for(const id of ['rice','bulgur','couscous'])$('grain-form').elements.namedItem(id).value=saved.grains[id]??weekElevenStock[id]??0;
+ $('stock-list').innerHTML=Object.entries(weekTwelveStock).map(([id,n])=>`<div class="stock-item">${esc(currentIngredient(id,7).name)}<strong>${qty(id,n,7)}</strong></div>`).join('')+weekTwelveReserves.map(([name,value])=>`<div class="stock-item">${esc(name)}<strong>${esc(value)}</strong></div>`).join('');
+ $('stock-notes').innerHTML=weekTwelveNotes.map(s=>`<li>${esc(s)}</li>`).join('');
+ for(const id of ['rice','bulgur','couscous'])$('grain-form').elements.namedItem(id).value=saved.grains[id]??weekTwelveStock[id]??0;
 }
 function openRecipe(id,trigger){
  const r=recipeFor(id,activeTier);lastTrigger=trigger;
@@ -1496,10 +1606,10 @@ function openRecipe(id,trigger){
  const d=$('recipe-dialog');if(typeof d.showModal==='function')d.showModal();else d.setAttribute('open','');document.body.style.overflow='hidden';$('recipe-close').focus();
 }
 function closeRecipe(){const d=$('recipe-dialog');if(typeof d.close==='function')d.close();else d.removeAttribute('open');document.body.style.overflow='';lastTrigger?.focus();}
-const seed=[...weekFivePurchases,...additionalConfirmed,...weekSevenPurchases,...weekSevenExtras,...weekEightPurchases,...weekEightExtras,...weekNinePurchases,...weekNineExtras,...weekTenPurchases,...weekTenExtras,{period:'review',name:'Ранее учтённая корзина недели 4: чек 29.08 + отдельные фрукты и молоко',amount:4165.51,date:'Неделя 31.08–06.09',source:'сохранённый журнал сайта'},{period:'review',name:'Яйца, 10 шт.',amount:130,date:'Сообщено 06.09',source:'со слов пользователя'},{period:'review',name:'Яблоки, корица, разрыхлитель, тесто',amount:780,date:'Сообщено 06.09',source:'единая сумма со слов пользователя'}];
+const seed=[...weekFivePurchases,...additionalConfirmed,...weekSevenPurchases,...weekSevenExtras,...weekEightPurchases,...weekEightExtras,...weekNinePurchases,...weekNineExtras,...weekTenPurchases,...weekTenExtras,...weekElevenPurchases,...weekElevenExtras,{period:'review',name:'Ранее учтённая корзина недели 4: чек 29.08 + отдельные фрукты и молоко',amount:4165.51,date:'Неделя 31.08–06.09',source:'сохранённый журнал сайта'},{period:'review',name:'Яйца, 10 шт.',amount:130,date:'Сообщено 06.09',source:'со слов пользователя'},{period:'review',name:'Яблоки, корица, разрыхлитель, тесто',amount:780,date:'Сообщено 06.09',source:'единая сумма со слов пользователя'}];
 function renderExpenses(){
  const period=$('expense-period').value,all=[...seed,...saved.entries.map(x=>({...x,source:'ручная запись в этом браузере'}))].filter(x=>x.period===period),total=all.reduce((s,x)=>s+x.amount,0),week=Number(period.slice(1));
- const comparison=period==='review'?'Сохранённые покупки недели 4':period==='unassigned'?'Дата известна, неделя меню не назначена':period==='w3'?'Чек 5 103,62 ₽ + допокупки 970 ₽; прежний прогноз не факт':period==='w4'?'Чек 3 180,39 ₽ + допокупки 600 ₽; дата чека 03.10':period==='w5'?'Чек 3 939,64 ₽ + докупки 930 ₽; дата чека 10.10':week>=6?`Прогноз без доставки: ${money(plan().weeks[week].total)}`:period==='w2'?'Чек 2 366,56 ₽ + допокупки 280 ₽':period==='w1'?'Учтена только допокупка 500 ₽, не полный расход':period==='w0'?'Сообщённые покупки недели 5':'Проверить по чекам';
+ const comparison=period==='review'?'Сохранённые покупки недели 4':period==='unassigned'?'Дата известна, неделя меню не назначена':period==='w3'?'Чек 5 103,62 ₽ + допокупки 970 ₽; прежний прогноз не факт':period==='w4'?'Чек 3 180,39 ₽ + допокупки 600 ₽; дата чека 03.10':period==='w5'?'Чек 3 939,64 ₽ + докупки 930 ₽; дата чека 10.10':period==='w6'?'Чек 3 413,45 ₽ + докупки 1 500 ₽; доставка/сборка не указаны':week>=7?`Прогноз: ${money(plan().weeks[week].total)}`:period==='w2'?'Чек 2 366,56 ₽ + допокупки 280 ₽':period==='w1'?'Учтена только допокупка 500 ₽, не полный расход':period==='w0'?'Сообщённые покупки недели 5':'Проверить по чекам';
  $('expense-summary').innerHTML=chip('Внесено',money(total))+chip('Статус',comparison)+chip('Полнота',week>=6?'будущая неделя, пока нет чеков':'проверить по чекам')+(saved.entries.some(x=>x.period===period)?'<p class="notice">Проверьте, не дублируют ли ручные записи покупки из чата.</p>':'');
  $('expense-list').innerHTML=all.length?all.map(x=>`<div class="expense-row"><div>${esc(x.name)}<small>${esc(x.date)} · ${esc(x.source)}</small></div><strong>${money(x.amount)}</strong></div>`).join(''):'<p class="muted">Подтверждённых расходов пока нет. Это не означает, что неделя обошлась в 0 ₽.</p>';
 }
@@ -1507,7 +1617,7 @@ function download(name,data,type){const u=URL.createObjectURL(new Blob([data],{t
 function downloadShopping(weekIndex){const p=plan().weeks[weekIndex],cell=v=>'"'+String(v).replaceAll('"','""')+'"',groups=groupShoppingRows(p.rows.filter(r=>r.purchase>0),id=>currentIngredient(id,weekIndex).name);const lines=[['Период',weeks[weekIndex].label,'Лимит',25000],['Продукт','Купить','Плановая стоимость ₽','Отдел','Нужно','Есть','Останется','Куда идёт'],...groups.flatMap(group=>group.rows.map(r=>[currentIngredient(r.id,weekIndex).name,qty(r.id,r.purchase,weekIndex),r.cost,group.label,qty(r.id,r.used,weekIndex),qty(r.id,r.opening,weekIndex),qty(r.id,r.closing,weekIndex),r.alloc.map(([s,q])=>s+': '+qty(r.id,q,weekIndex)).join(' | ')])),['Доставка и сборка','',p.deliveryPending?'Сумма неизвестна':p.delivery],['Резерв 5%','',p.buffer],[p.deliveryPending?'ИТОГО продукты с резервом, БЕЗ доставки':'ИТОГО план','',p.total]];download(`zakupka-nedelya-${weekIndex+5}-25000.csv`,'\ufeff'+lines.map(row=>row.map(cell).join(';')).join('\r\n'),'text/csv;charset=utf-8');}
 function render(){renderDashboard();renderMenu();renderShopping();renderExpenses();}
 for(let i=4;i<8;i++){const option=document.createElement('option');option.value='w'+i;option.textContent=`Неделя ${i+5} · ${weeks[i].label}`;$('expense-period').append(option);}
-$('expense-period').value='w5';
+$('expense-period').value='w6';
 $('week-tabs').addEventListener('click',e=>{const b=e.target.closest('[data-week]');if(b){activeWeek=Number(b.dataset.week);render();}});
 $('meal-list').addEventListener('click',e=>{const b=e.target.closest('[data-recipe]');if(b)openRecipe(b.dataset.recipe,b);});
 $('shopping-weeks').addEventListener('click',e=>{const b=e.target.closest('[data-download-week]');if(b)downloadShopping(Number(b.dataset.downloadWeek));});
