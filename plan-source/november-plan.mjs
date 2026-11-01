@@ -1,3 +1,4 @@
+import {weekThirteenMeals,weekThirteenBaking,weekThirteenStock} from './week-thirteen.mjs';
 import {novemberPrices} from './november-prices.mjs';
 export {novemberPrices};
 const meal=(title,protein,time,items,steps,note='')=>({title,protein,time,items,steps,note});
@@ -233,13 +234,15 @@ const menus=[
  ]
 ];
 
+menus[0]=weekThirteenMeals;
 const dates=[['2026-11-02','2026-11-08','2–8 ноября'],['2026-11-09','2026-11-15','9–15 ноября'],['2026-11-16','2026-11-22','16–22 ноября'],['2026-11-23','2026-11-29','23–29 ноября']];
 const slots=[['Пн','Ужин'],['Вт','Ужин'],['Ср','Ужин'],['Чт','Ужин'],['Пт','Ужин'],['Сб','Завтрак'],['Сб','Ужин'],['Вс','Завтрак'],['Вс','Ужин']];
-export const novemberWeeks=menus.map((items,index)=>({number:index+13,start:dates[index][0],end:dates[index][1],label:dates[index][2],title:['Курица, фаршированные перцы и красная рыба','Запеканки, паста и домашняя пицца','Мясной рулет, гуляш и горячие сэндвичи','Тефтели, булгур с грибами и картофельные лодочки'][index],meals:items.map((m,i)=>({...m,id:`n${index+13}-${i}`,day:slots[i][0],type:slots[i][1],portions:[5,6,7].includes(i)?2:3,steps:[...m.steps,[5,6,7].includes(i)?finish2:finish3],note:[m.note,safeNote].filter(Boolean).join(' ')}))}));
-export const novemberOpeningStock={pork:50,passata:200,bulgur:270,pasta:270,dough:100};
-export const novemberStockNote='Это условный перенос после выполнения плана недели 12: свинина 50 г, пассата 200 г, булгур 270 г, паста 270 г, тесто 100 г. Свинину, пассату и тесто нужно сохранить замороженными пригодными. Остатки не подтверждены на 2 ноября. Другие молочные остатки, яйца и котлеты без массы в стартовый запас ноября автоматически не включены.';
-export const novemberPriceNote='Плановые цены опираются на справочник подтверждённых покупок. Для весовых овощей, фруктов и отдельных видов мяса выбрана верхняя оплаченная цена на трёх последних подходящих датах; для фасованных товаров — конкретная подтверждённая покупка. Это ориентиры, а не текущие предложения магазина. Бренд, фасовка, скидка и цена могут измениться. Масло, соль и прочая домашняя база показаны отдельно: их достаточность на четыре недели не подтверждена.';
-export const novemberStorageNote='Покупайте скоропортящееся на нужную неделю и проверяйте сроки. Сырое мясо для поздних дней и излишки заморозьте в день покупки порциями. Оставшиеся творог, сыр, молоко, тортильи и пассату для следующей недели переносите только после своевременной заморозки; молочное после размораживания используйте для готовки. Яйца и открытый лимонный сок переносите только в пределах срока на упаковке. Если хранение не обеспечено, перед закупкой обнулите соответствующий запас и пересчитайте дефицит.';
+export const novemberWeeks=menus.map((items,index)=>({number:index+13,start:dates[index][0],end:dates[index][1],label:dates[index][2],title:['Используем остатки и печём грушевую шарлотку','Запеканки, паста и домашняя пицца','Мясной рулет, гуляш и горячие сэндвичи','Тефтели, булгур с грибами и картофельные лодочки'][index],meals:items.map((m,i)=>({...m,id:`n${index+13}-${i}`,day:slots[i][0],type:slots[i][1],portions:[5,6,7].includes(i)?2:3,steps:[...m.steps,[5,6,7].includes(i)?finish2:finish3],note:[m.note,safeNote].filter(Boolean).join(' ')}))}));
+novemberWeeks[0].meals.push(weekThirteenBaking);
+export const novemberOpeningStock={...weekThirteenStock};
+export const novemberStockNote='Подтверждённые остатки от1 ноября учтены отдельно от чека и докупок прошлой недели. Булгур:3×60=180 г. Котлеты:две вместе120 г. Мука800 г, сливочное масло40 г. Старый расчётный перенос заменён фактическим списком. Горох680 г остаётся в шкафу. Масло растительное, сахар и специи — домашняя база с неизвестным количеством. Соль1 кг включена в покупку.';
+export const novemberPriceNote='Плановые цены опираются на справочник подтверждённых покупок. Для весовых овощей, фруктов и отдельных видов мяса выбрана верхняя оплаченная цена на трёх последних подходящих датах; для фасованных товаров — конкретная подтверждённая покупка. Это ориентиры, а не текущие предложения магазина. Бренд, фасовка, скидка и цена могут измениться. Растительное масло, сахар и специи — домашняя база показаны отдельно: их достаточность на четыре недели не подтверждена.';
+export const novemberStorageNote='Сразу проверьте срок имеющихся творога и молока: пригодный творог для субботы и молоко для поздних дней при необходимости заморозьте сейчас порциями. Размораживайте в холодильнике. Покупайте скоропортящееся на нужную неделю и проверяйте сроки. Сырое мясо для поздних дней и излишки заморозьте в день покупки порциями. Оставшиеся творог, сыр, молоко, тортильи и пассату для следующей недели переносите только после своевременной заморозки; молочное после размораживания используйте для готовки. Яйца и открытый лимонный сок переносите только в пределах срока на упаковке. Если хранение не обеспечено, перед закупкой обнулите соответствующий запас и пересчитайте дефицит.';
 export const novemberExtras={title:'Дополнения на неделю',items:{mandarin:1500,banana:500,pear:700,juice:1000,bar:2},note:'Фрукты распределить на неделю вдвоём; фрукты из рецептов завтраков посчитаны дополнительно. Сок и сырки — по желанию, их стоимость включена. Для сока выбрана подтверждённая упаковка 2 л: половину можно заморозить пригодной для следующей недели. Не нужно допивать сверх желания или срока хранения.'};
 
 export function calculateNovember({useProjectedStock=true,stockOverrides={}}={}){
@@ -256,11 +259,11 @@ export function calculateNovember({useProjectedStock=true,stockOverrides={}}={})
    if(p.storage==='home'){kitchen[id]=(kitchen[id]||0)+used;return {id,used,opening:null,purchase:0,closing:null,costKopecks:0,carryForward:null,alloc:alloc[id]||[],household:true};}
    const opening=stock[id]||0,units=Math.max(0,Math.ceil((used-opening)/p.increment-1e-9)),purchase=units*p.increment,closing=Math.round((opening+purchase-used)*1000)/1000;
    const carryForward=['dry','freeze','eggs','label'].includes(p.storage)?closing:0;next[id]=carryForward;
-   return {id,used,opening,purchase,closing,costKopecks:money(units*p.pricePerIncrementKopecks),carryForward,alloc:alloc[id]||[],household:false};
+   return {id,used,opening,purchase,closing,costKopecks:units>0&&p.pricePerIncrementKopecks===null?null:money(units*p.pricePerIncrementKopecks),carryForward,alloc:alloc[id]||[],household:false};
   });
   stock=next;const foodKopecks=rows.reduce((s,r)=>s+r.costKopecks,0),bufferKopecks=Math.ceil(foodKopecks*.05/100)*100;
-  return {number:week.number,label:week.label,rows,foodKopecks,bufferKopecks,totalKopecks:foodKopecks+bufferKopecks};
+  return {number:week.number,label:week.label,unknownPurchases:rows.filter(r=>r.costKopecks===null).map(r=>r.id),rows,foodKopecks,bufferKopecks,totalKopecks:foodKopecks+bufferKopecks};
  });
  const baseNeeds=Object.entries(kitchen).map(([id,used])=>{const p=novemberPrices[id];return {id,used,availableQuantity:null,purchaseIfNone:p.increment?Math.ceil(used/p.increment)*p.increment:null,costIfNoneKopecks:p.increment?Math.ceil(used/p.increment)*p.pricePerIncrementKopecks:null};});
- return {period:'2–29 ноября 2026',weeks,baseNeeds,remaining:stock,useProjectedStock,totalKopecks:weeks.reduce((s,w)=>s+w.totalKopecks,0),foodKopecks:weeks.reduce((s,w)=>s+w.foodKopecks,0),bufferKopecks:weeks.reduce((s,w)=>s+w.bufferKopecks,0),conditionalPricedBaseKopecks:baseNeeds.reduce((s,r)=>s+(r.costIfNoneKopecks||0),0),unpricedBase:baseNeeds.filter(r=>r.costIfNoneKopecks===null).map(r=>r.id),budgetKopecks:2500000};
+ return {hasUnpricedPurchases:weeks.some(w=>w.unknownPurchases.length>0),period:'2–29 ноября 2026',weeks,baseNeeds,remaining:stock,useProjectedStock,totalKopecks:weeks.reduce((s,w)=>s+w.totalKopecks,0),foodKopecks:weeks.reduce((s,w)=>s+w.foodKopecks,0),bufferKopecks:weeks.reduce((s,w)=>s+w.bufferKopecks,0),conditionalPricedBaseKopecks:baseNeeds.reduce((s,r)=>s+(r.costIfNoneKopecks||0),0),unpricedBase:baseNeeds.filter(r=>r.costIfNoneKopecks===null).map(r=>r.id),budgetKopecks:2500000};
 }

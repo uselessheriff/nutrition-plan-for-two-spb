@@ -3085,130 +3085,226 @@ export const futureMenuWeeks: Week[] = [
     ],
     "shopping": [
       {
-        "category": "Овощи, фрукты и зелень",
-        "name": "Бананы, вес с кожурой",
-        "quantity": "800 г",
-        "price": 71.99
+        "category": "Куплено",
+        "name": "Картофель вес 1кг",
+        "quantity": "2.136 кг",
+        "price": 64.06
       },
       {
-        "category": "Овощи, фрукты и зелень",
-        "name": "Груши, вес с кожурой",
-        "quantity": "1100 г",
-        "price": 302.49
+        "category": "Куплено",
+        "name": "Грибы ЛЕНТА FRESH шампиньоны 250г",
+        "quantity": "1.0 шт.",
+        "price": 99.99
       },
       {
-        "category": "Овощи, фрукты и зелень",
-        "name": "Картофель, вес до очистки",
-        "quantity": "1000 г",
-        "price": 29.99
+        "category": "Куплено",
+        "name": "Бананы вес 1кг",
+        "quantity": "1.033 кг",
+        "price": 118.78
       },
       {
-        "category": "Овощи, фрукты и зелень",
-        "name": "Мандарины, вес с кожурой",
-        "quantity": "1500 г",
-        "price": 358.5
+        "category": "Куплено",
+        "name": "Груша Конференц вес",
+        "quantity": "0.365 кг",
+        "price": 94.9
       },
       {
-        "category": "Овощи, фрукты и зелень",
-        "name": "Свежие огурцы",
-        "quantity": "300 г",
-        "price": 48
+        "category": "Куплено",
+        "name": "Огурцы короткоплодные колюч вес",
+        "quantity": "0.365 кг",
+        "price": 73
       },
       {
-        "category": "Овощи, фрукты и зелень",
-        "name": "Сладкий перец, вес до удаления семян",
-        "quantity": "300 г",
-        "price": 99
+        "category": "Куплено",
+        "name": "Мандарины медовые Honey Gold вес",
+        "quantity": "2.25 кг",
+        "price": 560.25
       },
       {
-        "category": "Овощи, фрукты и зелень",
-        "name": "Шампиньоны свежие",
-        "quantity": "500 г",
-        "price": 209.44
+        "category": "Куплено",
+        "name": "Перец красный вес 1кг",
+        "quantity": "0.35 кг",
+        "price": 92.75
       },
       {
-        "category": "Хлеб и лаваш",
-        "name": "Лаваш / пита",
-        "quantity": "400 г",
-        "price": 180
+        "category": "Куплено",
+        "name": "Лимоны вес 1кг",
+        "quantity": "0.14 кг",
+        "price": 18.62
       },
       {
-        "category": "Крупы, макароны и бакалея",
-        "name": "Булгур сухой",
-        "quantity": "360 г",
-        "price": 119.99
+        "category": "Куплено",
+        "name": "Фарш САМСОН говяжий кат.А охл 7.5% 400г",
+        "quantity": "1.0 шт.",
+        "price": 499.99
       },
       {
-        "category": "Крупы, макароны и бакалея",
-        "name": "Паста / спагетти сухие",
-        "quantity": "450 г",
-        "price": 90
+        "category": "Куплено",
+        "name": "Свинина карбонад б/к кусок охл вес",
+        "quantity": "0.792 кг",
+        "price": 261.35
       },
       {
-        "category": "Консервы, соусы и варенье",
-        "name": "Пассата",
-        "quantity": "500 г",
+        "category": "Куплено",
+        "name": "Йогурт ЭГО Греческий 8% 180г",
+        "quantity": "1.0 шт.",
+        "price": 34.99
+      },
+      {
+        "category": "Куплено",
+        "name": "Йогурт ЭГО Греческий 8% 180г",
+        "quantity": "1.0 шт.",
+        "price": 34.99
+      },
+      {
+        "category": "Куплено",
+        "name": "Йогурт ЭГО Греческий 8% 180г",
+        "quantity": "1.0 шт.",
+        "price": 34.99
+      },
+      {
+        "category": "Куплено",
+        "name": "Йогурт LAPLAND Слив Чернич маф 7,2% 180г",
+        "quantity": "1.0 шт.",
+        "price": 74.99
+      },
+      {
+        "category": "Куплено",
+        "name": "Сметана ПРОСТОКВАШИНО 20% п/ст 180г",
+        "quantity": "1.0 шт.",
+        "price": 69.99
+      },
+      {
+        "category": "Куплено",
+        "name": "Пудинг EHRMANN Эрмиг Bella Car 3,0%100г",
+        "quantity": "1.0 шт.",
+        "price": 35.99
+      },
+      {
+        "category": "Куплено",
+        "name": "Яйцо кур СИНЯВИНСКОЕ К завтраку С0 10шт",
+        "quantity": "10 шт.",
+        "price": 124.99
+      },
+      {
+        "category": "Куплено",
+        "name": "Сыр БРЕСТ-ЛИТОВСК Классический 45% 180г",
+        "quantity": "1.0 шт.",
+        "price": 179.99
+      },
+      {
+        "category": "Куплено",
+        "name": "Чай GREENFIELD Грин мелисса 100 пак",
+        "quantity": "1.0 уп.",
+        "price": 289
+      },
+      {
+        "category": "Куплено",
+        "name": "Творог СВЕЖЕЕ ЗАВТРА 5 пак. 400г",
+        "quantity": "1.0 шт.",
+        "price": 189.99
+      },
+      {
+        "category": "Куплено",
+        "name": "Творог СВЕЖЕЕ ЗАВТРА 5 пак. 400г",
+        "quantity": "1.0 шт.",
+        "price": 189.99
+      },
+      {
+        "category": "Куплено",
+        "name": "Мякоть томат ПИКАНТА Пассата протерт500г",
+        "quantity": "1.0 шт.",
         "price": 129.99
       },
       {
-        "category": "Соки и напитки",
-        "name": "Сок",
-        "quantity": "1000 мл",
-        "price": 150
+        "category": "Куплено",
+        "name": "Конфеты +-X? Пингвин с фрукт. соком 60г",
+        "quantity": "1.0 шт.",
+        "price": 104.99
       },
       {
-        "category": "Мясо, птица и рыба",
-        "name": "Говяжий фарш",
-        "quantity": "400 г",
-        "price": 429.99
+        "category": "Куплено",
+        "name": "Макароны MALTAGLIATI Спагетти №4 450г",
+        "quantity": "1.0 шт.",
+        "price": 79.99
       },
       {
-        "category": "Мясо, птица и рыба",
-        "name": "Свинина без кости",
-        "quantity": "500 г",
+        "category": "Куплено",
+        "name": "Макароны MALTAGLIATI Лапша длин.№10 450г",
+        "quantity": "1.0 шт.",
+        "price": 79.99
+      },
+      {
+        "category": "Куплено",
+        "name": "Булгур УВЕЛКА 80г*5 пак 400г",
+        "quantity": "1.0 шт.",
+        "price": 89.99
+      },
+      {
+        "category": "Куплено",
+        "name": "Сахар РУССКИЙ кусковой 500г",
+        "quantity": "1.0 шт.",
+        "price": 54.99
+      },
+      {
+        "category": "Куплено",
+        "name": "Зефир",
+        "quantity": "масса не сообщена",
+        "price": 180
+      },
+      {
+        "category": "Куплено",
+        "name": "Печенье",
+        "quantity": "масса не сообщена",
+        "price": 100
+      },
+      {
+        "category": "Куплено",
+        "name": "Сушки",
+        "quantity": "масса не сообщена",
+        "price": 60
+      },
+      {
+        "category": "Куплено",
+        "name": "Молоко, жирность не сообщена",
+        "quantity": "1.4 л",
+        "price": 140
+      },
+      {
+        "category": "Куплено",
+        "name": "Лаваш, масса не сообщена",
+        "quantity": "масса не сообщена",
+        "price": 60
+      },
+      {
+        "category": "Куплено",
+        "name": "Лепёшка, масса не сообщена",
+        "quantity": "масса не сообщена",
+        "price": 90
+      },
+      {
+        "category": "Куплено",
+        "name": "Зефир, вторая покупка",
+        "quantity": "масса не сообщена",
+        "price": 180
+      },
+      {
+        "category": "Куплено",
+        "name": "Маршмелоу",
+        "quantity": "масса не сообщена",
+        "price": 130
+      },
+      {
+        "category": "Куплено",
+        "name": "Йогурт, масса и жирность не сообщены",
+        "quantity": "2 шт.",
         "price": 160
       },
       {
-        "category": "Мясо, птица и рыба",
-        "name": "Филе горбуши (красная рыба)",
-        "quantity": "200 г",
+        "category": "Куплено",
+        "name": "Пиво безалкогольное, объём не сообщён",
+        "quantity": "4 шт.",
         "price": 300
-      },
-      {
-        "category": "Молочные продукты, сыр и яйца",
-        "name": "Йогурт греческий 8%",
-        "quantity": "360 г",
-        "price": 76.96
-      },
-      {
-        "category": "Молочные продукты, сыр и яйца",
-        "name": "Сметана 20%",
-        "quantity": "180 г",
-        "price": 75.18
-      },
-      {
-        "category": "Молочные продукты, сыр и яйца",
-        "name": "Сырок глазированный, 40 г",
-        "quantity": "2 шт.",
-        "price": 110
-      },
-      {
-        "category": "Молочные продукты, сыр и яйца",
-        "name": "Твёрдый сыр",
-        "quantity": "180 г",
-        "price": 192.44
-      },
-      {
-        "category": "Молочные продукты, сыр и яйца",
-        "name": "Творог 5%",
-        "quantity": "600 г",
-        "price": 268.76
-      },
-      {
-        "category": "Молочные продукты, сыр и яйца",
-        "name": "Яйца",
-        "quantity": "10 шт.",
-        "price": 127.1
       }
     ]
   }
@@ -3336,10 +3432,10 @@ export const futureExtras = [
     }
   ]
 ];
-export const futureWeekTotals = [3331.3,4545,2845,6073.62,3780.39,4869.64,4913.45,3706.82];
-export const futurePlanTotal = 17270.3;
+export const futureWeekTotals = [3331.3,4545,2845,6073.62,3780.39,4869.64,4913.45,5083.53];
+export const futurePlanTotal = 18647.01;
 export const futureConfirmedTotal = 16726.64;
-export const futureCurrentCycleActual = 13563.48;
+export const futureCurrentCycleActual = 18647.01;
 export const futureDeliveryPending = true;
-export const futureRemainingTotal = 3706.82;
+export const futureRemainingTotal = 0;
 export const futureWeekFiveOutcomes: Record<number,{outcome:MealOutcome;preference:MealPreference;note:string}> = {"2":{"outcome":"not_eaten","preference":"blocked","note":"Тортилью не готовили: идея не понравилась. Вместо неё приготовили пюре с котлетами и малосольными огурцами; фактические граммовки не сообщены."},"4":{"outcome":"not_eaten","preference":null,"note":"Пятничный ужин дома пропустили, ели в другом месте. Продукты планового блюда не списываются автоматически."},"5":{"outcome":"not_eaten","preference":null,"note":"Вместо овсяных приготовили банановые панкейки: они вкуснее, овсяные надоели. Рецептура фактической партии не сообщена."}};

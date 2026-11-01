@@ -10,10 +10,10 @@ test('receipt, reported extras and future forecast remain distinct',()=>{
  assert.equal(weekNinePurchases.length,24);
  assert.equal(weekNineExtras.length,1);assert.equal(weekNineExtras[0].amount,600);
  assert(weekNinePurchases.every(r=>r.date==='03.10.2026'&&r.period==='w4'));
- assert.equal(p.weeks[4].total,weekNineReportedTotal);assert.equal(p.currentCycleConfirmed,13563.48);
+ assert.equal(p.weeks[4].total,weekNineReportedTotal);assert.equal(p.currentCycleConfirmed,18647.01);
  assert.equal(p.confirmed,16726.64);
- assert.equal(p.total,Math.round((13563.48+p.remainingTotal)*100)/100);
- assert(p.total<25000);assert(p.weeks[5].isActual);assert(p.weeks.slice(7).every(w=>!w.isActual));
+ assert.equal(p.total,Math.round((18647.01+p.remainingTotal)*100)/100);
+ assert(p.total<25000);assert(p.weeks[5].isActual);assert(p.weeks[7].isActual);assert.equal(p.remainingTotal,0);
 });
 test('new inventory replaces projected stock; quantities are conserved',()=>{
  const p=calculate(1),w=p.weeks[5];

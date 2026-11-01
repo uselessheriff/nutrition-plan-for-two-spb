@@ -5,11 +5,11 @@
 </style></head><body><main>
 <span class="eyebrow">Ноябрь · недели 13–16</span><h1>Покупки на четыре недели</h1><p class="muted">2–29 ноября 2026 · ужины в будни и воскресенье на 3 порции, субботний ужин и завтраки выходных на 2.</p>
 <section class="card budget" aria-label="Бюджет ноября"><div><small>Прогноз с резервом цен 5%</small><strong id="grand-total" aria-live="polite"></strong><p id="budget-note"></p></div><div><small>Лимит на четыре недели</small><strong>25 000 ₽</strong></div></section>
-<label class="check"><input type="checkbox" id="use-stock" checked><span>Учесть расчётный перенос после недели 12<small>Снимите галочку, если этих остатков не будет. Это ещё не подтверждённый запас.</small></span></label>
+<label class="check"><input type="checkbox" id="use-stock" checked disabled><span>Учтены остатки от1 ноября<small>Подтверждено пользователем. Количества показаны ниже; будущий перенос зависит от выполнения плана и хранения.</small></span></label>
 <details class="card note"><summary>На чём основан расчёт</summary><p id="price-note"></p><p id="stock-note"></p><p>Цены из сохранённых подтверждённых покупок проверены 25 октября. Для моркови взят более высокий из последних ориентиров — 60 ₽/кг; фактическая новая цена пока неизвестна. Огурцы в эти четыре корзины не включены. Булгур 500 г оценён по старой покупке 16 августа: у поздней записи «6 пакетиков» масса неизвестна.</p><p>Весовые позиции округлены до 100 г — это шаг планирования, а не обещанная фасовка магазина. Упаковки рыбы, мяса и овощей на полке могут отличаться. Неизвестные цены не заменены нулём.</p></details>
 <div class="toolbar"><button id="all-csv" type="button">Все покупки в CSV</button><button id="expand" type="button">Раскрыть четыре недели</button></div>
 <div id="weeks"></div>
-<section class="card"><h2>Проверить дома перед ноябрём</h2><p class="muted">Нужное количество на все четыре недели. Наличие масла и соли вы подтвердили; хватит ли всей базы до конца ноября, пока неизвестно. В основной сумме эти покупки не добавлены.</p><div id="base"></div><p id="base-note"></p></section>
+<section class="card"><h2>Проверить дома перед ноябрём</h2><p class="muted">Нужное количество на все четыре недели. Соль уже включена в покупки; растительное масло есть дома; хватит ли всей базы до конца ноября, пока неизвестно. В основной сумме эти покупки не добавлены.</p><div id="base"></div><p id="base-note"></p></section>
 <details class="card note"><summary>Перенос и хранение продуктов</summary><p id="storage-note"></p><p>Сметана, йогурт, свежие фрукты и овощи автоматически не переносятся: покупаем их на текущую неделю. Оставшийся запас сухих и замороженных продуктов учтён в следующих корзинах. «Останется» означает расчётный остаток, а не проведённую инвентаризацию.</p><p>Температуры в рецептах и правило охлаждения сверены с <a href="https://www.foodsafety.gov/food-safety-charts/safe-minimum-internal-temperatures" target="_blank" rel="noopener noreferrer">FoodSafety.gov</a> и <a href="https://www.fda.gov/food/buy-store-serve-safe-food/safe-food-handling" target="_blank" rel="noopener noreferrer">FDA</a>. Остатки сразу разложите по неглубоким контейнерам и уберите в холодильник не позднее двух часов после готовки; не ждите полного остывания на столе.</p></details>
 <details class="card note"><summary>Дополнения к меню</summary><p id="extras-note"></p><p>Каждую неделю: мандарины 1,5 кг, бананы 500 г, груши 700 г, сок 1 л и два сырка. Бананы и груши для завтраков добавлены сверх этого списка. Вода, доставка и сборка не запланированы.</p></details>
 <p class="muted">Это план закупок. Чеки и фактические расходы будут записываться отдельно после покупки.</p>
@@ -40,16 +40,16 @@ const novemberPrices = {
     "unit": "г",
     "increment": 100,
     "storage": "freeze",
-    "pricePerIncrementKopecks": 3400,
+    "pricePerIncrementKopecks": 3300,
     "priceRule": "Верхняя оплаченная цена за единицу на трёх последних датах покупки подходящего товара",
     "incrementBasis": "Шаг планирования весовой покупки, не доказанная фасовка",
     "note": "",
     "source": {
-      "observationId": "receipt-2026-09-06:items:16",
-      "date": "2026-09-06",
-      "name": "Свинина карбонад без кости",
-      "paidKopecks": 28423,
-      "quantity": 0.836,
+      "observationId": "receipt-2026-09-12:items:16",
+      "date": "2026-09-12",
+      "name": "Стейк из свиной корейки,полуфабрикат охлаждённый",
+      "paidKopecks": 33197,
+      "quantity": 1.006,
       "unit": "kg",
       "massBasis": "purchased_weight_or_volume"
     }
@@ -135,16 +135,16 @@ const novemberPrices = {
     "unit": "г",
     "increment": 400,
     "storage": "freeze",
-    "pricePerIncrementKopecks": 42999,
+    "pricePerIncrementKopecks": 49999,
     "priceRule": "Цена выбранной подтверждённой покупки, пересчитанная на её фасовку",
     "incrementBasis": "Выбранная историческая фасовка / количество",
     "note": "",
     "source": {
-      "observationId": "receipt-week8-2026-09-27:lines:8",
-      "date": "2026-09-27",
-      "name": "Фарш говяжий",
-      "paidKopecks": 85998,
-      "quantity": 800,
+      "observationId": "receipt-week12-2026-10-25:items:8",
+      "date": "2026-10-25",
+      "name": "Фарш САМСОН говяжий кат.А охл 7.5% 400г",
+      "paidKopecks": 49999,
+      "quantity": 400,
       "unit": "g",
       "massBasis": "purchased_weight_or_volume"
     }
@@ -192,16 +192,16 @@ const novemberPrices = {
     "unit": "г",
     "increment": 100,
     "storage": "weekly",
-    "pricePerIncrementKopecks": 350,
+    "pricePerIncrementKopecks": 300,
     "priceRule": "Верхняя оплаченная цена за единицу на трёх последних датах покупки подходящего товара",
     "incrementBasis": "Шаг планирования весовой покупки, не доказанная фасовка",
     "note": "",
     "source": {
-      "observationId": "receipt-week9-2026-10-03:receipt_items:5",
-      "date": "2026-10-03",
+      "observationId": "receipt-week10-2026-10-10:receipt_items:0",
+      "date": "2026-10-10",
       "name": "Картофель",
-      "paidKopecks": 4591,
-      "quantity": 1.312,
+      "paidKopecks": 4475,
+      "quantity": 1.492,
       "unit": "kg",
       "massBasis": "purchased_weight_or_volume"
     }
@@ -268,16 +268,16 @@ const novemberPrices = {
     "unit": "г",
     "increment": 100,
     "storage": "weekly",
-    "pricePerIncrementKopecks": 1100,
+    "pricePerIncrementKopecks": 1150,
     "priceRule": "Верхняя оплаченная цена за единицу на трёх последних датах покупки подходящего товара",
     "incrementBasis": "Шаг планирования весовой покупки, не доказанная фасовка",
     "note": "",
     "source": {
-      "observationId": "receipt-week9-2026-10-03:receipt_items:8",
-      "date": "2026-10-03",
-      "name": "Бананы",
-      "paidKopecks": 8568,
-      "quantity": 0.779,
+      "observationId": "receipt-week12-2026-10-25:items:2",
+      "date": "2026-10-25",
+      "name": "Бананы вес 1кг",
+      "paidKopecks": 11878,
+      "quantity": 1.033,
       "unit": "kg",
       "massBasis": "purchased_weight_or_volume"
     }
@@ -287,16 +287,16 @@ const novemberPrices = {
     "unit": "г",
     "increment": 100,
     "storage": "weekly",
-    "pricePerIncrementKopecks": 2400,
+    "pricePerIncrementKopecks": 2490,
     "priceRule": "Верхняя оплаченная цена за единицу на трёх последних датах покупки подходящего товара",
     "incrementBasis": "Шаг планирования весовой покупки, не доказанная фасовка",
     "note": "",
     "source": {
-      "observationId": "receipt-week8-2026-09-27:lines:6",
-      "date": "2026-09-27",
-      "name": "Мандарины Honey Gold",
-      "paidKopecks": 20135,
-      "quantity": 0.839,
+      "observationId": "receipt-week12-2026-10-25:items:5",
+      "date": "2026-10-25",
+      "name": "Мандарины медовые Honey Gold вес",
+      "paidKopecks": 56025,
+      "quantity": 2.25,
       "unit": "kg",
       "massBasis": "purchased_weight_or_volume"
     }
@@ -325,15 +325,15 @@ const novemberPrices = {
     "unit": "г",
     "increment": 250,
     "storage": "weekly",
-    "pricePerIncrementKopecks": 10472,
+    "pricePerIncrementKopecks": 9999,
     "priceRule": "Цена выбранной подтверждённой покупки, пересчитанная на её фасовку",
     "incrementBasis": "Выбранная историческая фасовка / количество",
     "note": "",
     "source": {
-      "observationId": "receipt-week11-2026-10-18:rows:16",
-      "date": "2026-10-18",
-      "name": "Шампиньоны",
-      "paidKopecks": 10472,
+      "observationId": "receipt-week12-2026-10-25:items:1",
+      "date": "2026-10-25",
+      "name": "Грибы ЛЕНТА FRESH шампиньоны 250г",
+      "paidKopecks": 9999,
       "quantity": 250,
       "unit": "g",
       "massBasis": "purchased_weight_or_volume"
@@ -359,18 +359,18 @@ const novemberPrices = {
     }
   },
   "passata": {
-    "name": "Пассата Пиканта, обычная",
+    "name": "Пассата Пиканта",
     "unit": "г",
     "increment": 500,
     "storage": "freeze",
     "pricePerIncrementKopecks": 12999,
     "priceRule": "Цена выбранной подтверждённой покупки, пересчитанная на её фасовку",
     "incrementBasis": "Выбранная историческая фасовка / количество",
-    "note": "Выбрана подтверждённая пачка 500 г; цена пачки с базиликом 220 г к ней не приравнена.",
+    "note": "",
     "source": {
-      "observationId": "receipt-week10-2026-10-10:receipt_items:20",
-      "date": "2026-10-10",
-      "name": "Пассата Пиканта",
+      "observationId": "receipt-week12-2026-10-25:items:21",
+      "date": "2026-10-25",
+      "name": "Мякоть томат ПИКАНТА Пассата протерт500г",
       "paidKopecks": 12999,
       "quantity": 500,
       "unit": "g",
@@ -416,20 +416,20 @@ const novemberPrices = {
     }
   },
   "bulgur": {
-    "name": "Булгур сухой, фасовка 500 г",
+    "name": "Булгур сухой, пачка 400 г",
     "unit": "г",
-    "increment": 500,
+    "increment": 400,
     "storage": "dry",
-    "pricePerIncrementKopecks": 10999,
+    "pricePerIncrementKopecks": 8999,
     "priceRule": "Цена выбранной подтверждённой покупки, пересчитанная на её фасовку",
     "incrementBasis": "Выбранная историческая фасовка / количество",
-    "note": "Подтверждённая масса из покупки 16.08. Цена и наличие этой фасовки в ноябре требуют сверки. Вес шести пакетиков из чека 27.09 неизвестен.",
+    "note": "В чеке напечатано 80 г × 5 = 400 г. Остатки пользователя: 3 пакетика по его правилу 60 г = 180 г. Эти разные данные не подменяют друг друга.",
     "source": {
-      "observationId": "legacy-expense-38",
-      "date": "2026-08-16",
-      "name": "Булгур PROSTO, 500 г",
-      "paidKopecks": 10999,
-      "quantity": 500,
+      "observationId": "receipt-week12-2026-10-25:items:25",
+      "date": "2026-10-25",
+      "name": "Булгур УВЕЛКА 80г*5 пак 400г",
+      "paidKopecks": 8999,
+      "quantity": 400,
       "unit": "g",
       "massBasis": "purchased_weight_or_volume"
     }
@@ -456,18 +456,18 @@ const novemberPrices = {
   "pasta": {
     "name": "Макароны / спагетти сухие",
     "unit": "г",
-    "increment": 900,
+    "increment": 450,
     "storage": "dry",
-    "pricePerIncrementKopecks": 9499,
+    "pricePerIncrementKopecks": 7999,
     "priceRule": "Цена выбранной подтверждённой покупки, пересчитанная на её фасовку",
     "incrementBasis": "Выбранная историческая фасовка / количество",
     "note": "",
     "source": {
-      "observationId": "receipt-2026-09-12:items:24",
-      "date": "2026-09-12",
-      "name": "Спагетти AMERIA №3,900г",
-      "paidKopecks": 9499,
-      "quantity": 900,
+      "observationId": "receipt-week12-2026-10-25:items:23",
+      "date": "2026-10-25",
+      "name": "Макароны MALTAGLIATI Спагетти №4 450г",
+      "paidKopecks": 7999,
+      "quantity": 450,
       "unit": "g",
       "massBasis": "purchased_weight_or_volume"
     }
@@ -477,35 +477,35 @@ const novemberPrices = {
     "unit": "шт.",
     "increment": 10,
     "storage": "eggs",
-    "pricePerIncrementKopecks": 12710,
+    "pricePerIncrementKopecks": 12499,
     "priceRule": "Цена выбранной подтверждённой покупки, пересчитанная на её фасовку",
     "incrementBasis": "Выбранная историческая фасовка / количество",
     "note": "",
     "source": {
-      "observationId": "receipt-week11-2026-10-18:rows:17",
-      "date": "2026-10-18",
-      "name": "Яйца С0",
-      "paidKopecks": 12710,
+      "observationId": "receipt-week12-2026-10-25:items:16",
+      "date": "2026-10-25",
+      "name": "Яйцо кур СИНЯВИНСКОЕ К завтраку С0 10шт",
+      "paidKopecks": 12499,
       "quantity": 10,
       "unit": "pcs",
       "massBasis": "purchased_weight_or_volume"
     }
   },
   "milk": {
-    "name": "Молоко 3,2%",
+    "name": "Молоко, жирность не сообщена",
     "unit": "мл",
-    "increment": 1900,
+    "increment": 1400,
     "storage": "freeze",
-    "pricePerIncrementKopecks": 19999,
+    "pricePerIncrementKopecks": 14000,
     "priceRule": "Цена выбранной подтверждённой покупки, пересчитанная на её фасовку",
     "incrementBasis": "Выбранная историческая фасовка / количество",
-    "note": "Перенос на поздние недели предполагает своевременную заморозку пригодного молока порциями для готовки, а не хранение открытой пачки весь месяц.",
+    "note": "Подтверждённая докупка: 1,4 л за140 ₽; точная дата не сообщена. Остатки для поздних дней и следующих недель переносить только при соблюдении срока или своевременной заморозке.",
     "source": {
-      "observationId": "receipt-week10-2026-10-10:receipt_items:14",
-      "date": "2026-10-10",
-      "name": "Молоко 3,2%",
-      "paidKopecks": 19999,
-      "quantity": 1.9,
+      "observationId": "week12-extras-reported-2026-11-01:items:3",
+      "date": null,
+      "name": "Молоко, жирность не сообщена",
+      "paidKopecks": 14000,
+      "quantity": 1.4,
       "unit": "l",
       "massBasis": "purchased_weight_or_volume"
     }
@@ -515,16 +515,16 @@ const novemberPrices = {
     "unit": "г",
     "increment": 180,
     "storage": "weekly",
-    "pricePerIncrementKopecks": 3848,
+    "pricePerIncrementKopecks": 3499,
     "priceRule": "Цена выбранной подтверждённой покупки, пересчитанная на её фасовку",
     "incrementBasis": "Выбранная историческая фасовка / количество",
     "note": "",
     "source": {
-      "observationId": "receipt-week11-2026-10-18:rows:3",
-      "date": "2026-10-18",
-      "name": "Йогурт греческий Эго 8%",
-      "paidKopecks": 11544,
-      "quantity": 540,
+      "observationId": "receipt-week12-2026-10-25:items:10",
+      "date": "2026-10-25",
+      "name": "Йогурт ЭГО Греческий 8% 180г",
+      "paidKopecks": 3499,
+      "quantity": 180,
       "unit": "g",
       "massBasis": "purchased_weight_or_volume"
     }
@@ -534,15 +534,15 @@ const novemberPrices = {
     "unit": "г",
     "increment": 180,
     "storage": "weekly",
-    "pricePerIncrementKopecks": 7518,
+    "pricePerIncrementKopecks": 6999,
     "priceRule": "Цена выбранной подтверждённой покупки, пересчитанная на её фасовку",
     "incrementBasis": "Выбранная историческая фасовка / количество",
     "note": "",
     "source": {
-      "observationId": "receipt-week11-2026-10-18:rows:9",
-      "date": "2026-10-18",
-      "name": "Сметана 20%",
-      "paidKopecks": 7518,
+      "observationId": "receipt-week12-2026-10-25:items:14",
+      "date": "2026-10-25",
+      "name": "Сметана ПРОСТОКВАШИНО 20% п/ст 180г",
+      "paidKopecks": 6999,
       "quantity": 180,
       "unit": "g",
       "massBasis": "purchased_weight_or_volume"
@@ -553,35 +553,35 @@ const novemberPrices = {
     "unit": "г",
     "increment": 180,
     "storage": "freeze",
-    "pricePerIncrementKopecks": 19244,
+    "pricePerIncrementKopecks": 17999,
     "priceRule": "Цена выбранной подтверждённой покупки, пересчитанная на её фасовку",
     "incrementBasis": "Выбранная историческая фасовка / количество",
     "note": "",
     "source": {
-      "observationId": "receipt-week11-2026-10-18:rows:10",
-      "date": "2026-10-18",
-      "name": "Сыр полутвёрдый 45%",
-      "paidKopecks": 19244,
+      "observationId": "receipt-week12-2026-10-25:items:17",
+      "date": "2026-10-25",
+      "name": "Сыр БРЕСТ-ЛИТОВСК Классический 45% 180г",
+      "paidKopecks": 17999,
       "quantity": 180,
       "unit": "g",
       "massBasis": "purchased_weight_or_volume"
     }
   },
   "curd": {
-    "name": "Творог 5%",
+    "name": "Творог СВЕЖЕЕ ЗАВТРА, 400 г",
     "unit": "г",
-    "increment": 300,
+    "increment": 400,
     "storage": "freeze",
-    "pricePerIncrementKopecks": 13438,
+    "pricePerIncrementKopecks": 18999,
     "priceRule": "Цена выбранной подтверждённой покупки, пересчитанная на её фасовку",
     "incrementBasis": "Выбранная историческая фасовка / количество",
     "note": "",
     "source": {
-      "observationId": "receipt-week11-2026-10-18:rows:12",
-      "date": "2026-10-18",
-      "name": "Творог 5%, пачка 2",
-      "paidKopecks": 13438,
-      "quantity": 300,
+      "observationId": "receipt-week12-2026-10-25:items:19",
+      "date": "2026-10-25",
+      "name": "Творог СВЕЖЕЕ ЗАВТРА 5 пак. 400г",
+      "paidKopecks": 18999,
+      "quantity": 400,
       "unit": "g",
       "massBasis": "purchased_weight_or_volume"
     }
@@ -723,11 +723,11 @@ const novemberPrices = {
     "name": "Мука пшеничная",
     "unit": "г",
     "increment": 2000,
-    "storage": "home",
+    "storage": "dry",
     "pricePerIncrementKopecks": 9999,
     "priceRule": "Цена выбранной подтверждённой покупки, пересчитанная на её фасовку",
     "incrementBasis": "Выбранная историческая фасовка / количество",
-    "note": "Есть дома, точный остаток неизвестен. Цена условной докупки — по подтверждённой пачке 2 кг.",
+    "note": "Измеренный остаток800 г учтён в начале ноября.",
     "source": {
       "observationId": "receipt-2026-09-06:items:12",
       "date": "2026-09-06",
@@ -742,11 +742,11 @@ const novemberPrices = {
     "name": "Сливочное масло 82,5%",
     "unit": "г",
     "increment": 180,
-    "storage": "home",
+    "storage": "freeze",
     "pricePerIncrementKopecks": 19999,
     "priceRule": "Цена выбранной подтверждённой покупки, пересчитанная на её фасовку",
     "incrementBasis": "Выбранная историческая фасовка / количество",
-    "note": "",
+    "note": "Измеренный остаток40 г учтён в начале ноября.",
     "source": {
       "observationId": "receipt-week10-2026-10-10:receipt_items:13",
       "date": "2026-10-10",
@@ -762,15 +762,15 @@ const novemberPrices = {
     "unit": "г",
     "increment": 500,
     "storage": "home",
-    "pricePerIncrementKopecks": 5999,
+    "pricePerIncrementKopecks": 5499,
     "priceRule": "Цена выбранной подтверждённой покупки, пересчитанная на её фасовку",
     "incrementBasis": "Выбранная историческая фасовка / количество",
-    "note": "Подтверждена цена кускового сахара; для другого вида сахара это только аналог. Если берёте кусковой для выпечки, измельчите его.",
+    "note": "",
     "source": {
-      "observationId": "receipt-week9-2026-10-03:receipt_items:1",
-      "date": "2026-10-03",
-      "name": "Сахар кусковой",
-      "paidKopecks": 5999,
+      "observationId": "receipt-week12-2026-10-25:items:28",
+      "date": "2026-10-25",
+      "name": "Сахар РУССКИЙ кусковой 500г",
+      "paidKopecks": 5499,
       "quantity": 500,
       "unit": "g",
       "massBasis": "purchased_weight_or_volume"
@@ -805,15 +805,163 @@ const novemberPrices = {
     "source": null
   },
   "salt": {
-    "name": "Соль из дома",
+    "name": "Соль пищевая, 1 кг",
     "unit": "г",
-    "increment": null,
-    "storage": "home",
+    "increment": 1000,
+    "storage": "dry",
+    "pricePerIncrementKopecks": 5000,
+    "source": null,
+    "priceRule": "Оценка для покупки, не подтверждённый расход",
+    "incrementBasis": "Пачка1 кг",
+    "note": "Обязательно купить. В справочнике оплаченной соли нет; заложено50 ₽ по внешнему ориентиру45,99 ₽ за1 кг, проверенному01.11.2026. Цена в вашем магазине может отличаться.",
+    "estimateSource": {
+      "url": "https://agatvspb.ru/catalog/bytovye_tovary/produkty_pitaniya/sakhar_sol_pripravy_spetsii/sol/sol_pishchevaya_krupnaya_1_kg_pet_paket.html",
+      "observedKopecks": 4599,
+      "checkedOn": "2026-11-01"
+    }
+  },
+  "oats": {
+    "name": "Овсянка",
+    "unit": "г",
+    "increment": 1,
+    "storage": "dry",
     "unknownPrice": true,
     "pricePerIncrementKopecks": null,
     "source": null
+  },
+  "semolina": {
+    "name": "Манка",
+    "unit": "г",
+    "increment": 1,
+    "storage": "dry",
+    "unknownPrice": true,
+    "pricePerIncrementKopecks": null,
+    "source": null
+  },
+  "peas": {
+    "name": "Горох колотый",
+    "unit": "г",
+    "increment": 1,
+    "storage": "dry",
+    "unknownPrice": true,
+    "pricePerIncrementKopecks": null,
+    "source": null
+  },
+  "cutlets": {
+    "name": "Котлеты полуфабрикаты: две вместе120 г",
+    "unit": "г",
+    "increment": 1,
+    "storage": "freeze",
+    "unknownPrice": true,
+    "pricePerIncrementKopecks": null,
+    "source": null
+  },
+  "cucumber": {
+    "name": "Огурцы",
+    "unit": "г",
+    "increment": 100,
+    "storage": "weekly",
+    "pricePerIncrementKopecks": 2000,
+    "priceRule": "Верхняя оплаченная цена за единицу на трёх последних датах покупки подходящего товара",
+    "incrementBasis": "Шаг планирования весовой покупки, не доказанная фасовка",
+    "note": "",
+    "source": {
+      "observationId": "legacy-expense-24",
+      "date": "2026-08-16",
+      "name": "Огурцы, 408 г",
+      "paidKopecks": 8160,
+      "quantity": 408,
+      "unit": "g",
+      "massBasis": "purchased_weight_or_volume"
+    }
+  },
+  "freshlemon": {
+    "name": "Лимон целиком",
+    "unit": "г",
+    "increment": 100,
+    "storage": "weekly",
+    "pricePerIncrementKopecks": 1330,
+    "priceRule": "Верхняя оплаченная цена за единицу на трёх последних датах покупки подходящего товара",
+    "incrementBasis": "Шаг планирования весовой покупки, не доказанная фасовка",
+    "note": "",
+    "source": {
+      "observationId": "receipt-week12-2026-10-25:items:7",
+      "date": "2026-10-25",
+      "name": "Лимоны вес 1кг",
+      "paidKopecks": 1862,
+      "quantity": 0.14,
+      "unit": "kg",
+      "massBasis": "purchased_weight_or_volume"
+    }
   }
 };
+
+// Week 13 was revised on 1 November against the user's reported stock.
+const meal13=(title,protein,time,items,steps,note='')=>({title,protein,time,items,steps,note});
+const weekThirteenMeals=[
+ meal13('Свинина с грибным соусом, булгуром и огурцом','Свинина',40,{pork:485,mushrooms:100,bulgur:180,cucumber:365,onion:100,sourcream:100,oil:10,salt:4,spices:1},[
+  'Разморозьте обе части свинины в холодильнике; всего 485 г. Нарежьте поперёк волокон тонкими полосками. 100 г шампиньонов нарежьте пластинками, 100 г лука — полукольцами.',
+  '180 г булгура — это три имеющихся пакетика по вашему правилу 60 г. Сварите по инструкции на упаковке, добавив 1 г соли. Граммовки относятся ко всему блюду на три порции.',
+  'На 10 г масла подрумяньте свинину в два захода, переложите. В той же сковороде готовьте лук и грибы 5–7 минут; добавьте немного воды, если сухо.',
+  'Верните мясо, добавьте 100 г сметаны, 80 мл воды, 2 г соли и 1 г специй. Тушите 8–12 минут; свинина должна достичь 63 °C, затем отдыхать 3 минуты. 365 г огурца нарежьте, добавьте оставшийся 1 г соли непосредственно перед едой. Порцию огурца на завтра держите отдельно от горячего.'
+ ],'Используем все 485 г свинины, 100 г свежих грибов, 180 г булгура и 365 г огурцов из остатков. Свежие грибы готовим в начале недели.'),
+ meal13('Спагетти с говяжьим фаршем и сладким перцем','Говяжий фарш',40,{mince:400,pasta:180,passata:300,pepper:170,carrot:100,onion:100,oil:10,salt:3,spices:1},[
+  'Заранее разморозьте 400 г фарша в холодильнике. Измельчите 100 г лука, натрите 100 г моркови, очистите и нарежьте 170 г перца.',
+  'На 10 г масла готовьте овощи 5 минут. Добавьте весь фарш и обжаривайте ещё 7–8 минут, разбивая комочки.',
+  'Влейте 300 г пассаты и 100 мл воды, добавьте 2 г соли и 1 г специй. Тушите 20 минут до густого соуса и температуры фарша не ниже 71 °C.',
+  '180 г сухих спагетти сварите по упаковке с оставшимся 1 г соли. Смешайте со всем соусом и равномерно распределите мясо и овощи.'
+ ],'Фарш, спагетти, пассата, перец и морковь берутся из подтверждённых остатков; повторная покупка этих количеств не нужна.'),
+ meal13('Курица с картофелем в молочном соусе','Курица',55,{chicken:450,potato:600,milk:200,flour:20,onion:100,oil:10,salt:3,spices:1},[
+  'Очистите 600 г картофеля, нарежьте кубиками 1,5 см и проварите 7–8 минут. 450 г куриного филе нарежьте небольшими кусочками, 100 г лука измельчите.',
+  'На 10 г масла готовьте лук 3 минуты, затем курицу 5 минут. Посыпьте 20 г муки и перемешайте.',
+  'Понемногу влейте 200 мл молока и 150 мл воды, размешивая комочки. Добавьте 3 г соли и 1 г специй, прогрейте до лёгкого загустения.',
+  'Переложите картофель и курицу с соусом в форму. Запекайте при 190 °C 25–30 минут до мягкого картофеля и 74 °C внутри курицы. Если верх быстро подсыхает, накройте форму фольгой.'
+ ]),
+ meal13('Куриные тефтели в молочном соусе со спагетти','Курица',45,{chicken:450,pasta:180,milk:250,flour:15,butter:10,onion:80,egg:1,oil:5,salt:3,spices:1},[
+  '450 г курицы и 80 г лука измельчите в фарш. Смешайте с 1 яйцом, 1 г соли и 1 г специй. Влажными руками сформуйте 9 тефтелей; при необходимости охладите смесь 10 минут.',
+  'В глубокой сковороде на 5 г растительного масла слегка подрумяньте тефтели с двух сторон и переложите.',
+  'Растопите 10 г сливочного масла, вмешайте 15 г муки. Понемногу влейте 250 мл молока и 100 мл воды. Добавьте 1 г соли, верните тефтели и тушите под крышкой 15–20 минут до 74 °C в центре.',
+  '180 г спагетти сварите по упаковке с оставшимся 1 г соли. На порцию положите треть пасты, 3 тефтели и треть соуса.'
+ ]),
+ meal13('Горбуша с рисом, брокколи и лимоном','Красная рыба',55,{fishwhole:1000,rice:150,broccoli:400,freshlemon:140,oil:12,salt:4,spices:1},[
+  'Разморозьте целую горбушу в холодильнике, очистите от внутренностей, жабр и чешуи, промокните. 140 г лимона вымойте: половину нарежьте ломтиками, из другой выжмите сок.',
+  'Рыбу натрите соком лимона, 6 г масла, 2 г соли и 1 г специй. Положите в форму с ломтиками лимона и накройте фольгой. Запекайте при 180 °C 30–40 минут до 63 °C в толстой части мяса.',
+  '150 г сухого риса сварите по упаковке с 1 г соли. 400 г брокколи приготовьте на пару 5–7 минут, добавьте оставшиеся 6 г масла и 1 г соли.',
+  'С готовой рыбы снимите мясо и тщательно удалите кости. Разделите мясо, рис и брокколи на три равные части. Лимон был взвешен целиком: несъедобная кожура и семечки не считаются выходом готовой еды.'
+ ],'В покупке 1 кг целой рыбы до разделки, не 1 кг филе. Выход мяса зависит от рыбы. Для этого рецепта используем имеющийся лимон 140 г, отдельный лимонный сок не покупаем.'),
+ meal13('Сырники с манкой, бананом и йогуртом','Плотный завтрак',35,{curd:400,semolina:40,egg:1,flour:20,sugar:10,oil:8,yogurt:180,banana:250,salt:1},[
+  '400 г творога разомните с 1 яйцом, 40 г манки, 10 г сахара и 1 г соли. Оставьте на 15 минут. Если творог влажный, сначала откиньте его на сито; дополнительную муку сверх 20 г не добавляйте без необходимости.',
+  '20 г муки высыпьте на доску. Сформуйте 8 небольших сырников и слегка обваляйте в этой муке.',
+  'На 8 г масла готовьте на умеренном огне по 3–4 минуты с каждой стороны, затем ещё 3–4 минуты под крышкой до 71 °C внутри.',
+  'Очистите 250 г бананов. На каждого подайте 4 сырника, половину банана и 90 г йогурта.'
+ ],'Имеющиеся 400 г творога используются полностью. Если срок не позволяет хранить до субботы, заморозьте пригодный творог сейчас и разморозьте в холодильнике накануне.'),
+ meal13('Горячие сэндвичи с котлетой, яйцом и сыром','Котлеты и яйца',25,{cutlets:120,egg:2,bread:200,tomato:250,cheese:40,yogurt:80,oil:5,salt:1},[
+  'Возьмите обе котлеты: их общий вес 120 г, по 60 г на человека. Приготовьте по инструкции производителя; если состав и готовность полуфабриката неясны, прогрейте центр до 74 °C.',
+  'На 5 г масла приготовьте 2 яйца до схватившегося белка и желтка. 200 г хлеба разделите на четыре ломтика и подсушите.',
+  '250 г помидоров нарежьте. На два нижних ломтика распределите 80 г йогурта, часть помидоров, по котлете, яйцу и 20 г сыра.',
+  'Накройте оставшимися ломтиками и прогрейте под крышкой на сухой сковороде до размягчения сыра. Остальные помидоры подайте рядом, распределив 1 г соли на обе порции.'
+ ],'Котлеты дополняются яйцом и сыром: 120 г полуфабриката не выдаются за полноценные две большие мясные порции.'),
+ meal13('Овсяные панкейки с бананом и йогуртом','Плотный завтрак',30,{oats:120,milk:250,egg:2,banana:300,yogurt:180,oil:10,flour:20,salt:1},[
+  '120 г овсянки измельчите в муку или мелкую крошку. Смешайте с 20 г муки, 250 мл молока, 2 яйцами и 1 г соли; дайте постоять 10 минут.',
+  'Очистите 300 г бананов. Примерно половину мякоти разомните и вмешайте в тесто, оставшуюся нарежьте для подачи.',
+  'Распределяя 10 г масла на все партии, выпекайте небольшие панкейки на умеренном огне по 2–3 минуты с каждой стороны. Середина должна полностью пропечься, до 71 °C.',
+  'Разделите панкейки и оставшийся банан поровну, добавьте каждому 90 г йогурта. Дополнительный сахар не нужен.'
+ ]),
+ meal13('Запеканка с курицей, картофелем и брокколи','Курица',60,{chicken:450,potato:600,broccoli:400,milk:200,cheese:80,onion:100,oil:10,flour:15,salt:3,spices:1},[
+  '600 г картофеля очистите, нарежьте кубиками и проварите 8 минут. 400 г брокколи проварите 3 минуты и откиньте на сито.',
+  '450 г курицы нарежьте небольшими кусочками. На 10 г масла готовьте 100 г лука 3 минуты, затем курицу ещё 5 минут.',
+  'Вмешайте 15 г муки, влейте 200 мл молока и 150 мл воды, добавьте 3 г соли и 1 г специй. Прогрейте до слабого загустения.',
+  'Сложите картофель, брокколи и курицу с соусом в форму, посыпьте 80 г сыра. Запекайте при 190 °C 25–30 минут до мягкого картофеля и 74 °C в курице.'
+ ])
+];
+const weekThirteenBaking={...meal13('Грушевая шарлотка на выходные','Выпечка',60,{pear:600,flour:120,egg:3,sugar:60,butter:10,salt:1},[
+ 'Разогрейте духовку до 180 °C. 600 г груш вымойте, удалите сердцевины, нарежьте небольшими кубиками. Это масса груш до очистки.',
+ 'Смажьте круглую форму 18–20 см 10 г сливочного масла. 3 яйца комнатной температуры взбивайте с 60 г сахара и 1 г соли 6–8 минут до густой светлой пены. Если сахар кусковой, предварительно измельчите его.',
+ 'В два приёма лопаткой аккуратно вмешайте 120 г муки, затем груши. Не перемешивайте долго, чтобы сохранить воздух; разрыхлитель в этом варианте не требуется.',
+ 'Выложите в форму и выпекайте 40–45 минут, не открывая духовку первые 30 минут. Деревянная шпажка из середины должна выходить без сырого теста; при необходимости допеките ещё 5–10 минут.',
+ 'Дайте остыть и разрежьте на 6 небольших кусочков. Четыре распределите на двоих между субботой и воскресеньем, оставшиеся два заморозьте в тот же день после охлаждения. Пирог добавлен к меню один раз; все ингредиенты уже включены в покупки.'
+ ],'Один пирог на выходные, 6 кусочков. Это дополнение к двум завтракам, а не ещё одно основное блюдо.'),id:'n13-baking',day:'Сб–Вс',type:'Выпечка',portions:6};
+const weekThirteenStock={curd:400,mushrooms:100,pepper:170,cucumber:365,freshlemon:140,milk:1400,passata:300,carrot:100,butter:40,pork:485,mince:400,cutlets:120,semolina:220,pasta:900,oats:240,bulgur:180,peas:680,flour:800};
 
 const meal=(title,protein,time,items,steps,note='')=>({title,protein,time,items,steps,note});
 const finish3='Разделите весь белок, гарнир и соус на 3 равные порции: две на ужин, одну на следующий день. Порцию на завтра охладите в течение 2 часов и уберите в холодильник; разогрейте до 74 °C. Повторно продукты для неё не покупать.';
@@ -1048,13 +1196,15 @@ const menus=[
  ]
 ];
 
+menus[0]=weekThirteenMeals;
 const dates=[['2026-11-02','2026-11-08','2–8 ноября'],['2026-11-09','2026-11-15','9–15 ноября'],['2026-11-16','2026-11-22','16–22 ноября'],['2026-11-23','2026-11-29','23–29 ноября']];
 const slots=[['Пн','Ужин'],['Вт','Ужин'],['Ср','Ужин'],['Чт','Ужин'],['Пт','Ужин'],['Сб','Завтрак'],['Сб','Ужин'],['Вс','Завтрак'],['Вс','Ужин']];
-const novemberWeeks=menus.map((items,index)=>({number:index+13,start:dates[index][0],end:dates[index][1],label:dates[index][2],title:['Курица, фаршированные перцы и красная рыба','Запеканки, паста и домашняя пицца','Мясной рулет, гуляш и горячие сэндвичи','Тефтели, булгур с грибами и картофельные лодочки'][index],meals:items.map((m,i)=>({...m,id:`n${index+13}-${i}`,day:slots[i][0],type:slots[i][1],portions:[5,6,7].includes(i)?2:3,steps:[...m.steps,[5,6,7].includes(i)?finish2:finish3],note:[m.note,safeNote].filter(Boolean).join(' ')}))}));
-const novemberOpeningStock={pork:50,passata:200,bulgur:270,pasta:270,dough:100};
-const novemberStockNote='Это условный перенос после выполнения плана недели 12: свинина 50 г, пассата 200 г, булгур 270 г, паста 270 г, тесто 100 г. Свинину, пассату и тесто нужно сохранить замороженными пригодными. Остатки не подтверждены на 2 ноября. Другие молочные остатки, яйца и котлеты без массы в стартовый запас ноября автоматически не включены.';
-const novemberPriceNote='Плановые цены опираются на справочник подтверждённых покупок. Для весовых овощей, фруктов и отдельных видов мяса выбрана верхняя оплаченная цена на трёх последних подходящих датах; для фасованных товаров — конкретная подтверждённая покупка. Это ориентиры, а не текущие предложения магазина. Бренд, фасовка, скидка и цена могут измениться. Масло, соль и прочая домашняя база показаны отдельно: их достаточность на четыре недели не подтверждена.';
-const novemberStorageNote='Покупайте скоропортящееся на нужную неделю и проверяйте сроки. Сырое мясо для поздних дней и излишки заморозьте в день покупки порциями. Оставшиеся творог, сыр, молоко, тортильи и пассату для следующей недели переносите только после своевременной заморозки; молочное после размораживания используйте для готовки. Яйца и открытый лимонный сок переносите только в пределах срока на упаковке. Если хранение не обеспечено, перед закупкой обнулите соответствующий запас и пересчитайте дефицит.';
+const novemberWeeks=menus.map((items,index)=>({number:index+13,start:dates[index][0],end:dates[index][1],label:dates[index][2],title:['Используем остатки и печём грушевую шарлотку','Запеканки, паста и домашняя пицца','Мясной рулет, гуляш и горячие сэндвичи','Тефтели, булгур с грибами и картофельные лодочки'][index],meals:items.map((m,i)=>({...m,id:`n${index+13}-${i}`,day:slots[i][0],type:slots[i][1],portions:[5,6,7].includes(i)?2:3,steps:[...m.steps,[5,6,7].includes(i)?finish2:finish3],note:[m.note,safeNote].filter(Boolean).join(' ')}))}));
+novemberWeeks[0].meals.push(weekThirteenBaking);
+const novemberOpeningStock={...weekThirteenStock};
+const novemberStockNote='Подтверждённые остатки от1 ноября учтены отдельно от чека и докупок прошлой недели. Булгур:3×60=180 г. Котлеты:две вместе120 г. Мука800 г, сливочное масло40 г. Старый расчётный перенос заменён фактическим списком. Горох680 г остаётся в шкафу. Масло растительное, сахар и специи — домашняя база с неизвестным количеством. Соль1 кг включена в покупку.';
+const novemberPriceNote='Плановые цены опираются на справочник подтверждённых покупок. Для весовых овощей, фруктов и отдельных видов мяса выбрана верхняя оплаченная цена на трёх последних подходящих датах; для фасованных товаров — конкретная подтверждённая покупка. Это ориентиры, а не текущие предложения магазина. Бренд, фасовка, скидка и цена могут измениться. Растительное масло, сахар и специи — домашняя база показаны отдельно: их достаточность на четыре недели не подтверждена.';
+const novemberStorageNote='Сразу проверьте срок имеющихся творога и молока: пригодный творог для субботы и молоко для поздних дней при необходимости заморозьте сейчас порциями. Размораживайте в холодильнике. Покупайте скоропортящееся на нужную неделю и проверяйте сроки. Сырое мясо для поздних дней и излишки заморозьте в день покупки порциями. Оставшиеся творог, сыр, молоко, тортильи и пассату для следующей недели переносите только после своевременной заморозки; молочное после размораживания используйте для готовки. Яйца и открытый лимонный сок переносите только в пределах срока на упаковке. Если хранение не обеспечено, перед закупкой обнулите соответствующий запас и пересчитайте дефицит.';
 const novemberExtras={title:'Дополнения на неделю',items:{mandarin:1500,banana:500,pear:700,juice:1000,bar:2},note:'Фрукты распределить на неделю вдвоём; фрукты из рецептов завтраков посчитаны дополнительно. Сок и сырки — по желанию, их стоимость включена. Для сока выбрана подтверждённая упаковка 2 л: половину можно заморозить пригодной для следующей недели. Не нужно допивать сверх желания или срока хранения.'};
 
 function calculateNovember({useProjectedStock=true,stockOverrides={}}={}){
@@ -1071,13 +1221,13 @@ function calculateNovember({useProjectedStock=true,stockOverrides={}}={}){
    if(p.storage==='home'){kitchen[id]=(kitchen[id]||0)+used;return {id,used,opening:null,purchase:0,closing:null,costKopecks:0,carryForward:null,alloc:alloc[id]||[],household:true};}
    const opening=stock[id]||0,units=Math.max(0,Math.ceil((used-opening)/p.increment-1e-9)),purchase=units*p.increment,closing=Math.round((opening+purchase-used)*1000)/1000;
    const carryForward=['dry','freeze','eggs','label'].includes(p.storage)?closing:0;next[id]=carryForward;
-   return {id,used,opening,purchase,closing,costKopecks:money(units*p.pricePerIncrementKopecks),carryForward,alloc:alloc[id]||[],household:false};
+   return {id,used,opening,purchase,closing,costKopecks:units>0&&p.pricePerIncrementKopecks===null?null:money(units*p.pricePerIncrementKopecks),carryForward,alloc:alloc[id]||[],household:false};
   });
   stock=next;const foodKopecks=rows.reduce((s,r)=>s+r.costKopecks,0),bufferKopecks=Math.ceil(foodKopecks*.05/100)*100;
-  return {number:week.number,label:week.label,rows,foodKopecks,bufferKopecks,totalKopecks:foodKopecks+bufferKopecks};
+  return {number:week.number,label:week.label,unknownPurchases:rows.filter(r=>r.costKopecks===null).map(r=>r.id),rows,foodKopecks,bufferKopecks,totalKopecks:foodKopecks+bufferKopecks};
  });
  const baseNeeds=Object.entries(kitchen).map(([id,used])=>{const p=novemberPrices[id];return {id,used,availableQuantity:null,purchaseIfNone:p.increment?Math.ceil(used/p.increment)*p.increment:null,costIfNoneKopecks:p.increment?Math.ceil(used/p.increment)*p.pricePerIncrementKopecks:null};});
- return {period:'2–29 ноября 2026',weeks,baseNeeds,remaining:stock,useProjectedStock,totalKopecks:weeks.reduce((s,w)=>s+w.totalKopecks,0),foodKopecks:weeks.reduce((s,w)=>s+w.foodKopecks,0),bufferKopecks:weeks.reduce((s,w)=>s+w.bufferKopecks,0),conditionalPricedBaseKopecks:baseNeeds.reduce((s,r)=>s+(r.costIfNoneKopecks||0),0),unpricedBase:baseNeeds.filter(r=>r.costIfNoneKopecks===null).map(r=>r.id),budgetKopecks:2500000};
+ return {hasUnpricedPurchases:weeks.some(w=>w.unknownPurchases.length>0),period:'2–29 ноября 2026',weeks,baseNeeds,remaining:stock,useProjectedStock,totalKopecks:weeks.reduce((s,w)=>s+w.totalKopecks,0),foodKopecks:weeks.reduce((s,w)=>s+w.foodKopecks,0),bufferKopecks:weeks.reduce((s,w)=>s+w.bufferKopecks,0),conditionalPricedBaseKopecks:baseNeeds.reduce((s,r)=>s+(r.costIfNoneKopecks||0),0),unpricedBase:baseNeeds.filter(r=>r.costIfNoneKopecks===null).map(r=>r.id),budgetKopecks:2500000};
 }
 
 const money=n=>new Intl.NumberFormat('ru-RU',{minimumFractionDigits:2,maximumFractionDigits:2}).format(n/100)+' ₽';
@@ -1089,11 +1239,11 @@ function group(id){const n=categories.findIndex(([,ids])=>ids.includes(id));retu
 let calculation;
 function csv(weeks){const quote=s=>'"'+String(s).replace(/"/g,'""')+'"';const rows=[['Неделя','Продукт','Нужно','Остаток до','Купить','Единица','Прогноз ₽','Основа цены','Перенос недели 12']];for(const w of weeks)for(const r of w.rows.filter(r=>r.purchase>0)){const p=novemberPrices[r.id];rows.push([w.number,p.name,r.used,r.opening,r.purchase,p.unit,(r.costKopecks/100).toFixed(2).replace('.',','),p.source?.date||'дата не подтверждена',calculation.useProjectedStock?'учтён, проверить':'не учтён']);}return '\uFEFF'+rows.map(r=>r.map(quote).join(';')).join('\r\n');}
 function download(weeks,name){const link=document.createElement('a');const url=URL.createObjectURL(new Blob([csv(weeks)],{type:'text/csv;charset=utf-8'}));link.href=url;link.download=name;link.click();setTimeout(()=>URL.revokeObjectURL(url),1000);}
-function details(r){const p=novemberPrices[r.id],s=p.source;return '<details class="detail"><summary>Расчёт и источник цены</summary><p>Нужно '+q(r.id,r.used)+'; до закупки '+q(r.id,r.opening)+'; останется '+q(r.id,r.closing)+(r.closing>0?(r.carryForward>0?' — перенос при соблюдении хранения.':' — в следующую корзину автоматически не переносится.') :'.')+'</p><p>'+esc(p.incrementBasis)+'. Расчётная цена: '+money(p.pricePerIncrementKopecks)+' за '+q(r.id,p.increment)+'. '+esc(p.priceRule)+'</p>'+(s?'<p>Основа: '+esc(s.date||'точная дата не подтверждена')+' · '+esc(s.name)+' · оплачено '+money(s.paidKopecks)+' за '+esc(s.quantity)+' '+esc(s.unit)+'.</p>':'')+(p.note?'<p>'+esc(p.note)+'</p>':'')+'<p>'+r.alloc.map(([name,n])=>esc(name)+' — '+q(r.id,n)).join('<br>')+'</p></details>';}
+function details(r){const p=novemberPrices[r.id],s=p.source;return '<details class="detail"><summary>Расчёт и источник цены</summary><p>Нужно '+q(r.id,r.used)+'; до закупки '+q(r.id,r.opening)+'; останется '+q(r.id,r.closing)+(r.closing>0?(r.carryForward>0?' — перенос при соблюдении хранения.':' — в следующую корзину автоматически не переносится.') :'.')+'</p><p>'+esc(p.incrementBasis)+'. Расчётная цена: '+money(p.pricePerIncrementKopecks)+' за '+q(r.id,p.increment)+'. '+esc(p.priceRule)+'</p>'+(s?'<p>Основа: '+esc(s.date||'точная дата не подтверждена')+' · '+esc(s.name)+' · оплачено '+money(s.paidKopecks)+' за '+esc(s.quantity)+' '+esc(s.unit)+'.</p>':'')+(p.note?'<p>'+esc(p.note)+'</p>':'')+(p.estimateSource?'<p><a href="'+esc(p.estimateSource.url)+'" target="_blank" rel="noreferrer">Внешний ориентир цены соли</a> · не оплаченная покупка</p>':'')+'<p>'+r.alloc.map(([name,n])=>esc(name)+' — '+q(r.id,n)).join('<br>')+'</p></details>';}
 function render(){calculation=calculateNovember({useProjectedStock:byId('use-stock').checked});byId('grand-total').textContent=money(calculation.totalKopecks);byId('budget-note').textContent='Из них резерв '+money(calculation.bufferKopecks)+'. До лимита остаётся '+money(calculation.budgetKopecks-calculation.totalKopecks)+', до возможного пополнения домашней базы.';
 byId('weeks').innerHTML=calculation.weeks.map((w,i)=>'<details class="card week" data-week="'+w.number+'" '+(i===0?'open':'')+'><summary><div><h2>Неделя '+w.number+'</h2><small>'+esc(w.label)+'</small></div><strong class="cost">'+money(w.totalKopecks)+'</strong></summary><div class="week-body">'+categories.map(([name],ci)=>{const rows=w.rows.filter(r=>r.purchase>0&&group(r.id)===ci);if(!rows.length)return '';return '<h3 class="group">'+name+'</h3><div class="row table-head"><span>Продукт</span><span>Купить</span><span>Прогноз</span></div>'+rows.map(r=>'<div class="row"><strong>'+esc(novemberPrices[r.id].name)+'</strong><span>'+q(r.id,r.purchase)+'</span><span>'+money(r.costKopecks)+'</span>'+details(r)+'</div>').join('');}).join('')+'<div class="total"><span>Продукты + резерв '+money(w.bufferKopecks)+'</span><span>'+money(w.totalKopecks)+'</span></div><button type="button" data-csv="'+w.number+'">Скачать список недели '+w.number+'</button><details class="note"><summary>Что используем из запасов</summary><p>'+w.rows.filter(r=>r.opening>0&&r.used>0).map(r=>esc(novemberPrices[r.id].name)+' — '+q(r.id,Math.min(r.opening,r.used))).join('; ')+'</p></details></div></details>').join('');
 byId('base').innerHTML=calculation.baseNeeds.map(r=>'<div class="stock-line"><span>'+esc(novemberPrices[r.id].name)+'</span><span>'+q(r.id,r.used)+'</span></div>').join('');
-byId('base-note').textContent='Если муки, сахара, сливочного масла и специй не хватит вовсе, целые упаковки по известным ориентирам добавят '+money(calculation.conditionalPricedBaseKopecks)+' до резерва; с дополнительным 5% резервом на них общий план будет '+money(calculation.totalKopecks+calculation.conditionalPricedBaseKopecks+Math.ceil(calculation.conditionalPricedBaseKopecks*.05/100)*100)+'. Это условный сценарий. Подтверждённой цены для растительного масла и соли в справочнике нет. Для сахара использована цена кускового: для выпечки потребуется измельчить его или уточнить цену песка.';
+byId('base-note').textContent='Если сахара и специй не хватит вовсе, целые упаковки по известным ориентирам добавят '+money(calculation.conditionalPricedBaseKopecks)+' до резерва; с дополнительным 5% резервом на них общий план будет '+money(calculation.totalKopecks+calculation.conditionalPricedBaseKopecks+Math.ceil(calculation.conditionalPricedBaseKopecks*.05/100)*100)+'. Это условный сценарий. Подтверждённой цены для растительного масла в справочнике нет. Для сахара использована цена кускового: для выпечки потребуется измельчить его или уточнить цену песка.';
 document.querySelectorAll('[data-csv]').forEach(b=>b.addEventListener('click',()=>download(calculation.weeks.filter(w=>w.number===Number(b.dataset.csv)),'Покупки-неделя-'+b.dataset.csv+'.csv')));}
 byId('price-note').textContent=novemberPriceNote;byId('stock-note').textContent=novemberStockNote;byId('storage-note').textContent=novemberStorageNote;byId('extras-note').textContent=novemberExtras.note;
 byId('use-stock').addEventListener('change',render);byId('all-csv').addEventListener('click',()=>download(calculation.weeks,'Покупки-2–29-ноября.csv'));byId('expand').addEventListener('click',()=>document.querySelectorAll('.week').forEach(w=>w.open=true));render();

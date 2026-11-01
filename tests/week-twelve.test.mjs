@@ -11,8 +11,8 @@ test('18 receipt lines plus one undivided extra are counted once; delivery stays
  const p=calculate();assert.equal(p.weeks[6].total,weekElevenReportedTotal);assert.equal(p.weeks[6].total,4913.45);
  assert(p.weeks[6].isActual);assert.equal(p.weeks[6].originalPlanTotal,5676.03);
  assert.equal(p.weeks[6].delivery,null);assert.equal(p.weeks[6].completeTotal,null);assert(p.deliveryPending);
- assert.equal(p.currentCycleConfirmed,13563.48);assert.equal(p.remainingTotal,p.weeks[7].total);
- assert.equal(p.total,Math.round((13563.48+p.remainingTotal)*100)/100);assert.equal(p.weeks[7].delivery,0);
+ assert.equal(p.currentCycleConfirmed,18647.01);assert.equal(p.remainingTotal,0);
+ assert.equal(p.total,Math.round((18647.01+p.remainingTotal)*100)/100);assert.equal(p.weeks[7].delivery,0);
 });
 test('new stock replaces carryover, all purchases conserve quantities and round to packs',()=>{
  const p=calculate(),w=p.weeks[7];
@@ -55,7 +55,7 @@ test('nine recipes preserve portions, hearty breakfasts and excluded ingredients
 });
 test('public generated view contains week12, sanitized receipt and no private identifiers',async()=>{
  const html=await readFile(new URL('../public/nutrition-plan.html',import.meta.url),'utf8');
- assert(html.includes("activeWeek=7"));assert(html.includes("snapshot='2026-10-25'"));assert(html.includes('Остатки перед неделей 12'));
+ assert(html.includes("activeWeek=7"));assert(html.includes("snapshot='2026-11-01'"));assert(html.includes('Остатки перед неделей 12'));
  assert(html.includes('4913.45'));assert(html.includes('3413.45'));
  assert(html.includes('прежняя цена огурцов 160 ₽/кг занижена'));
  for(const bad of ['check.yandex.ru','7382441000423987','2906630588','nutrition-memory/receipt-week11','@yandex.ru'])assert(!html.includes(bad),bad);

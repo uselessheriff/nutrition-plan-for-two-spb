@@ -11,8 +11,8 @@ test('week10 receipt is 24 food rows plus three separate reported extras, once',
  assert(weekTenPurchases.every(r=>r.date==='10.10.2026'&&r.period==='w5'));
  assert.equal(Math.round(weekTenReceiptTotal*100)+93000,Math.round(weekTenReportedTotal*100));
  const p=calculate();assert.equal(p.weeks[5].total,4869.64);assert(p.weeks[5].isActual);
- assert.equal(p.weeks[4].total,3780.39);assert.equal(p.currentCycleConfirmed,13563.48);
- assert.equal(p.confirmed,16726.64);assert.equal(p.total,Math.round((13563.48+p.remainingTotal)*100)/100);
+ assert.equal(p.weeks[4].total,3780.39);assert.equal(p.currentCycleConfirmed,18647.01);
+ assert.equal(p.confirmed,16726.64);assert.equal(p.total,Math.round((18647.01+p.remainingTotal)*100)/100);
  assert(p.total<25000);
 });
 test('week11 pantry replaces forecast, purchases use only deficits and package rounding',()=>{

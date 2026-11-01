@@ -1,3 +1,4 @@
+import {weekTwelveReportedTotal} from './week-twelve-actual.mjs';
 import {activeRecipe, portionPolicy, portionLabel} from './active-plan.mjs';
 import {revisedRecipe, latestStock, currentPriceOverrides, weekFiveActual} from './revision-september.mjs';
 import {heartyBreakfast, weekendPolicy} from './weekend-plan.mjs';
@@ -143,8 +144,9 @@ const rows=Object.entries(used).map(([id,q])=>{const i=latest?currentIngredient(
   if(tier===1&&!legacy&&w===4)Object.assign(result[4],{originalPlanTotal:total,food:weekNineReportedTotal,base:0,buffer:0,total:weekNineReportedTotal,isActual:true});
   if(tier===1&&!legacy&&w===5)Object.assign(result[5],{originalPlanTotal:total,food:weekTenReportedTotal,base:0,buffer:0,total:weekTenReportedTotal,completeTotal:weekTenReportedTotal,isActual:true});
   if(tier===1&&!legacy&&w===6)Object.assign(result[6],{originalPlanTotal:total,food:weekElevenReportedTotal,base:0,buffer:0,total:weekElevenReportedTotal,completeTotal:null,isActual:true});
+  if(tier===1&&!legacy&&w===7)Object.assign(result[7],{originalPlanTotal:total,food:weekTwelveReportedTotal,base:0,buffer:0,total:weekTwelveReportedTotal,completeTotal:weekTwelveReportedTotal,isActual:true});
   if(result[w].isActual&&!result[w].deliveryPending)result[w].completeTotal=result[w].total;
  }
- const current=tier===1&&!legacy,remainingTotal=current?Math.round(result.slice(7).reduce((s,w)=>s+w.total,0)*100)/100:null,currentCycleConfirmed=current?Math.round((weekNineReportedTotal+weekTenReportedTotal+weekElevenReportedTotal)*100)/100:0;
+ const current=tier===1&&!legacy,remainingTotal=current?Math.round(result.slice(8).reduce((s,w)=>s+w.total,0)*100)/100:null,currentCycleConfirmed=current?Math.round((weekNineReportedTotal+weekTenReportedTotal+weekElevenReportedTotal+weekTwelveReportedTotal)*100)/100:0;
  return {weeks:result,total:current?Math.round((currentCycleConfirmed+remainingTotal)*100)/100:Math.round(result.reduce((s,w)=>s+w.total,0)*100)/100,food:Math.round(result.reduce((s,w)=>s+w.food,0)*100)/100,confirmed:current?confirmedThroughEight:0,currentCycleConfirmed,remainingTotal,deliveryPending:current&&result[6].deliveryPending};
 }

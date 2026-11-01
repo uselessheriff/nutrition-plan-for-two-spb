@@ -532,3 +532,5 @@ footer { padding: 24px 0 34px; color: var(--muted); font-size: 12px; }
   .section, .hero { padding-block: 24px; }
   .tabs button:not(.active), .meal-list, .prep { break-inside: avoid; }
 }
+
+.page-panel .expense-row{display:flex;justify-content:space-between;gap:16px;padding:12px 0;border-bottom:1px solid #e5e7eb}.page-panel .expense-row small{display:block;color:#64748b}.page-panel .expense-row strong{white-space:nowrap}
