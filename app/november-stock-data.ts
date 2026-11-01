@@ -22,7 +22,7 @@ export const confirmedStock = [
   {
     "name": "Лимон целиком",
     "quantity": "140 г",
-    "remaining": "0 г"
+    "remaining": "140 г"
   },
   {
     "name": "Молоко, жирность не сообщена",
