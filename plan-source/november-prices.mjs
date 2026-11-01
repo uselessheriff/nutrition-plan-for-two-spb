@@ -877,5 +877,24 @@ export const novemberPrices = {
       "unit": "kg",
       "massBasis": "purchased_weight_or_volume"
     }
+  },
+  "turkeymince": {
+    "name": "Фарш из индейки (покупной), 450 г",
+    "unit": "г",
+    "increment": 450,
+    "storage": "freeze",
+    "pricePerIncrementKopecks": 24999,
+    "priceRule": "Цена выбранной подтверждённой покупки, пересчитанная на её фасовку",
+    "incrementBasis": "Выбранная историческая фасовка / количество",
+    "note": "Покупной сырой фарш. Подтверждённая покупка Pava Pava 450 г за249,99 ₽ от22.08.2026; исторический ориентир, текущую цену проверить при покупке. Цена фарша не подменена ценой филе.",
+    "source": {
+      "observationId": "legacy-expense-53",
+      "date": "2026-08-22",
+      "name": "Фарш индейки Pava Pava, 450 г",
+      "paidKopecks": 24999,
+      "quantity": 450,
+      "unit": "g",
+      "massBasis": "purchased_weight_or_volume"
+    }
   }
 };

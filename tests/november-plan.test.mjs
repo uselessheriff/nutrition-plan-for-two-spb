@@ -33,8 +33,8 @@ test('every weekly purchase balances inventory, whole packs, recipe demand and i
 });
 test('known scenario totals, unknown household prices and conditional base stay distinct',()=>{
  const withStock=calculateNovember(),without=calculateNovember({useProjectedStock:false});
- assert.deepEqual(withStock.weeks.map(w=>w.totalKopecks),[387186,540940,487795,474116]);
- assert.equal(withStock.totalKopecks,1890037);assert.equal(withStock.hasUnpricedPurchases,false);assert.equal(without.hasUnpricedPurchases,true);assert.deepEqual(without.weeks[0].unknownPurchases.sort(),["cutlets","oats","semolina"]);
+ assert.deepEqual(withStock.weeks.map(w=>w.totalKopecks),[380885,540940,487795,456316]);
+ assert.equal(withStock.totalKopecks,1865936);assert.equal(withStock.hasUnpricedPurchases,false);assert.equal(without.hasUnpricedPurchases,true);assert.deepEqual(without.weeks[0].unknownPurchases.sort(),["cutlets","oats","semolina"]);
  assert.deepEqual(withStock.baseNeeds.map(r=>r.id).sort(),["oil","spices","sugar"]);
  assert(withStock.conditionalPricedBaseKopecks>0);assert.deepEqual(withStock.unpricedBase,["oil"]);
  assert.equal(novemberPrices.oil.pricePerIncrementKopecks,null);assert.equal(novemberPrices.salt.pricePerIncrementKopecks,5000);assert.equal(novemberPrices.salt.source,null);assert(novemberPrices.salt.estimateSource.url);
@@ -52,7 +52,7 @@ test('receipt forms and quantities do not turn whole fish into fillets or unknow
 test('native recipe amounts and generated shopping use the same November source',async()=>{
  const source=await readFile(new URL('../app/november-plan-data.ts',import.meta.url),'utf8');const js=ts.transpileModule(source,{compilerOptions:{target:ts.ScriptTarget.ES2022,module:ts.ModuleKind.ES2022}}).outputText;
  const generated=await import('data:text/javascript;base64,'+Buffer.from(js).toString('base64'));
- assert.equal(generated.novemberTotal,18900.37);
+ assert.equal(generated.novemberTotal,18659.36);
  for(const [i,w] of generated.novemberMenuWeeks.entries()){for(const [j,m] of w.meals.entries()){const raw=novemberWeeks[i].meals[j];assert.equal(m.recipe.portions,raw.yieldPieces?`1 пирог (${raw.yieldPieces} кусочков)`:raw.portions+' порции');assert.deepEqual(m.recipe.steps,raw.steps);assert.deepEqual(m.recipe.ingredients,Object.entries(raw.items).map(([id,n])=>novemberPrices[id].name+' — '+n+' '+novemberPrices[id].unit));}}
  const html=await readFile(new URL('../public/november-plan.html',import.meta.url),'utf8');assert(html.includes('id="use-stock"'));assert(html.includes('id="all-csv"'));assert(!html.includes('/*MODEL*/'));assert.doesNotMatch(html,/check\.yandex|nutrition-memory|E:\\|fn=|fpd=/i);
 });
@@ -95,4 +95,17 @@ test('fish frequency is at most once per 14 days and week13 lunch is the one bak
  const sunday=plan.meals.filter(m=>m.day==='Вс');assert.deepEqual(sunday.map(m=>m.type),['Завтрак','Обед','Ужин']);
  assert.deepEqual(sunday.map(m=>m.portions),[2,2,3]);assert.equal(sunday[1].yieldPieces,6);assert.equal(sunday[1].leftoverPieces,2);
  assert.equal(plan.meals.filter(m=>m.id==='n13-baking').length,1);assert.equal(row('pear').used,1300);assert.equal(row('flour').used,210);assert.equal(row('egg').used,9);
+});
+
+
+test('mince is bought as mince, never made from fillets, and prices match the purchased pack',()=>{
+ const p=novemberPrices.turkeymince;
+ assert.equal(p.increment,450);assert.equal(p.pricePerIncrementKopecks,24999);
+ assert.equal(p.source.observationId,'legacy-expense-53');assert.equal(p.source.date,'2026-08-22');assert.equal(p.source.quantity,450);assert.equal(p.source.unit,'g');
+ const m13=novemberWeeks[0].meals.find(m=>m.id==='n13-3'),m16=novemberWeeks[3].meals.find(m=>m.id==='n16-0');
+ for(const m of [m13,m16]){assert.equal(m.items.turkeymince,450);assert.equal(m.items.chicken,undefined);assert.equal(m.items.turkey,undefined);assert(m.steps.some(s=>s.includes('покупного сырого фарша')));assert.equal(m.portions,3);}
+ for(const w of novemberWeeks)for(const m of w.meals)for(const step of m.steps)assert.doesNotMatch(step,/(?:куриц|индейк|филе|мяс)[^.,;]{0,80}(?:измельчите|прокрутите|мелко порубите)|измельчите[^.]{0,80}в фарш|мясорубк/iu,m.id);
+ const calc=calculateNovember();for(const i of [0,3]){const r=calc.weeks[i].rows.find(r=>r.id==='turkeymince');assert.equal(r.used,450);assert.equal(r.purchase,450);assert.equal(r.costKopecks,24999);assert.equal(r.closing,0);}
+ const chicken=calc.weeks[0].rows.find(r=>r.id==='chicken');assert.equal(chicken.used,900);assert.equal(chicken.purchase,900);
+ const oats=novemberWeeks[0].meals.find(m=>m.id==='n13-7');assert(oats.steps[0].includes('разомните вилкой'));assert.equal(oats.items.oats,120);assert.equal(oats.items.milk,250);
 });

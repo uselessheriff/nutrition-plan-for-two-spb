@@ -7,6 +7,7 @@ const forecast=calculateNovember();
 const menu=novemberWeeks.map((w,i)=>({number:w.number,title:w.title,focus:`${w.label} · план, не факт покупки`,variety:[...new Set(w.meals.map(m=>m.protein))],prep:[
  'Все ужины Пн–Пт и Вс — на 3 порции: две вечером и одна на следующий день. Субботний ужин и оба завтрака выходных — на 2. Другие отдельные обеды не планируются; в неделе 13 добавлен воскресный обед с пирогом.',
  novemberStorageNote,
+ 'Фарш используем только покупной; сырое мясо дома в фарш не измельчаем.',
  'Рыба — не чаще одного блюда в 14 дней; неделя 13 без рыбы, следующая рыба по плану 20 ноября.',
  ...(w.number===13?['Воскресный обед — грушевая шарлотка на двоих; один пирог уже включён в покупки. Лимон 140 г остаётся в запасе.']:[]),
  'Домашнюю базу и предполагаемые остатки проверьте в закупках ноября до похода в магазин.'
@@ -38,7 +39,7 @@ const money=n=>new Intl.NumberFormat('ru-RU',{minimumFractionDigits:2,maximumFra
 const q=(id,n)=>new Intl.NumberFormat('ru-RU',{maximumFractionDigits:2}).format(n)+' '+novemberPrices[id].unit;
 const esc=s=>String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const byId=id=>document.getElementById(id);
-const categories=[['Мясо и рыба',['chicken','pork','beef','turkey','mince','porkmince','mixedmince','fishwhole']],['Молочное и яйца',['milk','yogurt','sourcream','cheese','curd','egg','bar']],['Овощи и фрукты',['carrot','potato','onion','tomato','pepper','mushrooms','broccoli','banana','mandarin','pear']],['Крупы, хлеб и прочее',[]]];
+const categories=[['Мясо и рыба',['chicken','pork','beef','turkey','mince','porkmince','mixedmince','turkeymince','fishwhole']],['Молочное и яйца',['milk','yogurt','sourcream','cheese','curd','egg','bar']],['Овощи и фрукты',['carrot','potato','onion','tomato','pepper','mushrooms','broccoli','banana','mandarin','pear']],['Крупы, хлеб и прочее',[]]];
 function group(id){const n=categories.findIndex(([,ids])=>ids.includes(id));return n===-1?3:n;}
 let calculation;
 function csv(weeks){const quote=s=>'"'+String(s).replace(/"/g,'""')+'"';const rows=[['Неделя','Продукт','Нужно','Остаток до','Купить','Единица','Прогноз ₽','Основа цены','Перенос недели 12']];for(const w of weeks)for(const r of w.rows.filter(r=>r.purchase>0)){const p=novemberPrices[r.id];rows.push([w.number,p.name,r.used,r.opening,r.purchase,p.unit,(r.costKopecks/100).toFixed(2).replace('.',','),p.source?.date||'дата не подтверждена',calculation.useProjectedStock?'учтён, проверить':'не учтён']);}return '\uFEFF'+rows.map(r=>r.map(quote).join(';')).join('\r\n');}
